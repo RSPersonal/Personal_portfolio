@@ -1,5 +1,0 @@
-admin pw = Django123
-
-
-admin = admin
-pw = Django123
