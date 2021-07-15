@@ -1,24 +1,25 @@
 {% extends "base.html" %}
 {% load static %}
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-
+<link rel="stylesheet" href="{% static '/homepage/css/home_page.css' %}">
 {% block page_content %}
     <div class="container-fluid">
         <div class="row">
-            <div class="col">
+            <div class="col text-center">
                 Hi! My name is Raphael Sparenberg
             </div>
         </div>
         <div class="row">
             <div class="col">
-                <p class="para-frontpage">
+                <p>
                     Lorem, ipsum dolor sit amet consectetur adipisicing elit. Aut consectetur, tempore quasi esse eum, dolorem rem itaque, fuga totam vero enim. Officiis praesentium quidem fugiat excepturi inventore, placeat repudiandae est.
                 </p>
             </div>
+        </div>
         <div class="row">
             <div class="col">
-                <a href="https://github.com/RSPersonal" class="github-image" target="_blank" rel="noreferrer noopener">
-                    <img src="{% static 'images/Github_Logo.png' %}" class="img-fluid" alt="Github logo" >
+                <a href="https://github.com/RSPersonal" target="_blank" rel="noreferrer noopener">
+                    <img src="{% static 'images/Github_Logo.png' %}" class="github-logo" alt="Github logo" >
                 </a>
                 <a href="https://nl.linkedin.com/in/raphael-sparenberg-637885173/nl" target="_blank" rel="noreferrer noopener">
                     <img src="#" alt="Linked in logo">
@@ -27,7 +28,6 @@
                     TEst 123
                 </h1>
             </div>
-        </div>
         </div>
     </div>
 </html>
