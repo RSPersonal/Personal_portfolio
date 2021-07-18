@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
 from pathlib import Path
+import os
 from decouple import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -44,7 +45,8 @@ INSTALLED_APPS = [
     'personal_portfolio',
     'homepage',
     'projects',
-    'blog'
+    'blog',
+    'Todo'
 ]
 
 MIDDLEWARE = [
@@ -127,7 +129,20 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+IMAGES_URL = '/images/'
+
+IMAGES_ROOT = os.path.join(BASE_DIR, 'images')
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+REST_FRAMEWORK = {
+    # Use Django's standard `django.contrib.auth` permissions,
+    # or allow read-only access for unauthenticated users.
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+    ]
+}
