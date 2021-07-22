@@ -14,11 +14,15 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
+from django.conf import settings
+from django.conf.urls.static import static
 from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include("homepage.urls")),
     path("projects/", include("projects.urls")),
-    path("blog/", include("blog.urls"))
+    path("blog/", include("blog.urls")),
+    path("api-todo/", include("Todo.urls"))
 ]
+urlpatterns += static(settings.IMAGES_URL, document_root=settings.IMAGES_ROOT)
