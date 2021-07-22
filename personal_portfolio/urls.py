@@ -23,6 +23,6 @@ urlpatterns = [
     path('', include("homepage.urls")),
     path("projects/", include("projects.urls")),
     path("blog/", include("blog.urls")),
-    path("todo/", include("Todo.urls"))
+    path("api-todo/", include("Todo.urls"))
 ]
 urlpatterns += static(settings.IMAGES_URL, document_root=settings.IMAGES_ROOT)
