@@ -1,6 +1,10 @@
 import React, { Component } from "react";
 import Modal from "./components/Modal";
 import axios from "axios";
+
+axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
+axios.defaults.xsrfCookieName = "csrftoken";
+
 class App extends Component {
   constructor(props) {
     super(props);

@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/about_me.css' %}">
+
+{% block page_content %}
+<div class="col-md-8 offset-md-2">
+    <h1>My personal roadmap</h1>
+    <p>
+        Down below you can see my personal roadmap from my work experiences in life
+    </p>
+</div>
+<div class="row md-4">
+{% for live_event in live_events %}
+    <div class="col-md-4">
+        <div class="card mb-2">
+            <div class="card-body">
+                <h5 class="card-title">{{ live_event.title }}</h5>
+                <p class="card-text">{{ live_event.description }}</p>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

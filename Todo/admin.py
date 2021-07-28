@@ -3,7 +3,7 @@ from .models import Todo
 
 # Register your models here.
 class TodoAdmin(admin.ModelAdmin):
-    pass
+    list_display=('title', 'description', 'completed', 'created_on')
 
 
 admin.site.register(Todo, TodoAdmin)
