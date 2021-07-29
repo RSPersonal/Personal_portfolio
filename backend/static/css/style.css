@@ -15,3 +15,7 @@ a:link {
 a:hover {
     color: black;
 }
+
+.footer-text {
+    font-size: 20px;
+}
