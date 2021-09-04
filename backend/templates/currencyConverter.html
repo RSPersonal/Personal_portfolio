@@ -4,8 +4,11 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'js/app.js' %}">
 </head>
 <body>
+    <script>{currencyConverter("USD", "PHP")}</script>
     <h1>
         This is the currency converter page
     </h1>
