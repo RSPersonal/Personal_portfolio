@@ -25,7 +25,8 @@ urlpatterns = [
     path("blog/", include("blog.urls")),
     path("api-todo/", include("Todo.urls")),
     path("aboutme/", include("aboutme.urls")),
-    path("currency-converter/", include("currencyConverter.urls"))
+    path("currency-converter/", include("currencyConverter.urls")),
+    path('login-screen/', include('django.contrib.auth.urls')),
 ]
 
 urlpatterns += static(settings.IMAGES_URL, document_root=settings.IMAGES_ROOT)
