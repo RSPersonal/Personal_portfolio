@@ -82,11 +82,9 @@ statistics==1.0.3.5
 toml==0.10.2
 tornado==6.1
 Twisted==21.2.0
-twisted-iocpsupport==1.0.1
 tzlocal==2.1
 uritemplate==3.0.1
 urllib3==1.26.4
 w3lib==1.22.0
 wrapt==1.12.1
-yfinance==0.1.59
 zope.interface==5.4.0

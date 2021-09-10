@@ -20,10 +20,14 @@ from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include("homepage.urls")),
+    path('', include("homepage.urls"), name='home'),
+    path('accounts/', include('accounts.urls')),
     path("projects/", include("projects.urls")),
     path("blog/", include("blog.urls")),
     path("api-todo/", include("Todo.urls")),
-    path("aboutme/", include("aboutme.urls"))
+    path("aboutme/", include("aboutme.urls")),
+    path("api_examples/", include("apiexamples.urls")),
+    path('login-screen/', include('django.contrib.auth.urls')),
 ]
+
 urlpatterns += static(settings.IMAGES_URL, document_root=settings.IMAGES_ROOT)

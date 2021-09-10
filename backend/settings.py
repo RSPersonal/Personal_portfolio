@@ -49,6 +49,9 @@ INSTALLED_APPS = [
     'blog',
     'Todo',
     'aboutme',
+    'apiexamples',
+    'loginscreen',
+    'accounts'
 ]
 
 MIDDLEWARE = [
@@ -151,3 +154,6 @@ REST_FRAMEWORK = {
 CORS_ORIGIN_WHITELIST = [
      'http://localhost:3000',
 ]
+
+LOGIN_REDIRECT_URL= 'home_page'
+LOGOUT_REDIRECT_URL= 'home_page'
