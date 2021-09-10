@@ -3,3 +3,4 @@ info.txt
 *.pyc
 *.pyo
 .vscode
+api_key.py
