@@ -26,7 +26,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv("SECRET_KEY", config("SECRET_KEY"))
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
@@ -97,7 +97,6 @@ DATABASES = {
     }
 }
 
-
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
 
@@ -161,4 +160,4 @@ CORS_ORIGIN_WHITELIST = [
 LOGIN_REDIRECT_URL= 'home_page'
 LOGOUT_REDIRECT_URL= 'home_page'
 
-DATABASES['default'] = dj_database_url.config(conn_max_age=600, ssl_require=True)
+DATABASES['default'] = dj_database_url.config(default= 'postgres://bpvefsnsxlvsha:2133bf909d338496a82e1f87e5db72fb907929af033744512b2299188b17d83a@ec2-54-155-61-133.eu-west-1.compute.amazonaws.com:5432/d3sqg49umv87me', conn_max_age=600, ssl_require=True)
