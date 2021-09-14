@@ -160,4 +160,4 @@ CORS_ORIGIN_WHITELIST = [
 LOGIN_REDIRECT_URL= 'home_page'
 LOGOUT_REDIRECT_URL= 'home_page'
 
-DATABASES['default'] = dj_database_url.config(default= 'postgres://bpvefsnsxlvsha:2133bf909d338496a82e1f87e5db72fb907929af033744512b2299188b17d83a@ec2-54-155-61-133.eu-west-1.compute.amazonaws.com:5432/d3sqg49umv87me', conn_max_age=600, ssl_require=True)
+DATABASES['default'] = dj_database_url.config(default= os.getenv("DATABASE_URL", config("POSTGRES_STR")), conn_max_age=600, ssl_require=True)
