@@ -160,4 +160,4 @@ CORS_ORIGIN_WHITELIST = [
 LOGIN_REDIRECT_URL= 'home_page'
 LOGOUT_REDIRECT_URL= 'home_page'
 
-DATABASES['default'] = dj_database_url.config(default= os.getenv("DATABASE_URL", config("POSTGRES_STR")), conn_max_age=600, ssl_require=True)
+DATABASES['default'] = dj_database_url.config(default= os.getenv("DATABASE_URL", config("POSTGRESQL_STR")), conn_max_age=600, ssl_require=True)
