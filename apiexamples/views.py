@@ -1,13 +1,35 @@
+from json.decoder import JSONDecodeError
 from django.shortcuts import render
 import requests
 
-DOMAIN_NAME = '2001:1c06:1e0c:1400:a13c:7679:d9ae:35ef'
+IP_ADDRESS = ''
+JSON_ERROR = False
+
 # Create your views here.
 def index(request):
-    response=requests.get(f'http://api.ipstack.com/{DOMAIN_NAME}?access_key=9e190f3484c23275bc0cb044948ac119')
-    geo_data= response.json()
-    context= {
-        'ip': geo_data['ip'],
-        'country_name' : geo_data['country_name']
-    }
+    if (request.GET.get('mybtn')):
+        IP_ADDRESS = request.GET.get('mytextbox')
+        
+        try:
+            response=requests.get(f'http://api.ipstack.com/{IP_ADDRESS}?access_key=9e190f3484c23275bc0cb044948ac119')
+        except JSONDecodeError as e:
+            JSON_ERROR == True
+                
+        try:
+            geo_data= response.json()
+        except JSONDecodeError as e:
+            JSON_ERROR == True
+
+        
+        if (JSON_ERROR != False):
+            context= {
+            'ip': geo_data['ip'],
+            'country_name' : geo_data['country_name']
+            }
+        else:
+            context = {
+                'ip': 'No IP address entered',
+                'country_name': 'No country found, check error message'
+            }
+        
     return render(request, 'api_examples.html', context)

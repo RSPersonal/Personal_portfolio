@@ -1,11 +1,16 @@
 {% extends 'base.html' %}
 
 {% block page_content %}
+{% csrf_token %}
 <body>
     <div class="container">
         <h1>
             GEO API
         </h1>
+        <form action='#' method="get">
+            <input type="text" size="50">
+            <input type="submit" class="button" value='Click' name="mybtn">
+        </form>
         <p>Your ip address is {{ ip }} and you are probably in {{ country_name }}</p>
 </body>
 </div>
