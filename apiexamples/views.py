@@ -20,7 +20,7 @@ def index(request):
             
             geo_data = response.json()
             print(geo_data)
-            if (geo_data['ip'] != ''):
+            if ('ip' in geo_data):
                 context = {
                     'ip' : geo_data['ip'],
                     'country_name' : geo_data['country_name']
