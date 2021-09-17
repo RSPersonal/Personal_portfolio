@@ -137,6 +137,9 @@ STATIC_URL = '/static/'
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
+if not DEBUG:
+    STATIC_ROOT = ''
+
 IMAGES_URL = '/images/'
 
 IMAGES_ROOT = os.path.join(BASE_DIR, 'images')
