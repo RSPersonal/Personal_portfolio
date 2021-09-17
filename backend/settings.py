@@ -142,7 +142,7 @@ IMAGES_URL = '/images/'
 IMAGES_ROOT = os.path.join(BASE_DIR, 'images')
 
 STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, 'static'),
+    os.path.join(BASE_DIR, 'staticfiles'),
 )
 
 # Default primary key field type
@@ -177,4 +177,4 @@ LOGGING = {
         'level': 'DEBUG',
     },
 }
-# DATABASES['default'] = dj_database_url.config(default= os.getenv("DATABASE_URL", config("DATABASE_URL")), conn_max_age=600, ssl_require=True)
+DATABASES['default'] = dj_database_url.config(default= os.getenv("DATABASE_URL", config("DATABASE_URL")), conn_max_age=600, ssl_require=True)
