@@ -5,15 +5,26 @@
         <h1>
             GEO API
         </h1>
+        <p>Its' a powerful, real-time IP to geolocation API capable of looking up accurate location data and assessing security threats originating from risky IP addresses. </p>
         <form method="POST" action="">
             {% csrf_token %}
-            <input type="text" name="username">
-            <input type="submit" name="submit">
+            <input type="text" name="ip-address" >
+            <input type="submit" name="submit" class="btn btn-light">
     </form>
+    {% if messages %}
+    <ul class="messages">
+    {% for message in messages %}
+    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    {% endfor %}
+    </ul>
+{% endif %}
     {% if status == 'failed' %}
         <p>Something went wrong with {{ data.message }}</p>
     {% else %}
-        <p>Your ip address is {{ ip }} and you are probably in {{ country_name }}</p>
+    <ul>
+        <li>Your ip = {{ ip }}</li>
+        <li>Country location = {{ country_name }}</li>
+    </ul>
     {% endif %}
 </body>
 </div>
