@@ -26,7 +26,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv("SECRET_KEY", config("SECRET_KEY"))
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
@@ -177,4 +177,4 @@ LOGGING = {
         'level': 'DEBUG',
     },
 }
-DATABASES['default'] = dj_database_url.config(default= os.getenv("DATABASE_URL", config("DATABASE_URL")), conn_max_age=600, ssl_require=True)
+# DATABASES['default'] = dj_database_url.config(default= os.getenv("DATABASE_URL", config("DATABASE_URL")), conn_max_age=600, ssl_require=True)
