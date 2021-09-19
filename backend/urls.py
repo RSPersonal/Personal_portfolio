@@ -25,9 +25,7 @@ urlpatterns = [
     path("projects/", include("projects.urls")),
     path("blog/", include("blog.urls")),
     path("api-todo/", include("Todo.urls")),
-    path("aboutme/", include("aboutme.urls")),
     path("api_examples/", include("apiexamples.urls")),
-    path('login-screen/', include('django.contrib.auth.urls')),
 ]
 
 urlpatterns += static(settings.IMAGES_URL, document_root=settings.IMAGES_ROOT)

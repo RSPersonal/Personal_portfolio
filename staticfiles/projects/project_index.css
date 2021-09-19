@@ -1,0 +1,10 @@
+.row {
+    display: flex;
+    flex-direction: column;
+    font-size: small;
+}
+
+.project-image {
+    width: 100px;
+    height: 100px;
+}

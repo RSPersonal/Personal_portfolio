@@ -1,0 +1,5 @@
+.main-body {
+    display: flex;
+    margin: 10px;
+    flex-direction: column;
+}
