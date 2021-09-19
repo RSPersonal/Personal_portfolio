@@ -49,14 +49,13 @@ INSTALLED_APPS = [
     'projects',
     'blog',
     'Todo',
-    'aboutme',
     'apiexamples',
-    'loginscreen',
-    'accounts'
+    'accounts',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -90,12 +89,13 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-DATABASES = {
+if DEBUG:
+    DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
+        }
     }
-}
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
@@ -139,9 +139,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 IMAGES_URL = '/images/'
 
-IMAGES_ROOT = os.path.join(BASE_DIR, 'images')
-
-
+IMAGES_ROOT = os.path.join(BASE_DIR, '/static/images')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
@@ -175,4 +173,6 @@ LOGGING = {
         'level': 'DEBUG',
     },
 }
-DATABASES['default'] = dj_database_url.config(default= os.getenv("DATABASE_URL", config("DATABASE_URL")), conn_max_age=600, ssl_require=True)
+
+if not DEBUG:
+    DATABASES['default'] = dj_database_url.config(default= os.getenv("DATABASE_URL", config("DATABASE_URL")), conn_max_age=600, ssl_require=True)

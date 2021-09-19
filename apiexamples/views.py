@@ -21,7 +21,11 @@ def index(request):
             if ('ip' in geo_data):
                 context = {
                     'ip' : geo_data['ip'],
-                    'country_name' : geo_data['country_name']
+                    'country_name' : geo_data['country_name'],
+                    'region_name' : geo_data['region_name'],
+                    'city': geo_data['city'],
+                    'latitude' : geo_data['latitude'],
+                    'longitude' : geo_data['longitude']
                 }
             else:
                 return JsonResponse(geo_data)
