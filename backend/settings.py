@@ -174,5 +174,4 @@ LOGGING = {
     },
 }
 
-if not DEBUG:
-    DATABASES['default'] = dj_database_url.config(default= os.getenv("DATABASE_URL", config("DATABASE_URL")), conn_max_age=600, ssl_require=True)
+DATABASES['default'] = dj_database_url.config(default= os.getenv("DATABASE_URL", config("DATABASE_URL")), conn_max_age=600, ssl_require=True)
