@@ -4,3 +4,5 @@ info.txt
 *.pyo
 .vscode
 api_key.py
+__pycache__/
+__pycache__
