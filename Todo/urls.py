@@ -8,5 +8,7 @@ router.register(r'todos', views.TodoViewSet)
 
 urlpatterns = [
     path("", include(router.urls)),
-    path("api-auth/", include('rest_framework.urls', namespace="rest_framework"))
+    path("api-auth/", include('rest_framework.urls', namespace="rest_framework")),
+    path("all-todos/", views.overview_to_dos, name='todos'),
+    path("<int:pk>/", views.todo_detail, name="project_detail"),
 ]

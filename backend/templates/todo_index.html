@@ -2,17 +2,35 @@
 {% load static %}
 
 {% block page_content %}
-<h1>Todos</h1>
+<h1 class="container">Todos</h1>
+<div class="container row md-4">
+    <p>
+        <button>Create new todo</button>
+    </p>
+
+</div>
 <div class="row md-4">
-{% for todo in all_todos %}
+    {% for todo in to_dos %}
     <div class="col-md-4">
         <div class="card mb-2">
             <div class="card-body">
                 <h5 class="card-title">{{ todo.title }}</h5>
-                <p class="card-"></p>
+                <p class="card-text">{{ todo.description }}</p>
+                <p class="card-text">{{ todo.completed }}</p>
+                <p class="card-text">{{ todo.created_on }}</p>
+                <p>
+                    <button>Edit todo</button>
+                    <a href="/api/v1/todos<int:pk>/">
+                        <input type="submit"/>
+                    </a>
+                </p>
+                <p>
+                    <button>Delete todo</button>
+                </p>
             </div>
         </div>
     </div>
-{% endfor %}
+    {% endfor %}
 </div>
 {% endblock %}
+
