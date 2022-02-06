@@ -48,7 +48,6 @@ INSTALLED_APPS = [
     'projects',
     'blog',
     'Todo',
-    'aboutme',
 ]
 
 MIDDLEWARE = [
