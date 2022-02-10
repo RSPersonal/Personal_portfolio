@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'projects',
     'blog',
     'Todo',
+    'api_backend'
 ]
 
 MIDDLEWARE = [

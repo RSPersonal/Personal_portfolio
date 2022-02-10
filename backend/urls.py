@@ -18,11 +18,13 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.urls import path, include
 
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include("homepage.urls")),
     path("projects/", include("projects.urls")),
     path("blog/", include("blog.urls")),
-    path("api/v1/todos", include("Todo.urls")),
+    path("api/v1/to-dos", include("Todo.urls")),
+    path("api/v1/", include("api_backend.urls")),
 ]
 urlpatterns += static(settings.IMAGES_URL, document_root=settings.IMAGES_ROOT)
