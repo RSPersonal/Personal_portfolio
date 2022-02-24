@@ -2,26 +2,68 @@
 {% load static %}
 <link rel="stylesheet" href="{% static 'css/home_page.css' %}">
 {% block page_content %}
-    <div class="container">
-        <div class="row">
-            <div class="col text-left">
-                Hi! My name is Raphael Sparenberg
-            </div>
-        </div>
-        <div class="row">
-            <div class="col text-left">
-                <p>
-                    Lorem, ipsum dolor sit amet consectetur adipisicing elit. Aut consectetur, tempore quasi esse eum, dolorem rem itaque, fuga totam vero enim. Officiis praesentium quidem fugiat excepturi inventore, placeat repudiandae est.
-                </p>
-            </div>
-        </div>
-        <div class="row justify-content-center">
-            <div class="col-md-4">
-                <a href="https://github.com/RSPersonal" target="_blank" rel="noreferrer noopener">
-                    <img src="{% static 'images/Github-other-logo.png' %}" class="github-logo" alt="Github logo" >
-                </a>
-            </div>
+<div class="container">
+    <div class="row">
+        <div class="col text-center">
+            <h1>Raphael Sparenberg</h1>
+            <p>INTERNATIONAL BUSINESS IT-CONSULTANT | REAL ESTATE ADVISOR ZWOLLE, NEDERLAND +31 (0)6 41237152</p>
         </div>
     </div>
+</div>
+<div class="container">
+    <div class="row">
+        <div class="col-3 text-center">
+            <h5>PERSONALIA</h5>
+            <p>Zwolle
+                <br>Nederland
+                <br>+31 (0)6 41237152
+                <br>rsparenberg1992@gmail.com
+            </p>
+            <p>Geboortedatum/Plaats
+                <br>20-01-1992
+                <br>Wesel
+            </p>
+            <p>Nationaliteit
+                <br>Nederlands
+            </p>
+            <p>
+                Rijbewijs
+                <br>B
+            </p>
+            <h5>Links</h5>
+            <a href="https://nl.linkedin.com/in/raphael-sparenberg-637885173">LinkedIn</a>
+            <br>
+            <a href="https://github.com/RSPersonal">Github</a>
+        </div>
+        <div class="col-1 text-center">
+            <p></p>
+        </div>
+        <div class="col text-left">
+            <h5>Profiel</h5>
+            <p>
+                Graag omschrijf ik mijzelf als een empathische, gedreven, harde werker met een sterke
+                software affiniteit en passie voor het optimaliseren van beroepsgerichte competenties.
+                Vanwege het internationale werkveld waarbinnen ik opereer, onder andere in landen als
+                Duitsland, Rusland België en Nederland, heb ik ervaring met project management en
+                software implementaties op internationaal niveau.
+            </p>
+            <p>
+                Vanaf 2021 heb ik de rol van eindverantwoordelijke gekregen, voor alle groot klanten
+                zowel op nationaal, als op internationaal niveau. Mijn specialisme komen niet alleen
+                tot uiting in het uitvoeren van projectmanagement, maar liggen ook in het voeren van
+                actieve acquisitie (upselling), begeleiden van implementatie trajecten, het stimuleren
+                van interne procesverbeteringen, optimalisatie van digitalisering en invulling geven aan
+                business-analyses.
+            </p>
+        </div>
+    </div>
+    <div class="row justify-content-center">
+        <div class="col-md-4">
+            <a href="https://github.com/RSPersonal" target="_blank" rel="noreferrer noopener">
+                <img src="{% static 'images/Github-other-logo.png' %}" class="github-logo" alt="Github logo">
+            </a>
+        </div>
+    </div>
+</div>
 </html>
 {% endblock %}
