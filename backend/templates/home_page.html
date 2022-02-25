@@ -2,15 +2,15 @@
 {% load static %}
 
 {% block page_content %}
-<div class="container">
+<div class="container-fluid">
     <div class="row">
+        <div class="col-1 text-left">
+            <p>Visitor count</p>
+            {{ num_visits.visitor_count }}
+        </div>
         <div class="col text-center">
             <h1>Raphael Sparenberg</h1>
             <p>INTERNATIONAL BUSINESS IT-CONSULTANT | REAL ESTATE ADVISOR ZWOLLE, NEDERLAND +31 (0)6 41237152</p>
-        </div>
-        <div class="col-1 text-center">
-            <p>Visitor count</p>
-            {{ num_visits }}
         </div>
     </div>
 </div>
@@ -67,9 +67,6 @@
             </p>
         </div>
         <!-- Middle column -->
-<!--        <div class="col-1 text-center">-->
-<!--            <p></p>-->
-<!--        </div>-->
         <!-- Right column -->
         <div class="col text-left">
             <h5><b>PROFIEL</b></h5>
