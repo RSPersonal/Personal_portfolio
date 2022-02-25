@@ -1,6 +1,6 @@
 Django~=4.0.2
 djangorestframework==3.13.1
 requests~=2.27.1
-decouple
+python-decouple
+whitenoise
 dj-database-url
-whitenoise==6.0.0
