@@ -3,3 +3,4 @@ djangorestframework==3.13.1
 requests~=2.27.1
 decouple
 dj-database-url
+whitenoise==6.0.0

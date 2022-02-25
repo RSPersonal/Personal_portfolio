@@ -25,4 +25,5 @@ urlpatterns = [
     path("api/v1/to-dos", include("Todo.urls")),
     path("api/v1/", include("api_backend.urls")),
 ]
+
 urlpatterns += static(settings.IMAGES_URL, document_root=settings.IMAGES_ROOT)
