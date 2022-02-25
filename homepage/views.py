@@ -9,6 +9,7 @@ def home_page(request):
     """
     num_visit = VisitorCount.objects.all()[0]
     num_visit.visitor_count += 1
+
     num_visit.save()
 
     num_current_visits = VisitorCount.objects.get(pk=1)
