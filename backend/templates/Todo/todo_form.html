@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% block page_contend %}
+<form method="post">
+    {% csrf_token %}
+     {{ task_form }} to display all
+<!--    {{ task_form.title }} &lt;!&ndash; to display particular field&ndash;&gt;-->
+    <button type="submit">SUBMIT</button>
+</form>
+{% endblock %}

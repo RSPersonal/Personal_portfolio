@@ -10,14 +10,13 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
-from pathlib import Path
 import os
-from decouple import config
 import dj_database_url
+from pathlib import Path
+from decouple import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
@@ -46,11 +45,8 @@ INSTALLED_APPS = [
     'rest_framework_jwt',
     'backend',
     'homepage',
-    'projects',
-    'blog',
     'Todo',
-    'apiexamples',
-    'accounts',
+    'api_backend'
 ]
 
 MIDDLEWARE = [
@@ -85,14 +81,13 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'backend.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
 DATABASES = {
-'default': {
-    'ENGINE': 'django.db.backends.sqlite3',
-    'NAME': BASE_DIR / 'db.sqlite3',
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
 
@@ -114,7 +109,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
 
@@ -127,7 +121,6 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
@@ -145,7 +138,6 @@ IMAGES_ROOT = os.path.join(BASE_DIR, '/static/images')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.BasicAuthentication',
@@ -153,24 +145,9 @@ REST_FRAMEWORK = {
 }
 
 CORS_ORIGIN_WHITELIST = [
-     'http://localhost:3000',
+    'http://localhost:3000',
 ]
 
-LOGIN_REDIRECT_URL= 'home_page'
-LOGOUT_REDIRECT_URL= 'home_page'
-
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'handlers': {
-        'console': {
-            'class': 'logging.StreamHandler',
-        },
-    },
-    'root': {
-        'handlers': ['console'],
-        'level': 'DEBUG',
-    },
-}
 if not DEBUG:
-    DATABASES['default'] = dj_database_url.config(default= os.getenv("DATABASE_URL", config("DATABASE_URL")), conn_max_age=600, ssl_require=True)
+    DATABASES['default'] = dj_database_url.config(default=os.getenv("DATABASE_URL", config("DATABASE_URL")),
+                                                  conn_max_age=600, ssl_require=True)
