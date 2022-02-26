@@ -2,29 +2,12 @@
 {% load static %}
 
 {% block page_content %}
-<<<<<<< HEAD:backend/templates/home_page.html
 <div class="container-fluid">
     <div class="row">
         <div class="col-1 text-left">
             <p>Visitor count</p>
             {{ num_visits.visitor_count }}
-=======
-    <div class="container">
-        <div class="row">
-            <div class="col text-center">
-                {% if user.is_authenticated %}
-                <p>Hi! Welcome {{ user.username }}</p>
-                {% else %}
-                <p>Hi! Welcome guest! </p>
-                {% endif %}
-            </div>
->>>>>>> origin/heroku-prod-build:backend/templates/home_page_v1.html
         </div>
-        <div class="col text-center">
-            <h1>Raphael Sparenberg</h1>
-            <p>INTERNATIONAL BUSINESS IT-CONSULTANT | REAL ESTATE ADVISOR ZWOLLE, NEDERLAND +31 (0)6 41237152</p>
-        </div>
-<<<<<<< HEAD:backend/templates/home_page.html
     </div>
 </div>
 <div class="container">
@@ -160,19 +143,6 @@
                 <b>Crash course PHP programmeren, KATE Innovations, Utrecht</b>
                 <br>december 2020 — maart 2021
             </p>
-=======
-        <div class="row justify-content-center">
-            <div class="col-md-4">
-                <a href="https://github.com/RSPersonal" target="_blank" rel="noreferrer noopener">
-                    <img src="{% static 'images/Github-other-logo.png' %}" class="github-logo" alt="Github logo" >
-                </a>
-            </div>
-            <div class="col-md-4">
-                <a href="https://nl.linkedin.com/in/raphael-sparenberg-637885173/nl" target="_blank" rel="noreferrer noopener">
-                    <!-- <img src="{% static 'images/Linked-in.png' %}" class="linked-in-logo" id="linked-in" alt="Linked in logo"> -->
-                </a>
-            </div>
->>>>>>> origin/heroku-prod-build:backend/templates/home_page_v1.html
         </div>
     </div>
 </div>

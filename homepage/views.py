@@ -17,7 +17,7 @@ def home_page(request):
     context = {
         'num_visits': num_current_visits
     }
-    return render(request, 'home_page.html', context)
+    return render(request, 'homepage.html', context)
 
 
 def about_me(request):
