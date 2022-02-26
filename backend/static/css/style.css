@@ -1,25 +1,5 @@
-<<<<<<< HEAD
 * {
     outline-offset: -1px;
     font-family: monospace;
 }*
-
 #outline: 1px solid blue;
-
-=======
->>>>>>> origin/heroku-prod-build
-.navbar {
-    font-size: 30px;
-}
-
-a:link {
-    color: black;
-}
-
-a:hover {
-    color: black;
-}
-
-.footer-text {
-    font-size: 15px;
-}
