@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 
 import os
 import dj_database_url
+import sentry_sdk
+from sentry_sdk.integrations.django import DjangoIntegration
 from pathlib import Path
 from decouple import config
 
@@ -148,6 +150,21 @@ CORS_ORIGIN_WHITELIST = [
     'http://localhost:3000',
 ]
 
+
+sentry_sdk.init(
+    dsn="https://c7475ab1138443f6b991740a0c58c8a8@o1154297.ingest.sentry.io/6234073",
+    integrations=[DjangoIntegration()],
+
+    # Set traces_sample_rate to 1.0 to capture 100%
+    # of transactions for performance monitoring.
+    # We recommend adjusting this value in production.
+    traces_sample_rate=1.0,
+
+    # If you wish to associate users to errors (assuming you are using
+    # django.contrib.auth) you may enable sending PII data.
+    send_default_pii=True
+)
+
 if not DEBUG:
-    DATABASES['default'] = dj_database_url.config(default=os.getenv("DATABASE_URL", config("DATABASE_URL")),
+    DATABASES['default'] = dj_database_url.config(default=os.getenv("DATABASE_URL"),
                                                   conn_max_age=600, ssl_require=True)
