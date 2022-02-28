@@ -7,12 +7,13 @@ def home_page(request):
     """
     Function for homepage render
     """
-    num_visit = VisitorCount.objects.all()[0]
+    num_visit = VisitorCount.objects.all()[1]
     num_visit.visitor_count += 1
 
     num_visit.save()
 
     num_current_visits = VisitorCount.objects.get(pk=1)
+    # num_current_visits = 0
 
     context = {
         'num_visits': num_current_visits
