@@ -1,3 +1,8 @@
+* {
+    outline-offset: -1px;
+    font-family: monospace;
+}*
+
 .navbar {
     font-size: 25px;
 }

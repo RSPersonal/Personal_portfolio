@@ -1,16 +1,17 @@
 {% extends 'base.html' %}
 {% block page_content %}
 <body>
-    <div class="container">
-        <h1>
-            GEO API
-        </h1>
-        <p>Its' a powerful, real-time IP to geolocation API capable of looking up accurate location data and assessing security threats originating from risky IP addresses. </p>
-        <form method="POST" action="">
-            {% csrf_token %}
+<div class="container">
+    <h1>
+        GEO API
+    </h1>
+    <p>Its' a powerful, real-time IP to geolocation API capable of looking up accurate location data and assessing
+        security threats originating from risky IP addresses. </p>
+    <form method="POST" action="">
+        {% csrf_token %}
 
-            <input type="text" name="ip-address" size="60">
-            <input type="submit" name="submit" class="btn btn-light">
+        <input type="text" name="ip-address" size="60">
+        <input type="submit" name="submit" class="btn btn-light">
     </form>
     {% if ip != '' %}
     <ul>
@@ -24,14 +25,16 @@
     {% endif %}
     {% if messages %}
     <ul class="messages">
-    {% for message in messages %}
-    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-    {% endfor %}
+        {% for message in messages %}
+        <li
+        {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
     </ul>
+</div>
 {% endif %}
-    {% if status == 'failed' %}
-        <p>Something went wrong with {{ data.message }}</p>
-    </ul>
+{% if status == 'failed' %}
+<p>Something went wrong with {{ data.message }}</p>
+</ul>
 {% endif %}
 <div>
     <h1>Currency converter</h1>
