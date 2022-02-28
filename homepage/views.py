@@ -7,7 +7,7 @@ def home_page(request):
     """
     Function for homepage render
     """
-    num_visit = VisitorCount.objects.all()[1]
+    num_visit = VisitorCount.objects.get()
     num_visit.visitor_count += 1
 
     num_visit.save()
