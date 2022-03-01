@@ -8,6 +8,17 @@
             <p>Visitor count</p>
             {{ num_visits.visitor_count }}
         </div>
+        <div class="col text-center">
+            <h3 class="mt-4">
+                <p>Raphael Sparenberg</p>
+            </h3>
+            <p>
+            <br>REAL ESTATE ADVISOR | INTERNATIONAL BUSINESS IT-CONSULTANT ZWOLLE, NEDERLAND +31 (0)6 41237152
+            </p>
+        </div>
+        <div class="col-1 text-right">
+          <a class="btn btn-primary" href="/">ENG</a>
+        </div>
     </div>
 </div>
 <div class="container">
@@ -17,8 +28,8 @@
             <h5><b>PERSONALIA</b></h5>
             <p>Zwolle
                 <br>Nederland
-                <br>+31 (0)6 41237152
-                <br>rsparenberg1992@gmail.com
+                <br>+31 (0)*
+                <br>*@gmail.com
             </p>
             <p><b>Geboortedatum/Plaats</b>
                 <br>20-01-1992
@@ -66,21 +77,9 @@
         <!-- Right column -->
         <div class="col text-left">
             <h5><b>PROFIEL</b></h5>
-            <p>
-                Graag omschrijf ik mijzelf als een empathische, gedreven, harde werker met een sterke
-                software affiniteit en passie voor het optimaliseren van beroepsgerichte competenties.
-                Vanwege het internationale werkveld waarbinnen ik opereer, onder andere in landen als
-                Duitsland, Rusland België en Nederland, heb ik ervaring met project management en
-                software implementaties op internationaal niveau.
-            </p>
-            <p>
-                Vanaf 2021 heb ik de rol van eindverantwoordelijke gekregen, voor alle groot klanten
-                zowel op nationaal, als op internationaal niveau. Mijn specialisme komen niet alleen
-                tot uiting in het uitvoeren van projectmanagement, maar liggen ook in het voeren van
-                actieve acquisitie (upselling), begeleiden van implementatie trajecten, het stimuleren
-                van interne procesverbeteringen, optimalisatie van digitalisering en invulling geven aan
-                business-analyses.
-            </p>
+            {% for profile_post in profile_posts %}
+            <p>{{ profile_post.post }}</p>
+            {% endfor %}
             <h5><b>WERKERVARING</b></h5>
             <p>
                 <b>International Business IT-Consultant | Real Estate Advisor, KATE Innovations B.V., Utrecht</b>
