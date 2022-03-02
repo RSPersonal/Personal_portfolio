@@ -14,7 +14,7 @@ def home_page_en(request):
 
     num_current_visits = VisitorCount.objects.get(pk=1)
 
-    profile_posts = ProfilePosts.objects.order_by('order')
+    profile_posts = ProfilePosts.objects.order_by('order').filter(language='EN')
 
     context = {
         'num_visits': num_current_visits,
@@ -34,7 +34,7 @@ def home_page_nl(request):
 
     num_current_visits = VisitorCount.objects.get(pk=1)
 
-    profile_posts = ProfilePosts.objects.order_by('order')
+    profile_posts = ProfilePosts.objects.order_by('order').filter(language='NL')
 
     context = {
         'num_visits': num_current_visits,
