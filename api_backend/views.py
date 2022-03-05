@@ -4,7 +4,7 @@ from django.shortcuts import render
 from django.http import JsonResponse
 from django.contrib import messages
 from requests import Response
-
+from .forms import CurrencyForm
 from backend.helperclass import InputHelper
 
 
@@ -47,25 +47,26 @@ def currency_converter_call(request):
     context = {}
 
     if request.method == 'POST':
-        from_currency_input = request.POST.get('')
-        to_currency_input = request.POST.get('')
-        amount = float(request.POST.get(''))
-        if InputHelper.value(from_currency_input) and InputHelper.value(amount) and InputHelper.value(
-                to_currency_input):
+        from_currency_input = request.POST.get('to-currency')
+        amount = float(request.POST.get('amount'))
+        if InputHelper.value(from_currency_input) and InputHelper.value(amount):
             try:
-                response: Response = request.get(
-                    f'https://api.currencyfreaks.com/latest?apikey=0421374edc404ab7a49caf0433642541&symbols={to_currency_input}')
+                response: Response = requests.get(
+                    f'https://api.currencyfreaks.com/latest?apikey=0421374edc404ab7a49caf0433642541&symbols={from_currency_input}')
             except JSONDecodeError as e:
                 print(e)
             requested_currency_data = response.json()
-            converted_amount_in_new_currency = amount * float(requested_currency_data['rates'])
-            context = {
-                'from_currency': from_currency_input,
-                'to_currency': to_currency_input,
-                'converted_amount': converted_amount_in_new_currency
-            }
+            if 'success' in requested_currency_data:
+                messages.add_message(request, messages.INFO, requested_currency_data['error']['message'])
+            else:
+                converted_amount_in_new_currency = round(
+                    amount * float(requested_currency_data['rates'][from_currency_input]), 2)
+                context = {
+                    'from_currency': from_currency_input,
+                    'converted_amount': converted_amount_in_new_currency
+                }
         else:
             messages.add_message(request, messages.INFO, 'Wrong input parameters, check input')
     else:
-        context = {}
+        pass
     return render(request, 'api-examples/currency_converter.html', context=context)
