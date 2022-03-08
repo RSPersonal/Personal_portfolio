@@ -47,8 +47,8 @@ INSTALLED_APPS = [
     'rest_framework_jwt',
     'backend',
     'homepage',
-    'Todo',
-    'api_backend'
+    'api_backend',
+    'database_projects',
 ]
 
 MIDDLEWARE = [

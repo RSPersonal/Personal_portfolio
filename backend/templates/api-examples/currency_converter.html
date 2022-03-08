@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% block page_content %}
+<div class="container">
+    <div class="col">
+        <h2>Currency Converter</h2>
+        <p>Base currency is USD
+            <br>Supported Currencies at the moment are:
+        </p>
+        <ul>
+            <li>EUR</li>
+            <li>GBP</li>
+            <li>PKR</li>
+        </ul>
+        <form method="POST" action="">
+            {% csrf_token %}
+            <label for="currencies">Select a currency</label>
+            <select id="currencies" name="to-currency">
+                <option>EUR</option>
+                <option>GBP</option>
+                <option>PKR</option>
+            </select>
+            <br><input class="" type="" name="amount" size="20" value="">
+            <br><input type="submit" name="submit" class="btn btn-light">
+        </form>
+        <p>Result = {{ from_currency }} {{ converted_amount }}</p>
+        {% for message in messages %}
+        <ul>
+            <li
+                    {% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}
+            </li>
+        </ul>
+        {% endfor %}
+        <a class="btn btn-primary" href="/api/v1">Go back to api overview</a>
+    </div>
+</div>
+{% endblock %}
