@@ -1,10 +1,12 @@
+import os
+
 import requests
 from json.decoder import JSONDecodeError
 from django.shortcuts import render
 from django.http import JsonResponse
 from django.contrib import messages
 from requests import Response
-from .forms import CurrencyForm
+from decouple import config
 from backend.helperclass import InputHelper
 
 
@@ -48,11 +50,12 @@ def currency_converter_call(request):
 
     if request.method == 'POST':
         from_currency_input = request.POST.get('to-currency')
-        amount = float(request.POST.get('amount'))
+        amount = request.POST.get('amount')
         if InputHelper.value(from_currency_input) and InputHelper.value(amount):
+            api_key = os.getenv('CURRENCY_FREAKS_API_KEY', config('CURRENCY_FREAKS_API_KEY'))
             try:
                 response: Response = requests.get(
-                    f'https://api.currencyfreaks.com/latest?apikey=0421374edc404ab7a49caf0433642541&symbols={from_currency_input}')
+                    f'https://api.currencyfreaks.com/latest?apikey={api_key}&symbols={from_currency_input}')
             except JSONDecodeError as e:
                 print(e)
             requested_currency_data = response.json()
@@ -60,7 +63,7 @@ def currency_converter_call(request):
                 messages.add_message(request, messages.INFO, requested_currency_data['error']['message'])
             else:
                 converted_amount_in_new_currency = round(
-                    amount * float(requested_currency_data['rates'][from_currency_input]), 2)
+                    float(amount) * float(requested_currency_data['rates'][from_currency_input]), 2)
                 context = {
                     'from_currency': from_currency_input,
                     'converted_amount': converted_amount_in_new_currency

@@ -22,8 +22,8 @@ from django.urls import path, include
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include("homepage.urls")),
-    path("api/v1/to-dos", include("Todo.urls")),
-    path("api/v1/", include("api_backend.urls")),
+    path('api/v1/', include("api_backend.urls")),
+    path('database-projects', include('database_projects.urls'))
 ]
 
 urlpatterns += static(settings.IMAGES_URL, document_root=settings.IMAGES_ROOT)

@@ -27,7 +27,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv("SECRET_KEY", config("SECRET_KEY"))
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
@@ -47,8 +47,8 @@ INSTALLED_APPS = [
     'rest_framework_jwt',
     'backend',
     'homepage',
-    'Todo',
-    'api_backend'
+    'api_backend',
+    'database_projects',
 ]
 
 MIDDLEWARE = [
