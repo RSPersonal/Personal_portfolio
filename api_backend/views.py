@@ -7,6 +7,7 @@ from django.http import JsonResponse
 from django.contrib import messages
 from requests import Response
 from decouple import config
+from .forms import CurrencyForm
 from backend.helperclass import InputHelper
 
 
@@ -46,12 +47,15 @@ def geo_api_get_ip(request):
 
 
 def currency_converter_call(request):
-    context = {}
-
+    form = CurrencyForm()
+    context = {
+        'form': form
+    }
     if request.method == 'POST':
         from_currency_input = request.POST.get('to-currency')
-        amount = request.POST.get('amount')
-        if InputHelper.value(from_currency_input) and InputHelper.value(amount):
+        form = CurrencyForm(request.POST)
+        if InputHelper.value(from_currency_input) and form.is_valid():
+            amount = form.cleaned_data['amount']
             api_key = os.getenv('CURRENCY_FREAKS_API_KEY', config('CURRENCY_FREAKS_API_KEY'))
             try:
                 response: Response = requests.get(
@@ -64,10 +68,8 @@ def currency_converter_call(request):
             else:
                 converted_amount_in_new_currency = round(
                     float(amount) * float(requested_currency_data['rates'][from_currency_input]), 2)
-                context = {
-                    'from_currency': from_currency_input,
-                    'converted_amount': converted_amount_in_new_currency
-                }
+                context['from_currency'] = from_currency_input
+                context['converted_amount'] = converted_amount_in_new_currency
         else:
             messages.add_message(request, messages.INFO, 'Wrong input parameters, check input')
     else:

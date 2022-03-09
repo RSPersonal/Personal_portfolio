@@ -19,7 +19,8 @@
                 <option>GBP</option>
                 <option>PKR</option>
             </select>
-            <br><input class="" type="" name="amount" size="20" value="">
+            <br>{{ form.amount }}
+<!--            <br><input class="" type="" name="amount" size="20" value="">-->
             <br><input type="submit" name="submit" class="btn btn-light">
         </form>
         <p>Result = {{ from_currency }} {{ converted_amount }}</p>

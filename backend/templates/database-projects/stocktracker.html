@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block page_content %}
+{% if user.is_authenticated %}
+<div class="container">
+    <div class="col-6">
+        <div>
+            <h2>
+                Welcome to the stocktracker
+            </h2>
+            <p>This is still work in progress</P>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endblock %}
