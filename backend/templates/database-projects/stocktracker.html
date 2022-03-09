@@ -18,7 +18,7 @@
         <div>
             <h2>Select your portfolio</h2>
             {% for portfolio in portfolios %}
-            <a class="btn btn-primary">{{ portfolio }}</a>
+            <a class="btn btn-primary" href="{% url 'portfolio_detail' portfolio.pk%}">{{ portfolio }}</a>
             {% endfor %}
         </div>
     </div>
