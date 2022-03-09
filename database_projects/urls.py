@@ -3,5 +3,6 @@ from . import views
 
 urlpatterns = [
     path('', views.database_homepage, name='database-projects'),
-    path('-stocktracker/', views.stock_tracker, name='stocktracker')
+    path('-stocktracker/', views.stock_tracker_landing_page, name='stocktracker'),
+    path('-stocktracker/portfolio/<int:pk>', views.stock_tracker_landing_page, name='stocktracker')
 ]

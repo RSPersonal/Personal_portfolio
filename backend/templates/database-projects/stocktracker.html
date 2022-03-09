@@ -2,12 +2,24 @@
 {% block page_content %}
 {% if user.is_authenticated %}
 <div class="container">
-    <div class="col-6">
-        <div>
+    <div class="row">
+        <div class="col-6">
             <h2>
                 Welcome to the stocktracker
             </h2>
             <p>This is still work in progress</P>
+        </div>
+        <div class="col-6">
+            <h2>Section2</h2>
+            <p>Section paragraph</p>
+        </div>
+    </div>
+    <div class="row">
+        <div>
+            <h2>Select your portfolio</h2>
+            {% for portfolio in portfolios %}
+            <a class="btn btn-primary">{{ portfolio }}</a>
+            {% endfor %}
         </div>
     </div>
 </div>
