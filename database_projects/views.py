@@ -22,9 +22,11 @@ def stock_tracker_landing_page(request):
 
 @login_required
 def portfolio_detail(request, pk):
-    portfolio = Positions.objects.get(portfolio_id=pk)
     context = {}
-    if portfolio:
-        context['portfolio'] = portfolio
+    if Positions.objects.get(portfolio_id=pk):
+        positions = Positions.objects.get(portfolio_id=pk)
+        context['portfolio'] = positions
+    else:
+        context['success'] = False
 
     return render(request, 'database-projects/portfolio_detail.html', context=context)
