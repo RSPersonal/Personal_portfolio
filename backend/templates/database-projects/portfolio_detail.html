@@ -4,19 +4,30 @@
     <div class="row">
         <div class="col-4">
             <h2>Section 1</h2>
-            <p>{{ portfolio.ticker_name }}
-                <br>{{ portfolio.type }}
-                <br>{{ portfolio.buy_price }}
-                <br>{{ portfolio.market }}
-            </p>
         </div>
-        <div class="col-4">
-            <h2>Section 2</h2>
-            <p>
-            </p>
+        <div class="col-6 text-left">
+            <a class="btn btn-primary" href="">Delete portfolio</a>
         </div>
-        <div class="col-4">
-            <h2>Section 3</h2>
+        <div>
+            <table class="table">
+                <thead>
+                <tr>
+                    <th scope="col">Stock ticker</th>
+                    <th scope="col">Price bought</th>
+                    <th scope="col">Market</th>
+                    <th scope="col">Quantity</th>
+                    <th scope="col">Profit</th>
+                    <th scope="col">Profit in %</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>{{ position.ticker_name }}</td>
+                    <td>{{ position.buy_price }}</td>
+                    <td>{{ position.market }}</td>
+                </tr>
+                </tbody>
+            </table>
         </div>
     </div>
 </div>

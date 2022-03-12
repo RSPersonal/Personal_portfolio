@@ -23,9 +23,14 @@ def stock_tracker_landing_page(request):
 @login_required
 def portfolio_detail(request, pk):
     context = {}
+    if Portfolio.objects.filter('user_id').get('portfolio_name'):
+        context['portfolio_name'] = Portfolio.objects.filter('user_id').get('portfolio_name')
+    else:
+        context['portfolio_name'] = False
+
     if Positions.objects.get(portfolio_id=pk):
         positions = Positions.objects.get(portfolio_id=pk)
-        context['portfolio'] = positions
+        context['position'] = positions
     else:
         context['success'] = False
 
