@@ -28,8 +28,14 @@
                                     <p>
                                         Stock ticker:
                                     </p>
-                                    <p>
-                                        Buy price
+                                    <p class="pt-2">
+                                        Buy price:
+                                    </p>
+                                    <p class="pt-2">
+                                        Quantity:
+                                    </p>
+                                    <p class="pt-2">
+                                        Market:
                                     </p>
                                 </div>
                                 <div class="col-4">
@@ -41,82 +47,84 @@
                                         <p>
                                             {{ position_form.buy_price }}
                                         </p>
+                                        <p>
+                                            {{ position_form.quantity }}
+                                        </p>
+                                        <p>
+                                            {{ position_form.market }}
+                                        </p>
                                         <div class="modal-footer">
-                                            <div class="row">
-                                                <div class="col-6"></div>
-                                                <div class="col-6>
-                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                            {% csrf_token %}
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                                                 No
-                                                </button>
-                                                <input class="btn btn-primary" type="submit" value="Yes"/>
-                                            </div>
+                                            </button>
+                                            <input class="btn btn-primary" type="submit" value="Yes"/>
                                         </div>
+                                    </form>
                                 </div>
-                                </form>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-    <div class="col-2">
-        <!-- Button trigger modal -->
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#portfolio_label">
-            Delete portfolio
-        </button>
+        <div class="col-2">
+            <!-- Button trigger modal -->
+            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#portfolio_label">
+                Delete portfolio
+            </button>
 
-        <!-- Modal for deleting the portfolio -->
+            <!-- Modal for deleting the portfolio -->
 
-        <div class="modal fade" id="portfolio_label" tabindex="-1" role="dialog"
-             aria-labelledby="exampleModalLabel"
-             aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">{{ portfolio_name }}</h5>
-                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <form name="portfolio_form" method="post">
-                            {% csrf_token %}
-                            <p>
-                                Are you sure you want to delete the portfolio?
-                            </p>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No
-                                </button>
-                                <input class="btn btn-primary" type="submit" value="Yes"></input>
-                            </div>
-                        </form>
+            <div class="modal fade" id="portfolio_label" tabindex="-1" role="dialog"
+                 aria-labelledby="exampleModalLabel"
+                 aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="portfolio_label_modal_label">{{ portfolio_name }}</h5>
+                            <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form name="portfolio_form" method="post">
+                                {% csrf_token %}
+                                <p>
+                                    Are you sure you want to delete the portfolio?
+                                </p>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No
+                                    </button>
+                                    <input class="btn btn-primary" type="submit" value="Yes">
+                                </div>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
+        <div>
+            <table class="table">
+                <thead>
+                <tr>
+                    <th scope="col">Stock ticker</th>
+                    <th scope="col">Price bought</th>
+                    <th scope="col">Market</th>
+                    <th scope="col">Quantity</th>
+                    <th scope="col">Profit</th>
+                    <th scope="col">Profit in %</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>{{ position.ticker_name }}</td>
+                    <td>{{ position.buy_price }}</td>
+                    <td>{{ position.market }}</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
-    <div>
-        <table class="table">
-            <thead>
-            <tr>
-                <th scope="col">Stock ticker</th>
-                <th scope="col">Price bought</th>
-                <th scope="col">Market</th>
-                <th scope="col">Quantity</th>
-                <th scope="col">Profit</th>
-                <th scope="col">Profit in %</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-                <td>{{ position.ticker_name }}</td>
-                <td>{{ position.buy_price }}</td>
-                <td>{{ position.market }}</td>
-            </tr>
-            </tbody>
-        </table>
-    </div>
-</div>
 </div>
 {% endblock %}
