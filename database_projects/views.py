@@ -4,7 +4,7 @@ from .models import Portfolio, Positions
 from .forms import PortfolioForm, PositionForm
 
 
-# Create your views heree
+# Create your views here
 def database_homepage(request):
     context = {}
     return render(request, 'database-projects/database-projects.html', context=context)
