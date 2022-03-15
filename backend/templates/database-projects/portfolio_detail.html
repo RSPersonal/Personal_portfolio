@@ -3,7 +3,7 @@
 <div class="container">
     <div class="row">
         <div class="col-8">
-            <h2>{{ portfolio_name }}</h2>
+            <h2>{{ portfolio.portfolio_name }}</h2>
         </div>
         <div class="col-2">
             <!-- Button trigger modal -->
@@ -39,7 +39,7 @@
                                     </p>
                                 </div>
                                 <div class="col-4">
-                                    <form name="position_form" method="post">
+                                    <form name="position_form" method="POST">
                                         {% csrf_token %}
                                         <p>
                                             {{ position_form.ticker_name }}
@@ -88,7 +88,7 @@
                             </button>
                         </div>
                         <div class="modal-body">
-                            <form name="portfolio_form" method="post">
+                            <form name="portfolio_form" method="POST">
                                 {% csrf_token %}
                                 <p>
                                     Are you sure you want to delete the portfolio?
@@ -96,7 +96,7 @@
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No
                                     </button>
-                                    <input class="btn btn-primary" type="submit" value="Yes">
+                                    <input class="btn btn-primary" name="delete_button" type="submit" value="Yes">
                                 </div>
                             </form>
                         </div>
@@ -110,6 +110,7 @@
                 <tr>
                     <th scope="col">Stock ticker</th>
                     <th scope="col">Price bought</th>
+                    <th scope="col" class="text-center">Current market price</th>
                     <th scope="col">Market</th>
                     <th scope="col">Quantity</th>
                     <th scope="col">Profit</th>
@@ -117,12 +118,17 @@
                 </tr>
                 </thead>
                 <tbody>
+                {% for position in positions %}
                 <tr>
                     <td>{{ position.ticker_name }}</td>
-                    <td>{{ position.buy_price }}</td>
+                    <td class="text-end">{{ position.buy_price }}</td>
+                    <td class="text-end">{{ position.current_market_price }}</td>
                     <td>{{ position.market }}</td>
-                    <td>{{ position.quanity }}</td>
+                    <td class="text-end">{{ position.quantity }}</td>
+                    <td class="text-end">{{ position.profit }}</td>
+                    <td class="text-end">{{ position.profit_in_percentage }}</td>
                 </tr>
+                {% endfor %}
                 </tbody>
             </table>
         </div>

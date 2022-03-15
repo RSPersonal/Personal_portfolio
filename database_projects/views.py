@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from .models import Portfolio, Positions
 from .forms import PortfolioForm, PositionForm
@@ -30,17 +30,18 @@ def stock_tracker_landing_page(request):
 
 @login_required
 def portfolio_detail(request, pk):
-    portfolio_name = Portfolio.objects.get(id=pk)
+    portfolio = Portfolio.objects.get(id=pk)
     position_form = PositionForm()
 
     context = {
         'position_form': position_form,
-        'portfolio_name': portfolio_name
+        'portfolio': portfolio
     }
     # See if there are any active positions
-    if Positions.objects.filter(pk=pk).exists():
-        positions = Positions.objects.get(portfolio_id=pk)
-        context['position'] = positions
+    if Positions.objects.filter(portfolio=pk).exists():
+        positions = Positions.objects.filter(portfolio=pk).order_by('added_on')
+        print(positions)
+        context['positions'] = positions
     else:
         context['active_positions'] = False
 
@@ -48,12 +49,20 @@ def portfolio_detail(request, pk):
     if request.method == 'POST':
         form = PositionForm(request.POST)
         if form.is_valid():
-            stock_ticker = form.cleaned_data['ticker_name']
-            buy_price = form.cleaned_data['buy_price']
-            quantity = form.cleaned_data['quantity']
-            market = form.cleaned_data['market']
+            user_input_stock_name = form.cleaned_data['ticker_name']
+            user_input_buy_price = form.cleaned_data['buy_price']
+            user_input_quantity = form.cleaned_data['quantity']
+            user_input_market = form.cleaned_data['market']
 
-            new_stock_entry = Positions(ticker_name=stock_ticker, buy_price=buy_price, quantity=quantity, market=market)
+            new_stock_entry = Positions(portfolio=portfolio, ticker_name=user_input_stock_name,
+                                        buy_price=user_input_buy_price,
+                                        quantity=user_input_quantity, market=user_input_market)
             new_stock_entry.save()
+            return redirect('portfolio_detail', pk)
+
+    if request.method == 'POST' and 'delete_button' in request.POST:
+        if Positions.objects.filter(portfolio=pk).exists():
+            Portfolio.objects.filter(portfolio=pk).delete()
+        return redirect('stocktracker')
 
     return render(request, 'database-projects/portfolio_detail.html', context=context)
