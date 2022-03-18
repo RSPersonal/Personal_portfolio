@@ -109,12 +109,12 @@
                 <thead>
                 <tr>
                     <th scope="col">Stock ticker</th>
-                    <th scope="col">Price bought</th>
-                    <th scope="col" class="text-center">Current market price</th>
-                    <th scope="col">Market</th>
-                    <th scope="col">Quantity</th>
-                    <th scope="col">Profit</th>
-                    <th scope="col">Profit in %</th>
+                    <th scope="col" class="text-end">Price bought</th>
+                    <th scope="col" class="text-end">Current market price</th>
+                    <th scope="col" class="text-end">Market</th>
+                    <th scope="col" class="text-end">Quantity</th>
+                    <th scope="col" class="text-end">Profit</th>
+                    <th scope="col" class="text-end">Profit in %</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -123,9 +123,9 @@
                     <td>{{ position.ticker_name }}</td>
                     <td class="text-end">{{ position.buy_price }}</td>
                     <td class="text-end">{{ position.current_market_price }}</td>
-                    <td>{{ position.market }}</td>
+                    <td class="text-end">{{ position.market }}</td>
                     <td class="text-end">{{ position.quantity }}</td>
-                    <td class="text-end">{{ position.profit }}</td>
+                    <td class="text-end">{{ position.position_profit }}</td>
                     <td class="text-end">{{ position.profit_in_percentage }}</td>
                 </tr>
                 {% endfor %}

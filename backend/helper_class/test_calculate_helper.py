@@ -1,5 +1,5 @@
 import unittest
-from CalculateHelper import calculate_stock_profit
+from .CalculateHelper import calculate_stock_profit
 
 
 class CalculateTest(unittest.TestCase):

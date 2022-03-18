@@ -1,7 +1,11 @@
+import os
+import requests
+from decouple import config
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from .models import Portfolio, Positions
 from .forms import PortfolioForm, PositionForm
+from backend.helper_class import CalculateHelper
 
 
 # Create your views here
@@ -40,7 +44,10 @@ def portfolio_detail(request, pk):
     # See if there are any active positions
     if Positions.objects.filter(portfolio=pk).exists():
         positions = Positions.objects.filter(portfolio=pk).order_by('added_on')
-        print(positions)
+        for position in positions:
+            calculated_profit = CalculateHelper.calculate_stock_profit(position.buy_price,
+                                                                       position.current_market_price, position.quantity)
+            position.position_profit = round(calculated_profit, 2)
         context['positions'] = positions
     else:
         context['active_positions'] = False
@@ -49,14 +56,24 @@ def portfolio_detail(request, pk):
     if request.method == 'POST':
         form = PositionForm(request.POST)
         if form.is_valid():
+            # Getting all the cleaned data for the database entry
             user_input_stock_name = form.cleaned_data['ticker_name']
             user_input_buy_price = form.cleaned_data['buy_price']
             user_input_quantity = form.cleaned_data['quantity']
             user_input_market = form.cleaned_data['market']
 
+            # TODO Write checks for responses and empty data
+            get_stock_json = requests.get(
+                f"https://api.polygon.io/v2/aggs/ticker/{user_input_stock_name}/prev?adjusted=true&apiKey={os.getenv('POLYGON_API_KEY', config('POLYGON_API_KEY'))}")
+            ticker_data = get_stock_json.json()
+
+            # Adding new entry to Database
             new_stock_entry = Positions(portfolio=portfolio, ticker_name=user_input_stock_name,
                                         buy_price=user_input_buy_price,
+                                        current_market_price=ticker_data['results'][0]['c'],
                                         quantity=user_input_quantity, market=user_input_market)
+
+            # Saving the entry to database
             new_stock_entry.save()
             return redirect('portfolio_detail', pk)
 
