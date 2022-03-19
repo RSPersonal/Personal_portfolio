@@ -18,6 +18,7 @@ class Positions(models.Model):
     current_market_price = models.FloatField()
     market = models.CharField(max_length=20)
     quantity = models.FloatField(default=1)
+    amount_invested = models.FloatField(default=0)
     position_profit = models.FloatField(default=0.0)
     position_profit_in_percentage = models.FloatField(default=0.0)
     portfolio = models.ForeignKey(Portfolio, on_delete=models.CASCADE)

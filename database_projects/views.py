@@ -1,5 +1,6 @@
 import os
 import requests
+from django.contrib import messages
 from decouple import config
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
@@ -45,9 +46,33 @@ def portfolio_detail(request, pk):
     if Positions.objects.filter(portfolio=pk).exists():
         positions = Positions.objects.filter(portfolio=pk).order_by('added_on')
         for position in positions:
+            # Get current market price for profit calculation
+            get_stock_json = requests.get(
+                f"https://api.polygon.io/v2/aggs/ticker/{position.ticker_name}/prev?adjusted=true&apiKey={os.getenv('POLYGON_API_KEY', config('POLYGON_API_KEY'))}")
+            result_api_call = get_stock_json.json()
+            # TODO ERROR when newly added position, look nto this
+            if result_api_call['resultsCount'] > 0:
+                position.current_market_price = result_api_call['results'][0]['c']
+                current_market_price_from_api_call = result_api_call['results'][0]['c']
+            else:
+                current_market_price_from_api_call = 0
+
+            # Total amount invested calculation
+            calculated_total_invested = CalculateHelper.calculate_total_amount_invested(position.buy_price,
+                                                                                        position.quantity)
+            position.amount_invested = calculated_total_invested
+
+            # Profit calculation
             calculated_profit = CalculateHelper.calculate_stock_profit(position.buy_price,
-                                                                       position.current_market_price, position.quantity)
+                                                                       current_market_price_from_api_call, position.quantity)
             position.position_profit = round(calculated_profit, 2)
+
+            # Profit in percentage calculation
+            calculated_profit_perc = CalculateHelper.calculate_profit_in_percentage(position.buy_price,
+                                                                                    position.quantity,
+                                                                                    calculated_profit)
+            position.position_profit_in_percentage = calculated_profit_perc
+
         context['positions'] = positions
     else:
         context['active_positions'] = False
@@ -67,15 +92,19 @@ def portfolio_detail(request, pk):
                 f"https://api.polygon.io/v2/aggs/ticker/{user_input_stock_name}/prev?adjusted=true&apiKey={os.getenv('POLYGON_API_KEY', config('POLYGON_API_KEY'))}")
             ticker_data = get_stock_json.json()
 
-            # Adding new entry to Database
-            new_stock_entry = Positions(portfolio=portfolio, ticker_name=user_input_stock_name,
-                                        buy_price=user_input_buy_price,
-                                        current_market_price=ticker_data['results'][0]['c'],
-                                        quantity=user_input_quantity, market=user_input_market)
+            # Checking if results came back, otherwise give user notification for bad request
+            if ticker_data['resultsCount'] > 0:
+                # Adding new entry to Database
+                new_stock_entry = Positions(portfolio=portfolio, ticker_name=user_input_stock_name,
+                                            buy_price=user_input_buy_price,
+                                            current_market_price=ticker_data['results'][0]['c'],
+                                            quantity=user_input_quantity, market=user_input_market)
+                # Saving the entry to database
+                new_stock_entry.save()
 
-            # Saving the entry to database
-            new_stock_entry.save()
-            return redirect('portfolio_detail', pk)
+                return redirect('portfolio_detail', pk)
+            else:
+                messages.add_message(request, messages.INFO, "Could not find Stock, make sure you spelled it correct")
 
     if request.method == 'POST' and 'delete_button' in request.POST:
         if Positions.objects.filter(portfolio=pk).exists():

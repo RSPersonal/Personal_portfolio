@@ -11,10 +11,22 @@ def calculate_stock_profit(price_bought: float, current_market_price: float, qua
     return np.subtract((current_market_price * quantity), (price_bought * quantity))
 
 
-def calculate_profit_in_percentage(price_bought: float, current_market_price: float, quantity: float):
+def calculate_total_amount_invested(buy_price: float, amount_of_stocks: float):
     """
-    @param price_bought:
-    @param current_market_price:
-    @param quantity:
+    @param buy_price:
+    @param amount_of_stocks:
     @return:
     """
+    return np.multiply(buy_price, amount_of_stocks)
+
+
+def calculate_profit_in_percentage(buy_price: float, quantity: float, profit: float):
+    """
+    @param buy_price:
+    @param quantity:
+    @param profit:
+    @return:
+    """
+    calculated_total_amount_invested = calculate_total_amount_invested(buy_price, quantity)
+
+    return round(np.divide(profit, calculated_total_amount_invested) * 100, 2)
