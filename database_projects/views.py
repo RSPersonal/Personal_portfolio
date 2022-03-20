@@ -45,7 +45,7 @@ def portfolio_detail(request, pk):
     # See if there are any active positions
     if Positions.objects.filter(portfolio=pk).exists():
         positions = Positions.objects.filter(portfolio=pk).order_by('added_on')
-        # Needed for calculations
+        # Standard variables for total calculation of portfolio
         current_market_price_from_api_call = 0
         calculated_total_amount_invested_in_portfolio = 0
         calculated_total_profit_portfolio = 0
@@ -90,7 +90,7 @@ def portfolio_detail(request, pk):
 
         portfolio.total_positions = calculated_total_positions
         portfolio.total_amount_invested = calculated_total_amount_invested_in_portfolio
-        portfolio.total_profit = calculated_total_profit_portfolio
+        portfolio.total_profit = round(calculated_total_profit_portfolio, 2)
         portfolio.total_profit_percentage = CalculateHelper.calculate_portfolio_profit_in_percentage(
             calculated_total_amount_invested_in_portfolio, calculated_total_profit_portfolio)
         portfolio.save()

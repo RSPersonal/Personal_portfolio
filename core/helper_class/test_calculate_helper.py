@@ -1,5 +1,5 @@
 import unittest
-from CalculateHelper import calculate_total_amount_invested, calculate_stock_profit
+from .CalculateHelper import *
 
 
 class CalculateTest(unittest.TestCase):
@@ -11,7 +11,10 @@ class CalculateTest(unittest.TestCase):
         self.assertEqual(calculate_total_amount_invested(180, 10), 1800)
 
     def test_total_amount_invested_empty(self):
-        self.assertEqual(calculate_total_amount_invested(180, 10), 1800)
+        self.assertEqual(calculate_total_amount_invested(0, 0), 0)
+
+    def test_portfolio_total_amount_invested_empty(self):
+        self.assertEqual(calculate_portfolio_profit_in_percentage(4000, 400), 10)
 
 
 if __name__ == '__main__':

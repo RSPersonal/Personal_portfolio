@@ -40,3 +40,4 @@ def calculate_portfolio_profit_in_percentage(amount_invested: float, profit: flo
     """
 
     return round(np.divide(profit, amount_invested) * 100, 2)
+

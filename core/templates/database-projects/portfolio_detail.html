@@ -1,11 +1,11 @@
 {% extends 'base.html' %}
 {% block page_content %}
-<div class="container">
-    <div class="row">
-        <div class="col-8">
+<div class="container-fluid">
+    <div class="row ps-4 pe-4">
+        <div class="col-6">
             <h3>{{ portfolio.portfolio_name }}</h3>
         </div>
-        <div class="col-2 text-end">
+        <div class="col-3 text-end">
             <!-- Button trigger modal -->
             <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#add_position_modal">
                 Add position
@@ -68,7 +68,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-2 text-end">
+        <div class="col-3 text-end">
             <!-- Button trigger modal -->
             <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#portfolio_label">
                 Delete portfolio
