@@ -6,7 +6,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from .models import Portfolio, Positions
 from .forms import PortfolioForm, PositionForm
-from backend.helper_class import CalculateHelper
+from core.helper_class import CalculateHelper
 
 
 # Create your views here
@@ -50,12 +50,14 @@ def portfolio_detail(request, pk):
             get_stock_json = requests.get(
                 f"https://api.polygon.io/v2/aggs/ticker/{position.ticker_name}/prev?adjusted=true&apiKey={os.getenv('POLYGON_API_KEY', config('POLYGON_API_KEY'))}")
             result_api_call = get_stock_json.json()
+            current_market_price_from_api_call = 0
             # TODO ERROR when newly added position, look nto this
-            if result_api_call['resultsCount'] > 0:
+            if len(result_api_call) != 0 and result_api_call['status'] == 'ERROR':
+                messages.add_message(request, messages.INFO, result_api_call['error'])
+                break
+            elif len(result_api_call) != 0 and result_api_call['resultsCount'] > 0:
                 position.current_market_price = result_api_call['results'][0]['c']
                 current_market_price_from_api_call = result_api_call['results'][0]['c']
-            else:
-                current_market_price_from_api_call = 0
 
             # Total amount invested calculation
             calculated_total_invested = CalculateHelper.calculate_total_amount_invested(position.buy_price,
@@ -64,7 +66,8 @@ def portfolio_detail(request, pk):
 
             # Profit calculation
             calculated_profit = CalculateHelper.calculate_stock_profit(position.buy_price,
-                                                                       current_market_price_from_api_call, position.quantity)
+                                                                       current_market_price_from_api_call,
+                                                                       position.quantity)
             position.position_profit = round(calculated_profit, 2)
 
             # Profit in percentage calculation

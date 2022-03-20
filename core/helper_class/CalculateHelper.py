@@ -15,7 +15,7 @@ def calculate_total_amount_invested(buy_price: float, amount_of_stocks: float):
     """
     @param buy_price:
     @param amount_of_stocks:
-    @return:
+    @return: buy_price * amount_of_stocks
     """
     return np.multiply(buy_price, amount_of_stocks)
 
@@ -25,7 +25,7 @@ def calculate_profit_in_percentage(buy_price: float, quantity: float, profit: fl
     @param buy_price:
     @param quantity:
     @param profit:
-    @return:
+    @return: profit / (buy_price * quantity)
     """
     calculated_total_amount_invested = calculate_total_amount_invested(buy_price, quantity)
 
