@@ -4,18 +4,31 @@
 <body>
 <div class="container">
     <div class="row">
-        <div class="col-6">
+        <div class="col-12">
             <h2>
                 Welcome to the stocktracker
             </h2>
-            <p>This is still work in progress</P>
+            <p>I build this stocktracker app to learn database operations. To get current stock data, I linked this to
+                the free API from Polygon.io. It's only possible to do 5 API calls per minute. You will see an error
+                message whenever the api calls are exceeded.
+                <br><br>Current features are:
+            <ul>
+                <li>Basic CRUD database operation</li>
+                <li>Adding portfolio's linked to user</li>
+                <li>Only show portfolio's linked to user</li>
+                <li>Show general KPI's in portfolio overview</li>
+                <li>KPI's calculated based on positions in portfolio</li>
+                <li>Adding position to portfolio</li>
+                <li>API connection with Polygon.io to get live stock data</li>
+            </ul>
+            </p>
         </div>
     </div>
     <div class="row">
-        <div class="col-6">
+        <div class="col-8">
             <h2>Select your portfolio</h2>
         </div>
-        <div class="col-4">
+        <div class="col-4 text-end">
             <!-- Button trigger modal -->
             <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#exampleModal">
                 Add new portfolio
@@ -54,15 +67,15 @@
         <div>
             {% for portfolio in portfolios %}
             <div class="row pt-4">
-                <div class="col-2">
+                <div class="col-6">
                     <a class="btn btn-primary" href="{% url 'portfolio_detail' portfolio.pk%}">{{ portfolio }}</a>
                 </div>
                 <div class="row">
                     <div class="col-4 pt-2">
-                        Total amount invested: {{ portfolio.total_amount_invested }}
-                        <br>Positions: {{ portfolio.total_positions }}
-                        <br>Profit: {{  portfolio.total_profit }}
-                        <br>Profit in %: {{  portfolio.total_profit_percentage }} %
+                        <b>Total amount invested:</b> {{ portfolio.total_amount_invested }}
+                        <br><b>Positions:</b> {{ portfolio.total_positions }}
+                        <br><b>Profit:</b> {{ portfolio.total_profit }}
+                        <br><b>Profit in %:</b> {{ portfolio.total_profit_percentage }} %
                     </div>
                 </div>
             </div>
