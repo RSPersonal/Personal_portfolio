@@ -8,7 +8,7 @@ from django.contrib import messages
 from requests import Response
 from decouple import config
 from .forms import CurrencyForm
-from core.helper_class import InputHelper
+from core.helper_class import input_validator_helper
 
 
 # Create your views here.

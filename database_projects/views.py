@@ -6,7 +6,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from .models import Portfolio, Positions
 from .forms import PortfolioForm, PositionForm
-from core.helper_class import CalculateHelper
+from core.helper_class import calculations_helper
 
 
 # Create your views here
@@ -52,49 +52,61 @@ def portfolio_detail(request, pk):
         calculated_total_profit_percentage = 0.0
         calculated_total_positions = 0
 
-        for position in positions:
-            # Get current market price for profit calculation
+        # Check if connection is accessible
+        # TODO Build in an check if connection is available
+        active_connection = False
+        try:
             get_stock_json = requests.get(
-                f"https://api.polygon.io/v2/aggs/ticker/{position.ticker_name}/prev?adjusted=true&apiKey={os.getenv('POLYGON_API_KEY', config('POLYGON_API_KEY'))}")
-            result_api_call = get_stock_json.json()
+                f"https://api.polygon.io/v2/aggs/ticker/AAPL/prev?adjusted=true&apiKey={os.getenv('POLYGON_API_KEY', config('POLYGON_API_KEY'))}")
+            active_connection = True
+        except ConnectionError as e:
+            print('\nError =' . e)
 
-            if len(result_api_call) != 0 and result_api_call['status'] == 'ERROR':
-                messages.add_message(request, messages.INFO, result_api_call['error'])
-                break
-            elif len(result_api_call) != 0 and result_api_call['resultsCount'] > 0:
-                position.current_market_price = result_api_call['results'][0]['c']
-                current_market_price_from_api_call = result_api_call['results'][0]['c']
+        if active_connection:
+            for position in positions:
+                # Get current market price for profit calculation
+                get_stock_json = requests.get(
+                    f"https://api.polygon.io/v2/aggs/ticker/{position.ticker_name}/prev?adjusted=true&apiKey={os.getenv('POLYGON_API_KEY', config('POLYGON_API_KEY'))}")
+                result_api_call = get_stock_json.json()
 
-            # Total amount invested calculation
-            calculated_total_invested = CalculateHelper.calculate_total_amount_invested(position.buy_price,
-                                                                                        position.quantity)
-            position.amount_invested = calculated_total_invested
-            calculated_total_amount_invested_in_portfolio += calculated_total_invested
+                if len(result_api_call) != 0 and result_api_call['status'] == 'ERROR':
+                    messages.add_message(request, messages.INFO, result_api_call['error'])
+                    break
+                elif len(result_api_call) != 0 and result_api_call['resultsCount'] > 0:
+                    position.current_market_price = result_api_call['results'][0]['c']
+                    current_market_price_from_api_call = result_api_call['results'][0]['c']
 
-            # Profit calculation
-            calculated_profit = CalculateHelper.calculate_stock_profit(position.buy_price,
-                                                                       current_market_price_from_api_call,
-                                                                       position.quantity)
-            position.position_profit = round(calculated_profit, 2)
-            calculated_total_profit_portfolio += calculated_profit
+                # Total amount invested calculation
+                calculated_total_invested = calculations_helper.calculate_total_amount_invested(position.buy_price,
+                                                                                                position.quantity)
+                position.amount_invested = calculated_total_invested
+                calculated_total_amount_invested_in_portfolio += calculated_total_invested
 
-            # Profit in percentage calculation
-            calculated_profit_perc = CalculateHelper.calculate_profit_in_percentage(position.buy_price,
-                                                                                    position.quantity,
-                                                                                    calculated_profit)
-            calculated_total_profit_percentage += calculated_profit_perc
-            position.position_profit_in_percentage = calculated_profit_perc
+                # Profit calculation
+                calculated_profit = calculations_helper.calculate_stock_profit(position.buy_price,
+                                                                               current_market_price_from_api_call,
+                                                                               position.quantity)
+                position.position_profit = round(calculated_profit, 2)
+                calculated_total_profit_portfolio += calculated_profit
 
-            # Total positions
-            calculated_total_positions += 1
+                # Profit in percentage calculation
+                calculated_profit_perc = calculations_helper.calculate_profit_in_percentage(position.buy_price,
+                                                                                            position.quantity,
+                                                                                            calculated_profit)
+                calculated_total_profit_percentage += calculated_profit_perc
+                position.position_profit_in_percentage = calculated_profit_perc
 
-        portfolio.total_positions = calculated_total_positions
-        portfolio.total_amount_invested = calculated_total_amount_invested_in_portfolio
-        portfolio.total_profit = round(calculated_total_profit_portfolio, 2)
-        portfolio.total_profit_percentage = CalculateHelper.calculate_portfolio_profit_in_percentage(
-            calculated_total_amount_invested_in_portfolio, calculated_total_profit_portfolio)
-        portfolio.save()
-        context['positions'] = positions
+                # Total positions
+                calculated_total_positions += 1
+
+            # Save it to the portfolio object to show later in portfolio overview
+            portfolio.total_positions = calculated_total_positions
+            portfolio.total_amount_invested = calculated_total_amount_invested_in_portfolio
+            portfolio.total_profit = round(calculated_total_profit_portfolio, 2)
+            portfolio.total_profit_percentage = calculations_helper.calculate_portfolio_profit_in_percentage(
+                calculated_total_amount_invested_in_portfolio, calculated_total_profit_portfolio)
+            portfolio.save()
+            context['positions'] = positions
     else:
         context['active_positions'] = False
 
@@ -127,6 +139,12 @@ def portfolio_detail(request, pk):
             else:
                 messages.add_message(request, messages.INFO, "Could not find Stock, make sure you spelled it correct")
 
+    # Delete position
+    if request.method == 'POST' and 'delete_position_button' in request.POST:
+        Positions.objects.get(id=request.POST.get('id')).delete()
+        return redirect('portfolio_detail', pk)
+
+    # Delete portfolio
     if request.method == 'POST' and 'delete_button' in request.POST:
         if Positions.objects.filter(portfolio=pk).exists():
             Portfolio.objects.filter(portfolio=pk).delete()
