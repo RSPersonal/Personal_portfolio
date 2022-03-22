@@ -17,12 +17,22 @@ def database_homepage(request):
 
 @login_required
 def stock_tracker_landing_page(request):
+    # Getting all portfolio's from user
     portfolio_or_portfolios = Portfolio.objects.filter(user_id=request.user.id)
+    # Getting the position data from portfolio
+    labels = []
+    data = []
+    context = {}
+    positions_in_portfolio = Positions.objects.filter(portfolio_id=1)
+    for position in positions_in_portfolio:
+        labels.append(position.ticker_name)
+        data.append(position.quantity)
+
     portfolio_form = PortfolioForm()
-    context = {
-        'portfolios': portfolio_or_portfolios,
-        'portfolio_form': portfolio_form
-    }
+    context['labels'] = labels
+    context['data'] = data
+    context['portfolios'] = portfolio_or_portfolios
+    context['portfolio_form'] = portfolio_form
 
     if request.method == 'POST':
         form = PortfolioForm(request.POST)
@@ -54,13 +64,13 @@ def portfolio_detail(request, pk):
 
         # Check if connection is accessible
         # TODO Build in an check if connection is available
-        active_connection = False
+        active_connection = True
         try:
             get_stock_json = requests.get(
                 f"https://api.polygon.io/v2/aggs/ticker/AAPL/prev?adjusted=true&apiKey={os.getenv('POLYGON_API_KEY', config('POLYGON_API_KEY'))}")
-            active_connection = True
         except ConnectionError as e:
-            print('\nError =' . e)
+            print('\nError =', e)
+            active_connection = False
 
         if active_connection:
             for position in positions:
