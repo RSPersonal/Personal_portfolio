@@ -1,9 +1,9 @@
-from django.shortcuts import render, get_object_or_404
-from .models import VisitorCount
+from django.shortcuts import render, redirect
+from .models import VisitorCount, ProfilePosts
 
 
 # Create your views here.
-def home_page(request):
+def home_page_en(request):
     """
     Function for homepage render
     """
@@ -13,12 +13,34 @@ def home_page(request):
     num_visit.save()
 
     num_current_visits = VisitorCount.objects.get(pk=1)
-    # num_current_visits = 0
+
+    profile_posts = ProfilePosts.objects.order_by('order').filter(language='EN')
 
     context = {
-        'num_visits': num_current_visits
+        'num_visits': num_current_visits,
+        'profile_posts': profile_posts
     }
-    return render(request, 'homepage.html', context)
+    return render(request, 'homepage_en.html', context)
+
+
+def home_page_nl(request):
+    """
+    Function for homepage render
+    """
+    num_visit = VisitorCount.objects.get()
+    num_visit.visitor_count += 1
+
+    num_visit.save()
+
+    num_current_visits = VisitorCount.objects.get(pk=1)
+
+    profile_posts = ProfilePosts.objects.order_by('order').filter(language='NL')
+
+    context = {
+        'num_visits': num_current_visits,
+        'profile_posts': profile_posts
+    }
+    return render(request, 'homepage_nl.html', context)
 
 
 def about_me(request):

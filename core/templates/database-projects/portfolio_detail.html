@@ -1,0 +1,197 @@
+{% extends 'base.html' %}
+{% block page_content %}
+<div class="container-fluid">
+    <div class="row ps-4 pe-4">
+        <div class="col-6">
+            <h3>{{ portfolio.portfolio_name }}</h3>
+        </div>
+        <div class="col-3 text-end">
+            <!-- Button trigger modal -->
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#add_position_modal">
+                Add position
+            </button>
+            <!-- Modal for adding position -->
+            <div class="modal fade" id="add_position_modal" tabindex="-1" role="dialog"
+                 aria-labelledby="exampleModalLabel"
+                 aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">{{ portfolio_name }}</h5>
+                            <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-4">
+                                    <p>
+                                        Stock ticker:
+                                    </p>
+                                    <p class="pt-2">
+                                        Buy price:
+                                    </p>
+                                    <p class="pt-2">
+                                        Quantity:
+                                    </p>
+                                    <p class="pt-2">
+                                        Market:
+                                    </p>
+                                </div>
+                                <div class="col-4">
+                                    <form name="position_form" method="POST">
+                                        {% csrf_token %}
+                                        <p>
+                                            {{ position_form.ticker_name }}
+                                        </p>
+                                        <p>
+                                            {{ position_form.buy_price }}
+                                        </p>
+                                        <p>
+                                            {{ position_form.quantity }}
+                                        </p>
+                                        <p>
+                                            {{ position_form.market }}
+                                        </p>
+                                        <div class="modal-footer">
+                                            {% csrf_token %}
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                                No
+                                            </button>
+                                            <input class="btn btn-primary" type="submit" value="Yes"/>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-3 text-end">
+            <!-- Button trigger modal -->
+            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#portfolio_label">
+                Delete portfolio
+            </button>
+
+            <!-- Modal for deleting the portfolio -->
+
+            <div class="modal fade" id="portfolio_label" tabindex="-1" role="dialog"
+                 aria-labelledby="exampleModalLabel"
+                 aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="portfolio_label_modal_label">{{ portfolio_name }}</h5>
+                            <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form name="portfolio_form" method="POST">
+                                {% csrf_token %}
+                                <p>
+                                    Are you sure you want to delete the portfolio?
+                                </p>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No
+                                    </button>
+                                    <input class="btn btn-primary" name="delete_button" type="submit" value="Yes">
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-4">
+            <table class="table">
+
+            </table>
+        </div>
+        <div>
+            {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                <li
+                        {% if message.tags %} class="{{ message.tags }}" {% endif %}>
+                    {{ message }}
+                </li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+        </div>
+        <div>
+            <table class="table">
+                <thead>
+                <tr>
+                    <th scope="col">Stock ticker</th>
+                    <th scope="col" class="text-end">Price bought</th>
+                    <th scope="col" class="text-end">Quantity</th>
+                    <th scope="col" class="text-end">Amount invested</th>
+                    <th scope="col" class="text-end">Current market price</th>
+                    <th scope="col" class="text-end">Market</th>
+                    <th scope="col" class="text-end">Profit</th>
+                    <th scope="col" class="text-end">Profit in %</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for position in positions %}
+                <tr>
+                    <td>{{ position.ticker_name }}</td>
+                    <td class="text-end">{{ position.buy_price }}</td>
+                    <td class="text-end">{{ position.quantity }}</td>
+                    <td class="text-end">{{ position.amount_invested }}</td>
+                    <td class="text-end">{{ position.current_market_price }}</td>
+                    <td class="text-end">{{ position.market }}</td>
+                    <td class="text-end">{{ position.position_profit }}</td>
+                    <td class="text-end">{{ position.position_profit_in_percentage }} %</td>
+                    <td class="text-end">
+                        <!-- Button trigger modal -->
+                        <button type="button" class="btn btn-danger" data-bs-toggle="modal"
+                                data-bs-target="#position_label">
+                            DEL
+                        </button>
+
+                        <!-- Modal for deleting the portfolio -->
+
+                        <div class="modal fade" id="position_label" tabindex="-1" role="dialog"
+                             aria-labelledby="exampleModalLabel"
+                             aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="position_label_modal_label">{{ position.ticker_name                                    }}</h5>
+                                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form name="portfolio_form" method="POST">
+                                            {% csrf_token %}
+                                            <p>
+                                                <br>Are you sure you want to delete the position?
+                                            </p>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                                    No
+                                                </button>
+                                                <input class="btn btn-primary" name="delete_position_button"
+                                                       type="submit"
+                                                       value="Yes">
+                                                <input type='hidden' value='{{ position.id }}' name='id'>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
