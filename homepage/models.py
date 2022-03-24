@@ -3,7 +3,7 @@ from django.db import models
 
 # Create your models here.
 class VisitorCount(models.Model):
-    visitor_count = models.IntegerField()
+    visitor_count = models.IntegerField(default=1)
 
 
 class ProfilePosts(models.Model):

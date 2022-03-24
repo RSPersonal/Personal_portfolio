@@ -7,12 +7,12 @@ def home_page_en(request):
     """
     Function for homepage render
     """
-    num_visit = VisitorCount.objects.get()
-    num_visit.visitor_count += 1
+    active_visitor_count = VisitorCount.objects.get(pk=1)
+    if active_visitor_count:
+        active_visitor_count.visitor_count += 1
+        active_visitor_count.save()
 
-    num_visit.save()
-
-    num_current_visits = VisitorCount.objects.get(pk=1)
+    num_current_visits = active_visitor_count
 
     profile_posts = ProfilePosts.objects.order_by('order').filter(language='EN')
 
@@ -27,12 +27,12 @@ def home_page_nl(request):
     """
     Function for homepage render
     """
-    num_visit = VisitorCount.objects.get()
-    num_visit.visitor_count += 1
+    active_visitor_count = VisitorCount.objects.get(pk=1)
+    if active_visitor_count:
+        active_visitor_count.visitor_count += 1
+        active_visitor_count.save()
 
-    num_visit.save()
-
-    num_current_visits = VisitorCount.objects.get(pk=1)
+    num_current_visits = active_visitor_count
 
     profile_posts = ProfilePosts.objects.order_by('order').filter(language='NL')
 

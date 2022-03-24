@@ -5,7 +5,42 @@
         <div class="col-6">
             <h3>{{ portfolio.portfolio_name }}</h3>
         </div>
-        <div class="col-3 text-end">
+        <div class="col-6 text-end">
+            <!-- Button trigger modal -->
+            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#portfolio_label">
+                Delete portfolio
+            </button>
+
+            <!-- Modal for deleting the portfolio -->
+            <div class="modal fade" id="portfolio_label" tabindex="-1" role="dialog"
+                 aria-labelledby="exampleModalLabel"
+                 aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="portfolio_label_modal_label">{{ portfolio_name }}</h5>
+                            <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form name="portfolio_form" method="POST">
+                                {% csrf_token %}
+                                <p>
+                                    Are you sure you want to delete the portfolio?
+                                </p>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No
+                                    </button>
+                                    <input class="btn btn-primary" name="delete_button" type="submit" value="Yes">
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-2 text-start">
             <!-- Button trigger modal -->
             <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#add_position_modal">
                 Add position
@@ -68,48 +103,10 @@
                 </div>
             </div>
         </div>
-        <div class="col-3 text-end">
-            <!-- Button trigger modal -->
-            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#portfolio_label">
-                Delete portfolio
-            </button>
-
-            <!-- Modal for deleting the portfolio -->
-
-            <div class="modal fade" id="portfolio_label" tabindex="-1" role="dialog"
-                 aria-labelledby="exampleModalLabel"
-                 aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="portfolio_label_modal_label">{{ portfolio_name }}</h5>
-                            <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <form name="portfolio_form" method="POST">
-                                {% csrf_token %}
-                                <p>
-                                    Are you sure you want to delete the portfolio?
-                                </p>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No
-                                    </button>
-                                    <input class="btn btn-primary" name="delete_button" type="submit" value="Yes">
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <div class="col-3 text-start">
+            <a class="btn btn-secondary" href="/database-projects-stocktracker">Portfolio overview</a>
         </div>
-        <div class="col-4">
-            <table class="table">
-
-            </table>
-        </div>
-        <div>
+        <div class="pt-2">
             {% if messages %}
             <ul class="messages">
                 {% for message in messages %}
@@ -161,7 +158,8 @@
                             <div class="modal-dialog" role="document">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h5 class="modal-title" id="position_label_modal_label">{{ position.ticker_name                                    }}</h5>
+                                        <h5 class="modal-title" id="position_label_modal_label">{{ position.ticker_name
+                                            }}</h5>
                                         <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                                             <span aria-hidden="true">&times;</span>
                                         </button>
