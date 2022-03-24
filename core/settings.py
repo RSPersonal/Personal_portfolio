@@ -89,11 +89,11 @@ WSGI_APPLICATION = 'core.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'db',
-        'USER': '',
-        'PASSWORD': '',
-        'HOST': 'localhost',
-        'PORT': '5432',
+        'NAME': os.getenv("DB_DATABASE", config("DB_DATABASE")),
+        'USER': os.getenv("DB_USERNAME", config("DB_USERNAME")),
+        'PASSWORD': os.getenv("DB_PASSWORD", config("DB_PASSWORD")),
+        'HOST': os.getenv("DB_HOST", config("DB_HOST")),
+        'PORT': os.getenv("DB_PORT", config("DB_PORT")),
     }
 }
 
@@ -172,4 +172,4 @@ CSRF_COOKIE_SECURE = True
 SESSION_COOKIE_SECURE = True
 
 if not DEBUG:
-    DATABASES['default'] = dj_database_url.parse(os.environ.get("DATABASE_URL"))
+    DATABASES['default'] = dj_database_url.parse(os.environ.get("DATABASE_URL"), config("DATABASE_URL"))
