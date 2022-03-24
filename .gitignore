@@ -6,6 +6,7 @@ info.txt
 __pycache__/
 __pycache__
 .idea/
+.data/
 
 # Created by https://www.toptal.com/developers/gitignore/api/pycharm
 # Edit at https://www.toptal.com/developers/gitignore?templates=pycharm
