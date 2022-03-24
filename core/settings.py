@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
 import os
+import sys
 import dj_database_url
 import sentry_sdk
 from sentry_sdk.integrations.django import DjangoIntegration
@@ -85,17 +86,25 @@ WSGI_APPLICATION = 'core.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
+DEVELOPMENT_MODE = os.getenv("DEVELOPMENT_MODE", config("DEVELOPMENT_MODE")) == "True"
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': os.getenv("DB_DATABASE", config("DB_DATABASE")),
-        'USER': os.getenv("DB_USERNAME", config("DB_USERNAME")),
-        'PASSWORD': os.getenv("DB_PASSWORD", config("DB_PASSWORD")),
-        'HOST': os.getenv("DB_HOST", config("DB_HOST")),
-        'PORT': os.getenv("DB_PORT", config("DB_PORT")),
+if DEVELOPMENT_MODE is True:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': os.getenv("DB_DATABASE", config("DB_DATABASE")),
+            'USER': os.getenv("DB_USERNAME", config("DB_USERNAME")),
+            'PASSWORD': os.getenv("DB_PASSWORD", config("DB_PASSWORD")),
+            'HOST': os.getenv("DB_HOST", config("DB_HOST")),
+            'PORT': os.getenv("DB_PORT", config("DB_PORT")),
+        }
     }
-}
+elif len(sys.argv) > 0 and sys.argv[1] != 'collectstatic':
+    if os.getenv("DATABASE_URL", None) is None:
+        raise Exception("DATABASE_URL environment variable not defined")
+    DATABASES = {
+        "default": dj_database_url.parse(os.environ.get("DATABASE_URL")),
+    }
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
@@ -170,6 +179,3 @@ sentry_sdk.init(
 
 CSRF_COOKIE_SECURE = True
 SESSION_COOKIE_SECURE = True
-
-if not DEBUG:
-    DATABASES['default'] = dj_database_url.parse(os.environ.get("DATABASE_URL"), config("DATABASE_URL"))
