@@ -6,6 +6,8 @@ def value(input_value):
     """
     if not no_value(input_value):
         return True
+    else:
+        return False
 
 
 def no_value(input_value):
