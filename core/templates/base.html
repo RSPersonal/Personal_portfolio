@@ -29,6 +29,8 @@
                     <li><a class="dropdown-item" href="/accounts/logout">Logout</a></li>
                 </ul>
             </div>
+            {% else %}
+            <a class="text-dark" href="/accounts/login">Login</a>
             {% endif %}
         </div>
     </nav>

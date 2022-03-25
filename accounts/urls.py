@@ -3,5 +3,5 @@ from django.contrib.auth import views as auth_views
 
 urlpatterns = [
     path('accounts/login/',
-         auth_views.LoginView.as_view(template_name='registration/login.html', next='registration/login_valid.html'))
+         auth_views.LoginView.as_view(redirect_authenticated_user=True, template_name='registration/login.html'))
 ]

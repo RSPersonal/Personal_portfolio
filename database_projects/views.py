@@ -157,7 +157,7 @@ def portfolio_detail(request, pk):
     # Delete portfolio
     if request.method == 'POST' and 'delete_button' in request.POST:
         if Positions.objects.filter(portfolio=pk).exists():
-            Portfolio.objects.filter(portfolio=pk).delete()
+            Portfolio.objects.filter(id=pk).delete()
         return redirect('stocktracker')
 
     return render(request, 'database-projects/portfolio_detail.html', context=context)

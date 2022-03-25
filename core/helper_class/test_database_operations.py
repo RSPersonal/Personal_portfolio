@@ -1,8 +1,10 @@
 import sqlite3
 import unittest
+from unittest import mock
 
-
-# class TestCore(unittest.TestCase):
+#
+# class TestInsertRows(unittest.TestCase):
+#
 #     def setUp(self):
 #         self.conn = sqlite3.connect(':memory:')
 #         c = self.conn.cursor()
