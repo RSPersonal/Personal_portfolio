@@ -12,7 +12,7 @@
                 the free API from Polygon.io. It's only possible to do 5 API calls per minute. You will see an error
                 message whenever the api calls are exceeded.
                 <br><br>Current features are:
-            <ul>
+            <ol>
                 <li>Basic CRUD database operation</li>
                 <li>Adding portfolio's linked to user</li>
                 <li>Only show portfolio's linked to user</li>
@@ -20,7 +20,8 @@
                 <li>KPI's calculated based on positions in portfolio</li>
                 <li>Adding position to portfolio</li>
                 <li>API connection with Polygon.io to get live stock data</li>
-            </ul>
+                <li>Chart.js integration for visual representation of portfolio metrics</li>
+            </ol>
             </p>
         </div>
     </div>
@@ -30,19 +31,19 @@
         </div>
         <div class="col-4 text-end">
             <!-- Button trigger modal -->
-            <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+            <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#addPortfolioModal">
                 Add new portfolio
             </button>
 
             <!-- Modal -->
 
-            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog"
-                 aria-labelledby="exampleModalLabel"
+            <div class="modal fade" id="addPortfolioModal" tabindex="-1" role="dialog"
+                 aria-labelledby="addPortfolioModalLabel"
                  aria-hidden="true">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                            <h5 class="modal-title" id="addPortfolioLabel">Modal title</h5>
                             <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
@@ -68,28 +69,67 @@
             {% for portfolio in portfolios %}
             <div class="row pt-4">
                 <div class="col-6">
-                    <a class="btn btn-primary" href="{% url 'portfolio_detail' portfolio.pk%}">{{ portfolio }}</a>
+                    <a class="btn btn-primary" href="{% url 'portfolio_detail' portfolio.pk%}">Go to {{ portfolio }}</a>
                 </div>
-                <div class="col-4" style="width: 40%;">
+            </div>
+            <div>
+                <div class="col-4 text-start" style="width: 50%;">
                     <canvas id="pie-chart"></canvas>
                 </div>
                 <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+                {% load static %}
                 <script>
+    const randomNum = () => Math.floor(Math.random() * (235 - 52 + 1) + 52);
+    function rgbToHex(r,g,b) {
+    return "#"+((1<<24)+(r<<16)+(g<<8)+ b).toString(16).slice(1);
+    }
+    countPositions = {{ portfolio.total_positions|safe }}
+
+    let barColors =  [];
+    for (let i = 0; i < countPositions; i++) {
+    randomGeneratedColor = rgbToHex(randomNum(),randomNum(),randomNum());
+        while (barColors.includes(randomGeneratedColor)) {
+            randomGeneratedColor = rgbToHex(randomNum(),randomNum(),randomNum());
+        }
+        barColors.push(randomGeneratedColor);
+    }
+    console.log(barColors);
+
+    let config = {
+      type: 'pie',
+      data: {
+        datasets: [{
+          data: {{ data|safe }},
+          backgroundColor: barColors,
+          label: 'Stock ticker'
+        }],
+        labels: {{ labels|safe }}
+      },
+      options: {
+        responsive: true
+      }
+    };
+
+    window.onload = function() {
+      let ctx = document.getElementById('pie-chart').getContext('2d');
+      window.myPie = new Chart(ctx, config);
+    };
+
+
 
                 </script>
             </div>
-            <div class="row">
-                <div class="col-4 pt-2">
-                    <b>Total amount invested:</b> {{ portfolio.total_amount_invested }}
-                    <br><b>Positions:</b> {{ portfolio.total_positions }}
-                    <br><b>Profit:</b> {{ portfolio.total_profit }}
-                    <br><b>Profit in %:</b> {{ portfolio.total_profit_percentage }} %
-                </div>
+        </div>
+        <div class="row">
+            <div class="col-4 pt-2">
+                <b>Total amount invested:</b> {{ portfolio.total_amount_invested }}
+                <br><b>Positions:</b> {{ portfolio.total_positions }}
+                <br><b>Profit:</b> {{ portfolio.total_profit }}
+                <br><b>Profit in %:</b> {{ portfolio.total_profit_percentage }} %
             </div>
         </div>
-        {% endfor %}
     </div>
-</div>
+    {% endfor %}
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
