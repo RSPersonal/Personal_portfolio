@@ -30,7 +30,7 @@
                 </ul>
             </div>
             {% else %}
-            <a class="text-dark" href="/accounts/login">Login</a>
+            <a class="text-dark" href="/accounts/login/?next={{ request.path }}">Login</a>
             {% endif %}
         </div>
     </nav>
