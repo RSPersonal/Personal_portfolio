@@ -28,19 +28,8 @@ def stock_tracker_landing_page(request):
     # Getting all portfolio's from user
     portfolio_or_portfolios = Portfolio.objects.filter(user_id=request.user.id)
     # Getting the position data from portfolio
-    labels = []
-    data = []
     context = {}
-    for portfolio in portfolio_or_portfolios:
-        get_portfolio_id = portfolio.id
-        positions_in_portfolio = Positions.objects.filter(portfolio_id=get_portfolio_id)
-        for position in positions_in_portfolio:
-            labels.append(position.ticker_name)
-            data.append(position.quantity)
 
-        context[f"labels_{get_portfolio_id}"] = labels
-        context[f"data_{get_portfolio_id}"] = data
-    print(context)
     portfolio_form = PortfolioForm()
     context['portfolios'] = portfolio_or_portfolios
     context['portfolio_form'] = portfolio_form
@@ -73,6 +62,8 @@ def portfolio_detail(request, pk):
         calculated_total_profit_portfolio = 0
         calculated_total_profit_percentage = 0.0
         calculated_total_positions = 0
+        labels_for_portfolio_chart = []
+        data_for_portfolio_chart = []
 
         # Check if connection is accessible
         active_connection = True
@@ -126,12 +117,21 @@ def portfolio_detail(request, pk):
                 # Total positions
                 calculated_total_positions += 1
 
+                # Labels for Portfolio chart
+                labels_for_portfolio_chart.append(result_api_call_json["quoteResponse"]["result"][0][
+                                                      "symbol"])
+
+                # Data for Portfolio chart
+                data_for_portfolio_chart.append(position.quantity)
+
             # Save it to the portfolio object to show later in portfolio overview
             portfolio.total_positions = calculated_total_positions
             portfolio.total_amount_invested = calculated_total_amount_invested_in_portfolio
             portfolio.total_profit = round(calculated_total_profit_portfolio, 2)
             portfolio.total_profit_percentage = calculations_helper.calculate_portfolio_profit_in_percentage(
                 calculated_total_amount_invested_in_portfolio, calculated_total_profit_portfolio)
+            portfolio.labels_array = labels_for_portfolio_chart
+            portfolio.data_for_chart_array = data_for_portfolio_chart
             portfolio.save()
             context['positions'] = positions
     else:
@@ -171,6 +171,8 @@ def portfolio_detail(request, pk):
     # Delete position
     if request.method == 'POST' and 'delete_position_button' in request.POST:
         Positions.objects.get(id=request.POST.get('id')).delete()
+        portfolio.total_positions -= 1
+        portfolio.save()
         return redirect('portfolio_detail', pk)
 
     # Delete portfolio
