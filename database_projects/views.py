@@ -10,11 +10,11 @@ from core.helper_class import calculations_helper, input_validator_helper
 
 YAHOO_API_URL = "https://yfapi.net/v6/finance/quote"
 
-querystring = {"symbols":"ASHK"}
+querystring = {"symbols": "ASHK"}
 
 YAHOO_API_HEADERS = {
     'x-api-key': os.getenv("YAHOO_FINANCE_API", config("YAHOO_FINANCE_API"))
-    }
+}
 
 
 # Create your views here
@@ -31,14 +31,17 @@ def stock_tracker_landing_page(request):
     labels = []
     data = []
     context = {}
-    positions_in_portfolio = Positions.objects.filter(portfolio_id=1)
-    for position in positions_in_portfolio:
-        labels.append(position.ticker_name)
-        data.append(position.quantity)
+    for portfolio in portfolio_or_portfolios:
+        get_portfolio_id = portfolio.id
+        positions_in_portfolio = Positions.objects.filter(portfolio_id=get_portfolio_id)
+        for position in positions_in_portfolio:
+            labels.append(position.ticker_name)
+            data.append(position.quantity)
 
+        context[f"labels_{get_portfolio_id}"] = labels
+        context[f"data_{get_portfolio_id}"] = data
+    print(context)
     portfolio_form = PortfolioForm()
-    context['labels'] = labels
-    context['data'] = data
     context['portfolios'] = portfolio_or_portfolios
     context['portfolio_form'] = portfolio_form
 
@@ -74,8 +77,9 @@ def portfolio_detail(request, pk):
         # Check if connection is accessible
         active_connection = True
         try:
-            querystring = {"symbols": "AAPL"}
-            response = requests.request("GET", YAHOO_API_URL, headers=YAHOO_API_HEADERS, params=querystring)
+            requested_ticker_query_string = {"symbols": "AAPL"}
+            response = requests.request("GET", YAHOO_API_URL, headers=YAHOO_API_HEADERS,
+                                        params=requested_ticker_query_string)
         except ConnectionError as e:
             print('\nError =', e)
             active_connection = False
@@ -83,16 +87,21 @@ def portfolio_detail(request, pk):
         if active_connection:
             for position in positions:
                 # Get current market price for profit calculation
-                querystring = {"symbols": f"{position.ticker_name}"}
-                get_stock_data =requests.request("GET", YAHOO_API_URL, headers=YAHOO_API_HEADERS, params=querystring)
+                requested_ticker_query_string = {"symbols": f"{position.ticker_name}"}
+                get_stock_data = requests.request("GET", YAHOO_API_URL, headers=YAHOO_API_HEADERS,
+                                                  params=requested_ticker_query_string)
                 result_api_call_json = get_stock_data.json()
 
-                if len(result_api_call_json) != 0 and input_validator_helper.no_value(result_api_call_json["quoteResponse"]["result"]):
+                if len(result_api_call_json) != 0 and input_validator_helper.no_value(
+                        result_api_call_json["quoteResponse"]["result"]):
                     messages.add_message(request, messages.INFO, result_api_call_json["quoteResponse"]["error"])
                     break
-                elif len(result_api_call_json) != 0 and input_validator_helper.value(result_api_call_json["quoteResponse"]["result"]):
-                    position.current_market_price = result_api_call_json["quoteResponse"]["result"][0]["regularMarketPrice"]
-                    current_market_price_from_api_call = result_api_call_json["quoteResponse"]["result"][0]["regularMarketPrice"]
+                elif len(result_api_call_json) != 0 and input_validator_helper.value(
+                        result_api_call_json["quoteResponse"]["result"]):
+                    position.current_market_price = result_api_call_json["quoteResponse"]["result"][0][
+                        "regularMarketPrice"]
+                    current_market_price_from_api_call = result_api_call_json["quoteResponse"]["result"][0][
+                        "regularMarketPrice"]
 
                 # Total amount invested calculation
                 calculated_total_invested = calculations_helper.calculate_total_amount_invested(position.buy_price,
@@ -138,16 +147,19 @@ def portfolio_detail(request, pk):
             user_input_quantity = form.cleaned_data['quantity']
             user_input_market = form.cleaned_data['market']
 
-            querystring = {"symbols": f"{user_input_stock_name}"}
-            get_stock_data =requests.request("GET", YAHOO_API_URL, headers=YAHOO_API_HEADERS, params=querystring)
+            requested_ticker_query_string = {"symbols": f"{user_input_stock_name}"}
+            get_stock_data = requests.request("GET", YAHOO_API_URL, headers=YAHOO_API_HEADERS,
+                                              params=requested_ticker_query_string)
             result_stock_data_json = get_stock_data.json()
 
             # Checking if results came back, otherwise give user notification for bad request
-            if input_validator_helper.value(result_stock_data_json["quoteResponse"]["result"]) and result_stock_data_json["quoteResponse"]["result"][0]["symbol"] == user_input_stock_name:
+            if input_validator_helper.value(result_stock_data_json["quoteResponse"]["result"]) and \
+                    result_stock_data_json["quoteResponse"]["result"][0]["symbol"] == user_input_stock_name:
                 # Adding new entry to Database
                 new_stock_entry = Positions(portfolio=portfolio, ticker_name=user_input_stock_name,
                                             buy_price=user_input_buy_price,
-                                            current_market_price=result_stock_data_json["quoteResponse"]["result"][0]["regularMarketPrice"],
+                                            current_market_price=result_stock_data_json["quoteResponse"]["result"][0][
+                                                "regularMarketPrice"],
                                             quantity=user_input_quantity, market=user_input_market)
                 # Saving the entry to database
                 new_stock_entry.save()
