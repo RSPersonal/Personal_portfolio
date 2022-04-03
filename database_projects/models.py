@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.contrib.postgres.fields import ArrayField
 
 
 # Create your models here.
@@ -11,6 +12,8 @@ class Portfolio(models.Model):
     total_profit = models.FloatField(default=0)
     total_profit_percentage = models.FloatField(default=0.0)
     total_positions = models.IntegerField(default=0.0)
+    labels_array = ArrayField(models.CharField(max_length=20, default=''))
+    data_for_chart_array = ArrayField(models.FloatField(default=0.0))
 
     def __str__(self):
         return self.portfolio_name

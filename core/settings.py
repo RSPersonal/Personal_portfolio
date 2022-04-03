@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
 import os
+import sys
 import dj_database_url
 import sentry_sdk
 from sentry_sdk.integrations.django import DjangoIntegration
@@ -27,9 +28,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv("SECRET_KEY", config("SECRET_KEY"))
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = os.getenv("DEBUG", config('DEBUG')) == "True"
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = os.getenv("DJANGO_ALLOWED_HOSTS", "127.0.0.1,localhost").split(",")
 
 CORS_ORIGIN_ALLOW_ALL = True
 
@@ -85,17 +86,25 @@ WSGI_APPLICATION = 'core.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
+DEVELOPMENT_MODE = os.getenv("DEVELOPMENT_MODE", config("DEVELOPMENT_MODE")) == "True"
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'postgres',
-        'USER': 'postgres',
-        'PASSWORD': 'root',
-        'HOST': 'localhost',
-        'PORT': '5432',
+if DEVELOPMENT_MODE is True:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': os.getenv("DB_DATABASE", config("DB_DATABASE")),
+            'USER': os.getenv("DB_USERNAME", config("DB_USERNAME")),
+            'PASSWORD': os.getenv("DB_PASSWORD", config("DB_PASSWORD")),
+            'HOST': os.getenv("DB_HOST", config("DB_HOST")),
+            'PORT': os.getenv("DB_PORT", config("DB_PORT")),
+        }
     }
-}
+elif len(sys.argv) > 0 and sys.argv[1] != 'collectstatic':
+    if os.getenv("DATABASE_URL", None) is None:
+        raise Exception("DATABASE_URL environment variable not defined")
+    DATABASES = {
+        "default": dj_database_url.parse(os.environ.get("DATABASE_URL")),
+    }
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
@@ -131,13 +140,13 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
-STATIC_URL = '/static/'
+STATIC_URL = 'static/'
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
-IMAGES_URL = '/images/'
+IMAGES_URL = 'images/'
 
-IMAGES_ROOT = os.path.join(BASE_DIR, '/static/images')
+IMAGES_ROOT = os.path.join(BASE_DIR, 'static/images')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
@@ -170,7 +179,5 @@ sentry_sdk.init(
 
 CSRF_COOKIE_SECURE = True
 SESSION_COOKIE_SECURE = True
-
-if not DEBUG:
-    DATABASES['default'] = dj_database_url.config(default=os.getenv("DATABASE_URL", config("DATABASE_URL")),
-                                                  conn_max_age=600, ssl_require=True)
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'

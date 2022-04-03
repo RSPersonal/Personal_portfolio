@@ -6,7 +6,15 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from .models import Portfolio, Positions
 from .forms import PortfolioForm, PositionForm
-from core.helper_class import calculations_helper
+from core.helper_class import calculations_helper, input_validator_helper
+
+YAHOO_API_URL = "https://yfapi.net/v6/finance/quote"
+
+querystring = {"symbols": "ASHK"}
+
+YAHOO_API_HEADERS = {
+    'x-api-key': os.getenv("YAHOO_FINANCE_API", config("YAHOO_FINANCE_API"))
+}
 
 
 # Create your views here
@@ -20,17 +28,9 @@ def stock_tracker_landing_page(request):
     # Getting all portfolio's from user
     portfolio_or_portfolios = Portfolio.objects.filter(user_id=request.user.id)
     # Getting the position data from portfolio
-    labels = []
-    data = []
     context = {}
-    positions_in_portfolio = Positions.objects.filter(portfolio_id=1)
-    for position in positions_in_portfolio:
-        labels.append(position.ticker_name)
-        data.append(position.quantity)
 
     portfolio_form = PortfolioForm()
-    context['labels'] = labels
-    context['data'] = data
     context['portfolios'] = portfolio_or_portfolios
     context['portfolio_form'] = portfolio_form
 
@@ -55,19 +55,22 @@ def portfolio_detail(request, pk):
     # See if there are any active positions
     if Positions.objects.filter(portfolio=pk).exists():
         positions = Positions.objects.filter(portfolio=pk).order_by('added_on')
+
         # Standard variables for total calculation of portfolio
         current_market_price_from_api_call = 0
         calculated_total_amount_invested_in_portfolio = 0
         calculated_total_profit_portfolio = 0
         calculated_total_profit_percentage = 0.0
         calculated_total_positions = 0
+        labels_for_portfolio_chart = []
+        data_for_portfolio_chart = []
 
         # Check if connection is accessible
-        # TODO Build in an check if connection is available
         active_connection = True
         try:
-            get_stock_json = requests.get(
-                f"https://api.polygon.io/v2/aggs/ticker/AAPL/prev?adjusted=true&apiKey={os.getenv('POLYGON_API_KEY', config('POLYGON_API_KEY'))}")
+            requested_ticker_query_string = {"symbols": "AAPL"}
+            response = requests.request("GET", YAHOO_API_URL, headers=YAHOO_API_HEADERS,
+                                        params=requested_ticker_query_string)
         except ConnectionError as e:
             print('\nError =', e)
             active_connection = False
@@ -75,16 +78,21 @@ def portfolio_detail(request, pk):
         if active_connection:
             for position in positions:
                 # Get current market price for profit calculation
-                get_stock_json = requests.get(
-                    f"https://api.polygon.io/v2/aggs/ticker/{position.ticker_name}/prev?adjusted=true&apiKey={os.getenv('POLYGON_API_KEY', config('POLYGON_API_KEY'))}")
-                result_api_call = get_stock_json.json()
+                requested_ticker_query_string = {"symbols": f"{position.ticker_name}"}
+                get_stock_data = requests.request("GET", YAHOO_API_URL, headers=YAHOO_API_HEADERS,
+                                                  params=requested_ticker_query_string)
+                result_api_call_json = get_stock_data.json()
 
-                if len(result_api_call) != 0 and result_api_call['status'] == 'ERROR':
-                    messages.add_message(request, messages.INFO, result_api_call['error'])
+                if len(result_api_call_json) != 0 and input_validator_helper.no_value(
+                        result_api_call_json["quoteResponse"]["result"]):
+                    messages.add_message(request, messages.INFO, result_api_call_json["quoteResponse"]["error"])
                     break
-                elif len(result_api_call) != 0 and result_api_call['resultsCount'] > 0:
-                    position.current_market_price = result_api_call['results'][0]['c']
-                    current_market_price_from_api_call = result_api_call['results'][0]['c']
+                elif len(result_api_call_json) != 0 and input_validator_helper.value(
+                        result_api_call_json["quoteResponse"]["result"]):
+                    position.current_market_price = result_api_call_json["quoteResponse"]["result"][0][
+                        "regularMarketPrice"]
+                    current_market_price_from_api_call = result_api_call_json["quoteResponse"]["result"][0][
+                        "regularMarketPrice"]
 
                 # Total amount invested calculation
                 calculated_total_invested = calculations_helper.calculate_total_amount_invested(position.buy_price,
@@ -109,12 +117,21 @@ def portfolio_detail(request, pk):
                 # Total positions
                 calculated_total_positions += 1
 
+                # Labels for Portfolio chart
+                labels_for_portfolio_chart.append(result_api_call_json["quoteResponse"]["result"][0][
+                                                      "symbol"])
+
+                # Data for Portfolio chart
+                data_for_portfolio_chart.append(position.quantity)
+
             # Save it to the portfolio object to show later in portfolio overview
             portfolio.total_positions = calculated_total_positions
             portfolio.total_amount_invested = calculated_total_amount_invested_in_portfolio
             portfolio.total_profit = round(calculated_total_profit_portfolio, 2)
             portfolio.total_profit_percentage = calculations_helper.calculate_portfolio_profit_in_percentage(
                 calculated_total_amount_invested_in_portfolio, calculated_total_profit_portfolio)
+            portfolio.labels_array = labels_for_portfolio_chart
+            portfolio.data_for_chart_array = data_for_portfolio_chart
             portfolio.save()
             context['positions'] = positions
     else:
@@ -130,17 +147,19 @@ def portfolio_detail(request, pk):
             user_input_quantity = form.cleaned_data['quantity']
             user_input_market = form.cleaned_data['market']
 
-            # TODO Write checks for responses and empty data
-            get_stock_json = requests.get(
-                f"https://api.polygon.io/v2/aggs/ticker/{user_input_stock_name}/prev?adjusted=true&apiKey={os.getenv('POLYGON_API_KEY', config('POLYGON_API_KEY'))}")
-            ticker_data = get_stock_json.json()
+            requested_ticker_query_string = {"symbols": f"{user_input_stock_name}"}
+            get_stock_data = requests.request("GET", YAHOO_API_URL, headers=YAHOO_API_HEADERS,
+                                              params=requested_ticker_query_string)
+            result_stock_data_json = get_stock_data.json()
 
             # Checking if results came back, otherwise give user notification for bad request
-            if ticker_data['resultsCount'] > 0:
+            if input_validator_helper.value(result_stock_data_json["quoteResponse"]["result"]) and \
+                    result_stock_data_json["quoteResponse"]["result"][0]["symbol"] == user_input_stock_name:
                 # Adding new entry to Database
                 new_stock_entry = Positions(portfolio=portfolio, ticker_name=user_input_stock_name,
                                             buy_price=user_input_buy_price,
-                                            current_market_price=ticker_data['results'][0]['c'],
+                                            current_market_price=result_stock_data_json["quoteResponse"]["result"][0][
+                                                "regularMarketPrice"],
                                             quantity=user_input_quantity, market=user_input_market)
                 # Saving the entry to database
                 new_stock_entry.save()
@@ -152,12 +171,14 @@ def portfolio_detail(request, pk):
     # Delete position
     if request.method == 'POST' and 'delete_position_button' in request.POST:
         Positions.objects.get(id=request.POST.get('id')).delete()
+        portfolio.total_positions -= 1
+        portfolio.save()
         return redirect('portfolio_detail', pk)
 
     # Delete portfolio
     if request.method == 'POST' and 'delete_button' in request.POST:
-        if Positions.objects.filter(portfolio=pk).exists():
-            Portfolio.objects.filter(portfolio=pk).delete()
-        return redirect('stocktracker')
+        if Positions.objects.filter(portfolio=pk).exists() or Portfolio.objects.get(id=pk):
+            Portfolio.objects.get(id=pk).delete()
+            return redirect('stocktracker')
 
     return render(request, 'database-projects/portfolio_detail.html', context=context)

@@ -54,7 +54,7 @@ def currency_converter_call(request):
     if request.method == 'POST':
         from_currency_input = request.POST.get('to-currency')
         form = CurrencyForm(request.POST)
-        if InputHelper.value(from_currency_input) and form.is_valid():
+        if input_validator_helper.value(from_currency_input) and form.is_valid():
             amount = form.cleaned_data['amount']
             api_key = os.getenv('CURRENCY_FREAKS_API_KEY', config('CURRENCY_FREAKS_API_KEY'))
             try:
