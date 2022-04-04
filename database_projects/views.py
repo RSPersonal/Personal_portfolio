@@ -72,7 +72,10 @@ def portfolio_detail(request, pk):
             response = requests.request("GET", YAHOO_API_URL, headers=YAHOO_API_HEADERS,
                                         params=requested_ticker_query_string)
         except ConnectionError as e:
-            print('\nError =', e)
+            print('\nConnectionError =', e)
+            active_connection = False
+        except KeyError as e:
+            print('\nKeyError = ', e)
             active_connection = False
 
         if active_connection:
@@ -81,18 +84,17 @@ def portfolio_detail(request, pk):
                 requested_ticker_query_string = {"symbols": f"{position.ticker_name}"}
                 get_stock_data = requests.request("GET", YAHOO_API_URL, headers=YAHOO_API_HEADERS,
                                                   params=requested_ticker_query_string)
-                result_api_call_json = get_stock_data.json()
+                requested_stock_data_json = get_stock_data.json()
+                stock_data_object = requested_stock_data_json["quoteResponse"]["result"][0]
 
-                if len(result_api_call_json) != 0 and input_validator_helper.no_value(
-                        result_api_call_json["quoteResponse"]["result"]):
-                    messages.add_message(request, messages.INFO, result_api_call_json["quoteResponse"]["error"])
+                if len(requested_stock_data_json) != 0 and input_validator_helper.no_value(
+                        requested_stock_data_json["quoteResponse"]["result"]):
+                    messages.add_message(request, messages.INFO, requested_stock_data_json["quoteResponse"]["error"])
                     break
-                elif len(result_api_call_json) != 0 and input_validator_helper.value(
-                        result_api_call_json["quoteResponse"]["result"]):
-                    position.current_market_price = result_api_call_json["quoteResponse"]["result"][0][
-                        "regularMarketPrice"]
-                    current_market_price_from_api_call = result_api_call_json["quoteResponse"]["result"][0][
-                        "regularMarketPrice"]
+                elif len(requested_stock_data_json) != 0 and input_validator_helper.value(
+                        requested_stock_data_json["quoteResponse"]["result"]):
+                    position.current_market_price = stock_data_object["regularMarketPrice"]
+                    current_market_price_from_api_call = stock_data_object["regularMarketPrice"]
 
                 # Total amount invested calculation
                 calculated_total_invested = calculations_helper.calculate_total_amount_invested(position.buy_price,
@@ -118,8 +120,7 @@ def portfolio_detail(request, pk):
                 calculated_total_positions += 1
 
                 # Labels for Portfolio chart
-                labels_for_portfolio_chart.append(result_api_call_json["quoteResponse"]["result"][0][
-                                                      "symbol"])
+                labels_for_portfolio_chart.append(stock_data_object["symbol"])
 
                 # Data for Portfolio chart
                 data_for_portfolio_chart.append(position.quantity)
@@ -171,6 +172,7 @@ def portfolio_detail(request, pk):
     # Delete position
     if request.method == 'POST' and 'delete_position_button' in request.POST:
         Positions.objects.get(id=request.POST.get('id')).delete()
+        # Check if remaining positions in portfolio
         portfolio.total_positions -= 1
         portfolio.save()
         return redirect('portfolio_detail', pk)
@@ -180,5 +182,15 @@ def portfolio_detail(request, pk):
         if Positions.objects.filter(portfolio=pk).exists() or Portfolio.objects.get(id=pk):
             Portfolio.objects.get(id=pk).delete()
             return redirect('stocktracker')
+
+    # If no active positions reset the portfolio main values
+    if portfolio.total_positions == 0:
+        portfolio.total_amount_invested = 0
+        portfolio.total_profit = 0
+        portfolio.total_profit_percentage = 0.0
+        portfolio.data_for_chart_array = []
+        portfolio.labels_array = []
+        portfolio.total_positions = 0
+        portfolio.save()
 
     return render(request, 'database-projects/portfolio_detail.html', context=context)
