@@ -109,10 +109,10 @@
                         }
                     };
 
-                    window.onload = function() {
+                    window.addEventListener('load',  function() {
                         var ctx = document.getElementById('pie-chart{{ portfolio.pk }}').getContext('2d');
-                        window.myPie = new Chart(ctx_{{ portfolio.pk }}, config_{{ portfolio.pk }});
-                    };
+                        window.myPie = new Chart(ctx, config_{{ portfolio.pk }});
+                    });
 
                     </script>
                 </div>
