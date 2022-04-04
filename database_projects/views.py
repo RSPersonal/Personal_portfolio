@@ -38,7 +38,11 @@ def stock_tracker_landing_page(request):
         form = PortfolioForm(request.POST)
         if form.is_valid():
             cleaned_user_portfolio_name = form.cleaned_data['portfolio_name']
-            new_portfolio_entry = Portfolio(portfolio_name=cleaned_user_portfolio_name, user_id=request.user.id)
+            new_portfolio_entry = Portfolio(portfolio_name=cleaned_user_portfolio_name,
+                                            user_id=request.user.id,
+                                            data_for_chart_array=[],
+                                            labels_array=[]
+                                            )
             new_portfolio_entry.save()
     return render(request, 'database-projects/stocktracker.html', context=context)
 
