@@ -87,7 +87,7 @@
                     countPositions = {{ portfolio.total_positions|safe }};
 
                     var barColors_{{ portfolio.pk }} = [];
-                    for (let i = 0; i < countPositions; i++) {
+                    for (var i = 0; i < countPositions; i++) {
                         randomGeneratedColor = rgbToHex(randomNum_{{ portfolio.pk }}(), randomNum_{{ portfolio.pk }}(), randomNum_{{ portfolio.pk }}());
                         while (barColors_{{ portfolio.pk }}.includes(randomGeneratedColor)) {
                             randomGeneratedColor = rgbToHex(randomNum(), randomNum(), randomNum());

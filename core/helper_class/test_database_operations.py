@@ -26,7 +26,6 @@ class TestInsertRows(unittest.TestCase):
                 conn.close()
                 print("Postgresql connection is closed")
 
-    def test_
 
 if __name__ == '__main__':
     unittest.main()

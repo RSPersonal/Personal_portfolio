@@ -97,8 +97,15 @@ def portfolio_detail(request, pk):
                     break
                 elif len(requested_stock_data_json) != 0 and input_validator_helper.value(
                         requested_stock_data_json["quoteResponse"]["result"]):
-                    position.current_market_price = stock_data_object["regularMarketPrice"]
-                    current_market_price_from_api_call = stock_data_object["regularMarketPrice"]
+                    try:
+                        position.current_market_price = stock_data_object["regularMarketPrice"]
+                    except KeyError as error:
+                        print('KeyError in JSON, check if JSON is corrent', requested_stock_data_json)
+
+                    try:
+                        current_market_price_from_api_call = stock_data_object["regularMarketPrice"]
+                    except KeyError as error:
+                        print('KeyError in JSON, check if JSON is correct')
 
                 # Total amount invested calculation
                 calculated_total_invested = calculations_helper.calculate_total_amount_invested(position.buy_price,
