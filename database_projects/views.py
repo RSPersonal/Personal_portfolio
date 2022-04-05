@@ -6,7 +6,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from .models import Portfolio, Positions
 from .forms import PortfolioForm, PositionForm
-from core.helper_class import calculations_helper, input_validator_helper
+from core.helpers_and_validators import calculations_helper, input_validator_helper
 
 YAHOO_API_URL = "https://yfapi.net/v6/finance/quote"
 
@@ -73,14 +73,25 @@ def portfolio_detail(request, pk):
         active_connection = True
         try:
             requested_ticker_query_string = {"symbols": "AAPL"}
-            response = requests.request("GET", YAHOO_API_URL, headers=YAHOO_API_HEADERS,
-                                        params=requested_ticker_query_string)
-        except ConnectionError as e:
-            print('\nConnectionError =', e)
+            test_response_for_connection = requests.request("GET", YAHOO_API_URL, headers=YAHOO_API_HEADERS,
+                                                            params=requested_ticker_query_string)
+            test_response_for_connection_json = test_response_for_connection.json()
+        except ConnectionError as error:
+            print('\nConnectionError =', error)
             active_connection = False
-        except KeyError as e:
-            print('\nKeyError = ', e)
+        except KeyError as error:
+            print('\nKeyError = ', error)
             active_connection = False
+
+        # Check if amount of api calls are exceeded
+        limit_exceeded = False
+        try:
+            test_response_for_connection_json['quoteResponse']['result'][0]
+        except KeyError as error:
+            print('\nKeyError = ', test_response_for_connection_json)
+            limit_exceeded = True
+            messages.add_message(request, messages.INFO,
+                                 test_response_for_connection_json['message'] + '. Profit calculation is not correct due to market price is set to 0 in case of api call limit is exceeded.')
 
         if active_connection:
             for position in positions:
@@ -89,23 +100,21 @@ def portfolio_detail(request, pk):
                 get_stock_data = requests.request("GET", YAHOO_API_URL, headers=YAHOO_API_HEADERS,
                                                   params=requested_ticker_query_string)
                 requested_stock_data_json = get_stock_data.json()
-                stock_data_object = requested_stock_data_json["quoteResponse"]["result"][0]
+                if limit_exceeded is False:
+                    stock_data_object = requested_stock_data_json["quoteResponse"]["result"][0]
+                else:
+                    stock_data_object = {}
 
-                if len(requested_stock_data_json) != 0 and input_validator_helper.no_value(
+                if limit_exceeded is False and input_validator_helper.no_value(
                         requested_stock_data_json["quoteResponse"]["result"]):
                     messages.add_message(request, messages.INFO, requested_stock_data_json["quoteResponse"]["error"])
                     break
-                elif len(requested_stock_data_json) != 0 and input_validator_helper.value(
-                        requested_stock_data_json["quoteResponse"]["result"]):
-                    try:
-                        position.current_market_price = stock_data_object["regularMarketPrice"]
-                    except KeyError as error:
-                        print('KeyError in JSON, check if JSON is corrent', requested_stock_data_json)
-
-                    try:
-                        current_market_price_from_api_call = stock_data_object["regularMarketPrice"]
-                    except KeyError as error:
-                        print('KeyError in JSON, check if JSON is correct')
+                elif input_validator_helper.value(stock_data_object) and limit_exceeded is not True:
+                    position.current_market_price = stock_data_object["regularMarketPrice"]
+                    current_market_price_from_api_call = stock_data_object["regularMarketPrice"]
+                else:
+                    position.current_market_price = 0
+                    current_market_price_from_api_call = 0
 
                 # Total amount invested calculation
                 calculated_total_invested = calculations_helper.calculate_total_amount_invested(position.buy_price,
@@ -131,7 +140,8 @@ def portfolio_detail(request, pk):
                 calculated_total_positions += 1
 
                 # Labels for Portfolio chart
-                labels_for_portfolio_chart.append(stock_data_object["symbol"])
+                if limit_exceeded is False:
+                    labels_for_portfolio_chart.append(stock_data_object["symbol"])
 
                 # Data for Portfolio chart
                 data_for_portfolio_chart.append(position.quantity)
