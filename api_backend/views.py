@@ -3,12 +3,15 @@ import os
 import requests
 from json.decoder import JSONDecodeError
 from django.shortcuts import render
-from django.http import JsonResponse
 from django.contrib import messages
 from requests import Response
 from decouple import config
 from .forms import CurrencyForm
 from core.helpers_and_validators import input_validator_helper
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from database_projects.models import Portfolio
+from .serializers import PortfolioSerializer
 
 
 # Create your views here.
@@ -21,13 +24,15 @@ def geo_api_get_ip(request):
 
     if request.method == "POST":
         user_ip_input = request.POST.get('ip-address')
-        if InputHelper.value(user_ip_input):
+        if input_validator_helper.value(user_ip_input):
             try:
                 response: Response = requests.get(
                     f'http://api.ipstack.com/{user_ip_input}?access_key=9e190f3484c23275bc0cb044948ac119')
+                geo_data = response.json()
             except JSONDecodeError as e:
                 print(e)
-            geo_data = response.json()
+                geo_data = {}
+
             if 'ip' in geo_data:
                 context = {
                     'ip': geo_data['ip'],
@@ -38,7 +43,7 @@ def geo_api_get_ip(request):
                     'longitude': geo_data['longitude']
                 }
             else:
-                return JsonResponse(geo_data)
+                context['succes'] = False
         else:
             messages.add_message(request, messages.INFO, "Input field is empty, please enter you ip!")
     else:
@@ -75,3 +80,20 @@ def currency_converter_call(request):
     else:
         pass
     return render(request, 'api-examples/currency_converter.html', context=context)
+
+
+@api_view(['GET', 'POST'])
+def hello_world(request, pk):
+    if request.method == 'GET':
+        user_input_id = int(pk)
+        if Portfolio.objects.filter(pk=user_input_id).exists():
+            data = 'Found portfolio'
+            portfolio = Portfolio.objects.get(pk=user_input_id)
+            serializer = PortfolioSerializer(portfolio)
+            return Response({'message': 'succes',
+                             'data': serializer.data})
+        else:
+            data = 'Did not find requested portfolio'
+            return Response({'message': 'failed',
+                             'data': []})
+    return Response({'message': 'Hello World'})

@@ -85,10 +85,7 @@ def portfolio_detail(request, pk):
 
         # Check if amount of api calls are exceeded
         limit_exceeded = False
-        try:
-            test_response_for_connection_json['quoteResponse']['result'][0]
-        except KeyError as error:
-            print('\nKeyError = ', test_response_for_connection_json)
+        if test_response_for_connection_json['message'] == 'Limit Exceeded':
             limit_exceeded = True
             messages.add_message(request, messages.INFO,
                                  test_response_for_connection_json['message'] + '. Profit calculation is not correct due to market price is set to 0 in case of api call limit is exceeded.')
