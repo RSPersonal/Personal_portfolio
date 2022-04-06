@@ -52,7 +52,7 @@
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">{{ portfolio_name }}</h5>
+                            <h5 class="modal-title" id="add_position_modal_'label">{{ portfolio_name }}</h5>
                             <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
@@ -150,7 +150,7 @@
                             DEL
                         </button>
 
-                        <!-- Modal for deleting the portfolio -->
+                        <!-- Modal for deleting the position -->
 
                         <div class="modal fade" id="position_label" tabindex="-1" role="dialog"
                              aria-labelledby="exampleModalLabel"
@@ -176,6 +176,46 @@
                                                 </button>
                                                 <input class="btn btn-primary" name="delete_position_button"
                                                        type="submit"
+                                                       value="Yes">
+                                                <input type='hidden' value='{{ position.id }}' name='id'>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Button trigger modal -->
+                        <button type="button" class="btn btn-secondary" data-bs-toggle="modal"
+                                data-bs-target="#edit_position_label">
+                            EDIT
+                        </button>
+
+                        <!-- Modal for editing the position-->
+
+                        <div class="modal fade" id="edit_position_label" tabindex="-1" role="dialog"
+                             aria-labelledby="exampleModalLabel"
+                             aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="edit_position_modal_label">{{ position.ticker_name
+                                            }}</h5>
+                                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form name="portfolio_form" method="POST">
+                                            {% csrf_token %}
+                                            <p>
+                                                <br>Edit the position?
+                                            </p>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                                    No
+                                                </button>
+                                                <input class="btn btn-primary" name="edit_position_button"
+                                                       type=""
                                                        value="Yes">
                                                 <input type='hidden' value='{{ position.id }}' name='id'>
                                             </div>

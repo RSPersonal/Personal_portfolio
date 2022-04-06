@@ -74,48 +74,48 @@
             </div>
             {% if portfolio.total_positions > 0 %}
             <div>
-                <div class="col-4 text-start" style="width: 50%;">
-                    <canvas id="pie-chart"></canvas>
-                </div>
-                <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
                 {% load static %}
-                <script>
-    var randomNum = () => Math.floor(Math.random() * (235 - 52 + 1) + 52);
-    function rgbToHex(r,g,b) {
-    return "#"+((1<<24)+(r<<16)+(g<<8)+ b).toString(16).slice(1);
-    }
-    countPositions = {{ portfolio.total_positions|safe }}
+                <div class="col-4 text-start" style="width: 50%;">
+                    <canvas id="pie-chart{{ portfolio.pk }}"></canvas>
 
-    var barColors =  [];
-    for (let i = 0; i < countPositions; i++) {
-    randomGeneratedColor = rgbToHex(randomNum(),randomNum(),randomNum());
-        while (barColors.includes(randomGeneratedColor)) {
-            randomGeneratedColor = rgbToHex(randomNum(),randomNum(),randomNum());
-        }
-        barColors.push(randomGeneratedColor);
-    }
+                    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+                    <script>
+                    var randomNum_{{ portfolio.pk }} = () => Math.floor(Math.random() * (235 - 52 + 1) + 52);
+                    function rgbToHex(r, g, b) {
+                        return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
+                    }
+                    countPositions = {{ portfolio.total_positions|safe }};
 
-    var config = {
-      type: 'pie',
-      data: {
-        datasets: [{
-          data: {{ portfolio.data_for_chart_array|safe }},
-          backgroundColor: barColors,
-          label: 'Stock ticker'
-        }],
-        labels: {{ portfolio.labels_array|safe }}
-      },
-      options: {
-        responsive: true
-      }
-    };
+                    var barColors_{{ portfolio.pk }} = [];
+                    for (var i = 0; i < countPositions; i++) {
+                        randomGeneratedColor = rgbToHex(randomNum_{{ portfolio.pk }}(), randomNum_{{ portfolio.pk }}(), randomNum_{{ portfolio.pk }}());
+                        while (barColors_{{ portfolio.pk }}.includes(randomGeneratedColor)) {
+                            randomGeneratedColor = rgbToHex(randomNum(), randomNum(), randomNum());
+                        }
+                        barColors_{{ portfolio.pk }}.push(randomGeneratedColor);
+                    }
+                    var config_{{ portfolio.pk }} = {
+                        type: 'pie',
+                        data: {
+                            datasets: [{
+                                data: {{ portfolio.data_for_chart_array|safe }},
+                                backgroundColor: barColors_{{ portfolio.pk }},
+                                label: 'Stock ticker'
+                            }],
+                            labels: {{ portfolio.labels_array|safe }}
+                        },
+                        options: {
+                            responsive: true
+                        }
+                    };
 
-    window.onload = function() {
-      let ctx = document.getElementById('pie-chart').getContext('2d');
-      window.myPie = new Chart(ctx, config);
-    };
+                    window.addEventListener('load',  function() {
+                        var ctx = document.getElementById('pie-chart{{ portfolio.pk }}').getContext('2d');
+                        window.myPie = new Chart(ctx, config_{{ portfolio.pk }});
+                    });
 
-                </script>
+                    </script>
+                </div>
             </div>
             {% endif %}
             <div class="row">

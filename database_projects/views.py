@@ -6,12 +6,10 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from .models import Portfolio, Positions
 from .forms import PortfolioForm, PositionForm
-from core.helper_class import calculations_helper, input_validator_helper
+from core.helpers_and_validators import calculator, input_validator, yahoo_api
 
 YAHOO_API_URL = "https://yfapi.net/v6/finance/quote"
-
 querystring = {"symbols": "ASHK"}
-
 YAHOO_API_HEADERS = {
     'x-api-key': os.getenv("YAHOO_FINANCE_API", config("YAHOO_FINANCE_API"))
 }
@@ -38,7 +36,11 @@ def stock_tracker_landing_page(request):
         form = PortfolioForm(request.POST)
         if form.is_valid():
             cleaned_user_portfolio_name = form.cleaned_data['portfolio_name']
-            new_portfolio_entry = Portfolio(portfolio_name=cleaned_user_portfolio_name, user_id=request.user.id)
+            new_portfolio_entry = Portfolio(portfolio_name=cleaned_user_portfolio_name,
+                                            user_id=request.user.id,
+                                            data_for_chart_array=[],
+                                            labels_array=[]
+                                            )
             new_portfolio_entry.save()
     return render(request, 'database-projects/stocktracker.html', context=context)
 
@@ -66,51 +68,55 @@ def portfolio_detail(request, pk):
         data_for_portfolio_chart = []
 
         # Check if connection is accessible
-        active_connection = True
-        try:
-            requested_ticker_query_string = {"symbols": "AAPL"}
-            response = requests.request("GET", YAHOO_API_URL, headers=YAHOO_API_HEADERS,
-                                        params=requested_ticker_query_string)
-        except ConnectionError as e:
-            print('\nError =', e)
-            active_connection = False
+        active_connection = yahoo_api.test_yahoo_api_connection()
+
+        # Check if amount of api calls are exceeded
+        limit_exceeded = False
+        if not active_connection:
+            if yahoo_api.test_yahoo_api_limit_exceeded():
+                limit_exceeded = True
+                messages.add_message(request, messages.INFO,
+                                     'API call limit exceeded. Profit calculation is not correct due to market price is set to 0 in case of api call limit is exceeded.')
 
         if active_connection:
             for position in positions:
-                # Get current market price for profit calculation
-                requested_ticker_query_string = {"symbols": f"{position.ticker_name}"}
-                get_stock_data = requests.request("GET", YAHOO_API_URL, headers=YAHOO_API_HEADERS,
-                                                  params=requested_ticker_query_string)
-                result_api_call_json = get_stock_data.json()
+                # Get stock data
+                requested_stock_data_json = yahoo_api.get_stock_data(f"{position.ticker_name}")
 
-                if len(result_api_call_json) != 0 and input_validator_helper.no_value(
-                        result_api_call_json["quoteResponse"]["result"]):
-                    messages.add_message(request, messages.INFO, result_api_call_json["quoteResponse"]["error"])
+                if limit_exceeded is False:
+                    stock_data_object = requested_stock_data_json["quoteResponse"]["result"][0]
+                else:
+                    stock_data_object = {}
+
+                # Get current market price for profit calculation
+                if limit_exceeded is False and input_validator.no_value(
+                        requested_stock_data_json["quoteResponse"]["result"]):
+                    messages.add_message(request, messages.INFO, requested_stock_data_json["quoteResponse"]["error"])
                     break
-                elif len(result_api_call_json) != 0 and input_validator_helper.value(
-                        result_api_call_json["quoteResponse"]["result"]):
-                    position.current_market_price = result_api_call_json["quoteResponse"]["result"][0][
-                        "regularMarketPrice"]
-                    current_market_price_from_api_call = result_api_call_json["quoteResponse"]["result"][0][
-                        "regularMarketPrice"]
+                elif input_validator.value(stock_data_object) and limit_exceeded is False:
+                    position.current_market_price = stock_data_object["regularMarketPrice"]
+                    current_market_price_from_api_call = stock_data_object["regularMarketPrice"]
+                else:
+                    position.current_market_price = 0
+                    current_market_price_from_api_call = 0
 
                 # Total amount invested calculation
-                calculated_total_invested = calculations_helper.calculate_total_amount_invested(position.buy_price,
-                                                                                                position.quantity)
+                calculated_total_invested = calculator.calculate_total_amount_invested(position.buy_price,
+                                                                                       position.quantity)
                 position.amount_invested = calculated_total_invested
                 calculated_total_amount_invested_in_portfolio += calculated_total_invested
 
                 # Profit calculation
-                calculated_profit = calculations_helper.calculate_stock_profit(position.buy_price,
-                                                                               current_market_price_from_api_call,
-                                                                               position.quantity)
+                calculated_profit = calculator.calculate_stock_profit(position.buy_price,
+                                                                      current_market_price_from_api_call,
+                                                                      position.quantity)
                 position.position_profit = round(calculated_profit, 2)
                 calculated_total_profit_portfolio += calculated_profit
 
                 # Profit in percentage calculation
-                calculated_profit_perc = calculations_helper.calculate_profit_in_percentage(position.buy_price,
-                                                                                            position.quantity,
-                                                                                            calculated_profit)
+                calculated_profit_perc = calculator.calculate_profit_in_percentage(position.buy_price,
+                                                                                   position.quantity,
+                                                                                   calculated_profit)
                 calculated_total_profit_percentage += calculated_profit_perc
                 position.position_profit_in_percentage = calculated_profit_perc
 
@@ -118,8 +124,8 @@ def portfolio_detail(request, pk):
                 calculated_total_positions += 1
 
                 # Labels for Portfolio chart
-                labels_for_portfolio_chart.append(result_api_call_json["quoteResponse"]["result"][0][
-                                                      "symbol"])
+                if limit_exceeded is False:
+                    labels_for_portfolio_chart.append(stock_data_object["symbol"])
 
                 # Data for Portfolio chart
                 data_for_portfolio_chart.append(position.quantity)
@@ -128,7 +134,7 @@ def portfolio_detail(request, pk):
             portfolio.total_positions = calculated_total_positions
             portfolio.total_amount_invested = calculated_total_amount_invested_in_portfolio
             portfolio.total_profit = round(calculated_total_profit_portfolio, 2)
-            portfolio.total_profit_percentage = calculations_helper.calculate_portfolio_profit_in_percentage(
+            portfolio.total_profit_percentage = calculator.calculate_portfolio_profit_in_percentage(
                 calculated_total_amount_invested_in_portfolio, calculated_total_profit_portfolio)
             portfolio.labels_array = labels_for_portfolio_chart
             portfolio.data_for_chart_array = data_for_portfolio_chart
@@ -147,13 +153,10 @@ def portfolio_detail(request, pk):
             user_input_quantity = form.cleaned_data['quantity']
             user_input_market = form.cleaned_data['market']
 
-            requested_ticker_query_string = {"symbols": f"{user_input_stock_name}"}
-            get_stock_data = requests.request("GET", YAHOO_API_URL, headers=YAHOO_API_HEADERS,
-                                              params=requested_ticker_query_string)
-            result_stock_data_json = get_stock_data.json()
+            result_stock_data_json = yahoo_api.get_stock_data(f"{user_input_stock_name}")
 
             # Checking if results came back, otherwise give user notification for bad request
-            if input_validator_helper.value(result_stock_data_json["quoteResponse"]["result"]) and \
+            if input_validator.value(result_stock_data_json["quoteResponse"]["result"]) and \
                     result_stock_data_json["quoteResponse"]["result"][0]["symbol"] == user_input_stock_name:
                 # Adding new entry to Database
                 new_stock_entry = Positions(portfolio=portfolio, ticker_name=user_input_stock_name,
@@ -171,6 +174,7 @@ def portfolio_detail(request, pk):
     # Delete position
     if request.method == 'POST' and 'delete_position_button' in request.POST:
         Positions.objects.get(id=request.POST.get('id')).delete()
+        # Check if remaining positions in portfolio
         portfolio.total_positions -= 1
         portfolio.save()
         return redirect('portfolio_detail', pk)
@@ -180,5 +184,15 @@ def portfolio_detail(request, pk):
         if Positions.objects.filter(portfolio=pk).exists() or Portfolio.objects.get(id=pk):
             Portfolio.objects.get(id=pk).delete()
             return redirect('stocktracker')
+
+    # If no active positions reset the portfolio main values
+    if portfolio.total_positions == 0:
+        portfolio.total_amount_invested = 0
+        portfolio.total_profit = 0
+        portfolio.total_profit_percentage = 0.0
+        portfolio.data_for_chart_array = []
+        portfolio.labels_array = []
+        portfolio.total_positions = 0
+        portfolio.save()
 
     return render(request, 'database-projects/portfolio_detail.html', context=context)

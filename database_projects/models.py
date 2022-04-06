@@ -14,6 +14,7 @@ class Portfolio(models.Model):
     total_positions = models.IntegerField(default=0.0)
     labels_array = ArrayField(models.CharField(max_length=20, default=''))
     data_for_chart_array = ArrayField(models.FloatField(default=0.0))
+    monthly_profit = ArrayField(models.FloatField(default=0.0))
 
     def __str__(self):
         return self.portfolio_name
