@@ -10,6 +10,7 @@ from .forms import CurrencyForm
 from core.helpers_and_validators import input_validator
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from rest_framework import status
 from database_projects.models import Portfolio
 from .serializers import PortfolioSerializer
 
@@ -82,18 +83,26 @@ def currency_converter_call(request):
     return render(request, 'api-examples/currency_converter.html', context=context)
 
 
-@api_view(['GET', 'POST'])
-def hello_world(request, pk):
+@api_view(['GET'])
+def get_portfolio_monthly_profit(request, pk):
+    """
+    @param request:
+    @param pk: int portfolio id to get monthly profit data
+    @return: user_id and array with the monthly profits for requested portfolio
+    """
     if request.method == 'GET':
         user_input_id = int(pk)
         if Portfolio.objects.filter(pk=user_input_id).exists():
-            data = 'Found portfolio'
             portfolio = Portfolio.objects.get(pk=user_input_id)
             serializer = PortfolioSerializer(portfolio)
-            return Response({'message': 'succes',
+            return Response({'message': 'success',
                              'data': serializer.data})
         else:
-            data = 'Did not find requested portfolio'
             return Response({'message': 'failed',
                              'data': []})
-    return Response({'message': 'Hello World'})
+    return Response({'message': 'success', 'data': []})
+
+
+@api_view(['GET'])
+def endpoint_chart_data(request):
+    return Response({'message': 'success', 'endpoint': 'chart data from user portfolio'})

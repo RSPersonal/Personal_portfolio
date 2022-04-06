@@ -24,13 +24,17 @@ def database_homepage(request):
 @login_required
 def stock_tracker_landing_page(request):
     # Getting all portfolio's from user
-    portfolio_or_portfolios = Portfolio.objects.filter(user_id=request.user.id)
+    current_user_id = request.user.id
+    portfolio_or_portfolios = Portfolio.objects.filter(user_id=current_user_id)
     # Getting the position data from portfolio
     context = {}
 
     portfolio_form = PortfolioForm()
+    portfolio_monthly_profits = requests.request('GET', f"{os.getenv('DJANGO_ALLOWED_HOSTS', 'http://127.0.0.1:8000')}/api/v1/chart-data/{current_user_id}").json()
     context['portfolios'] = portfolio_or_portfolios
     context['portfolio_form'] = portfolio_form
+    context['labels_monthly'] = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec']
+    context[f"monthly_profit{request.user.id}"] = portfolio_monthly_profits['data']['monthly_profit']
 
     if request.method == 'POST':
         form = PortfolioForm(request.POST)
@@ -42,6 +46,7 @@ def stock_tracker_landing_page(request):
                                             labels_array=[]
                                             )
             new_portfolio_entry.save()
+    print(context)
     return render(request, 'database-projects/stocktracker.html', context=context)
 
 
