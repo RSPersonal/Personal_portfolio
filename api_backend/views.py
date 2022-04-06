@@ -24,7 +24,7 @@ def geo_api_get_ip(request):
 
     if request.method == "POST":
         user_ip_input = request.POST.get('ip-address')
-        if input_validator_helper.value(user_ip_input):
+        if input_validator.value(user_ip_input):
             try:
                 response: Response = requests.get(
                     f'http://api.ipstack.com/{user_ip_input}?access_key=9e190f3484c23275bc0cb044948ac119')
@@ -59,7 +59,7 @@ def currency_converter_call(request):
     if request.method == 'POST':
         from_currency_input = request.POST.get('to-currency')
         form = CurrencyForm(request.POST)
-        if input_validator_helper.value(from_currency_input) and form.is_valid():
+        if input_validator.value(from_currency_input) and form.is_valid():
             amount = form.cleaned_data['amount']
             api_key = os.getenv('CURRENCY_FREAKS_API_KEY', config('CURRENCY_FREAKS_API_KEY'))
             try:
