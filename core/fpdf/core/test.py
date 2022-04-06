@@ -1,5 +1,5 @@
 from fpdf import FPDF
-from ...helpers_and_validators import input_validator_helper
+from ...helpers_and_validators import input_validator
 
 
 class TestPDF:

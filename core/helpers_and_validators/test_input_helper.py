@@ -1,5 +1,5 @@
 import unittest
-from .input_validator_helper import value, no_value
+from .input_validator import value, no_value
 
 
 class TestInputHelper(unittest.TestCase):

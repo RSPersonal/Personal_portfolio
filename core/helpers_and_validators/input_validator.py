@@ -1,4 +1,4 @@
-# Helper class to check on standard input operation
+# Helper file to check on standard input operation
 
 def value(input_value):
     """

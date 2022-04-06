@@ -7,7 +7,7 @@ from django.contrib import messages
 from requests import Response
 from decouple import config
 from .forms import CurrencyForm
-from core.helpers_and_validators import input_validator_helper
+from core.helpers_and_validators import input_validator
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from database_projects.models import Portfolio
