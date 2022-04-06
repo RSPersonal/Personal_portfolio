@@ -73,11 +73,8 @@
                 </div>
             </div>
             {% if portfolio.total_positions > 0 %}
-            <div>
-                {% load static %}
+            <div class="row">
                 <div class="col-4 text-start" style="width: 50%;">
-                    <canvas id="pie-chart{{ portfolio.pk }}"></canvas>
-
                     <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
                     <script>
                     var randomNum_{{ portfolio.pk }} = () => Math.floor(Math.random() * (235 - 52 + 1) + 52);
@@ -94,7 +91,7 @@
                         }
                         barColors_{{ portfolio.pk }}.push(randomGeneratedColor);
                     }
-                    var config_{{ portfolio.pk }} = {
+                    var configPieChart_{{ portfolio.pk }} = {
                         type: 'pie',
                         data: {
                             datasets: [{
@@ -109,12 +106,36 @@
                         }
                     };
 
+                    var configBarChart_{{ portfolio.pk }} = {
+                        type: 'line',
+                        data: {
+                            datasets: [{
+                                data: {{ monthly_profit1|safe }},
+                                backgroundColor: barColors_{{ portfolio.pk }},
+                                fill: false,
+                                label: 'Profit p.m.'
+                            }],
+                            labels: {{ labels_monthly|safe }}
+                        },
+                        options: {
+                            responsive: true,
+                        },
+                    };
+
                     window.addEventListener('load',  function() {
-                        var ctx = document.getElementById('pie-chart{{ portfolio.pk }}').getContext('2d');
-                        window.myPie = new Chart(ctx, config_{{ portfolio.pk }});
+                        var ctx1 = document.getElementById('pie-chart{{ portfolio.pk }}').getContext('2d');
+                        window.myPie = new Chart(ctx1, configPieChart_{{ portfolio.pk }});
+                         var ctx2 = document.getElementById('barChart{{ portfolio.pk }}').getContext('2d');
+                        window.myBar = new Chart(ctx2, configBarChart_{{ portfolio.pk }});
                     });
 
+
+
                     </script>
+                    <canvas id="pie-chart{{ portfolio.pk }}"></canvas>
+                </div>
+                <div class="col-4 text-end" style="width: 50%;">
+                    <canvas id="barChart{{ portfolio.pk }}"></canvas>
                 </div>
             </div>
             {% endif %}

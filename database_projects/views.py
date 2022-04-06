@@ -24,13 +24,17 @@ def database_homepage(request):
 @login_required
 def stock_tracker_landing_page(request):
     # Getting all portfolio's from user
-    portfolio_or_portfolios = Portfolio.objects.filter(user_id=request.user.id)
+    current_user_id = request.user.id
+    portfolio_or_portfolios = Portfolio.objects.filter(user_id=current_user_id)
     # Getting the position data from portfolio
     context = {}
 
     portfolio_form = PortfolioForm()
+    portfolio_monthly_profits = requests.request('GET', f"{os.getenv('DJANGO_ALLOWED_HOSTS', 'http://127.0.0.1:8000')}/api/v1/chart-data/{current_user_id}").json()
     context['portfolios'] = portfolio_or_portfolios
     context['portfolio_form'] = portfolio_form
+    context['labels_monthly'] = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec']
+    context[f"monthly_profit{request.user.id}"] = portfolio_monthly_profits['data']['monthly_profit']
 
     if request.method == 'POST':
         form = PortfolioForm(request.POST)
@@ -42,11 +46,16 @@ def stock_tracker_landing_page(request):
                                             labels_array=[]
                                             )
             new_portfolio_entry.save()
+    print(context)
     return render(request, 'database-projects/stocktracker.html', context=context)
 
 
 @login_required
 def portfolio_detail(request, pk):
+    # General checks for yahoo api calls
+    limit_exceeded = yahoo_api.test_yahoo_api_limit_exceeded()
+    active_connection = yahoo_api.test_yahoo_api_connection()
+
     portfolio = Portfolio.objects.get(id=pk)
     position_form = PositionForm()
 
@@ -54,7 +63,8 @@ def portfolio_detail(request, pk):
         'position_form': position_form,
         'portfolio': portfolio
     }
-    # See if there are any active positions
+
+    # Lookup if there are any active positions
     if Positions.objects.filter(portfolio=pk).exists():
         positions = Positions.objects.filter(portfolio=pk).order_by('added_on')
 
@@ -67,16 +77,13 @@ def portfolio_detail(request, pk):
         labels_for_portfolio_chart = []
         data_for_portfolio_chart = []
 
-        # Check if connection is accessible
-        active_connection = yahoo_api.test_yahoo_api_connection()
-
-        # Check if amount of api calls are exceeded
-        limit_exceeded = False
-        if not active_connection:
+        if not active_connection or limit_exceeded:
             if yahoo_api.test_yahoo_api_limit_exceeded():
                 limit_exceeded = True
                 messages.add_message(request, messages.INFO,
                                      'API call limit exceeded. Profit calculation is not correct due to market price is set to 0 in case of api call limit is exceeded.')
+            elif not active_connection:
+                messages.add_message(request, messages.INFO, 'No active connection')
 
         if active_connection:
             for position in positions:
@@ -94,6 +101,7 @@ def portfolio_detail(request, pk):
                     messages.add_message(request, messages.INFO, requested_stock_data_json["quoteResponse"]["error"])
                     break
                 elif input_validator.value(stock_data_object) and limit_exceeded is False:
+                    print(stock_data_object)
                     position.current_market_price = stock_data_object["regularMarketPrice"]
                     current_market_price_from_api_call = stock_data_object["regularMarketPrice"]
                 else:
@@ -168,6 +176,8 @@ def portfolio_detail(request, pk):
                 new_stock_entry.save()
 
                 return redirect('portfolio_detail', pk)
+            elif limit_exceeded:
+                messages.add_message(request, messages.INFO, 'API CALL LIMIT EXCEEDED.')
             else:
                 messages.add_message(request, messages.INFO, "Could not find Stock, make sure you spelled it correct")
 
