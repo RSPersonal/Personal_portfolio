@@ -42,9 +42,10 @@ def stock_tracker_landing_page(request):
     context['portfolio_form'] = portfolio_form
     context['labels_monthly'] = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec']
 
-    # TODO BUG/01
-    context[f"monthly_profit{request.user.id}"] = portfolio_monthly_profits['data']['monthly_profit'] if active_connection_endpoint_portfolio else [random_generator.generate_random_number(0, 150000) for i in range(0, 13)]
-
+    # TODO BUG/01, dummy data for now
+    context[f"monthly_profit{request.user.id}"] = portfolio_monthly_profits['data'][
+        'monthly_profit'] if active_connection_endpoint_portfolio else [
+        random_generator.generate_random_number(0, 150000) for i in range(0, 13)]
 
     if request.method == 'POST':
         form = PortfolioForm(request.POST)
