@@ -34,3 +34,9 @@ class Positions(models.Model):
 
     def __str__(self):
         return '{} {}'.format(self.ticker_name, self.market)
+
+
+class MotivationLetterModel(models.Model):
+    motivation_letter_body = models.TextField(default='')
+    created_on = models.DateTimeField(auto_now=True)
+    firm_name = models.CharField(max_length=50, default='')

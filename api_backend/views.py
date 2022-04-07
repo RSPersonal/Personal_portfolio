@@ -84,6 +84,11 @@ def currency_converter_call(request):
 
 
 @api_view(['GET'])
+def endpoint_chart_data(request):
+    return Response({'message': 'success', 'endpoint': 'chart data from user portfolio'})
+
+
+@api_view(['GET'])
 def get_portfolio_monthly_profit(request, pk):
     """
     @param request:
@@ -104,5 +109,24 @@ def get_portfolio_monthly_profit(request, pk):
 
 
 @api_view(['GET'])
-def endpoint_chart_data(request):
-    return Response({'message': 'success', 'endpoint': 'chart data from user portfolio'})
+def endpoint_motivation_letter(request):
+    return Response({'message': 'success', 'endpoint': 'Endpoint for motivation letters'})
+
+
+@api_view(['GET'])
+def get_motivation_letter_for_firm(request, firm_name: str):
+    """
+    @param request:
+    @param firm_name:
+    @return:
+    """
+    if request.method == 'GET':
+        if Portfolio.objects.filter(pk=user_input_id).exists():
+            portfolio = Portfolio.objects.get(pk=user_input_id)
+            serializer = PortfolioSerializer(portfolio)
+            return Response({'message': 'success',
+                             'data': serializer.data})
+        else:
+            return Response({'message': 'failed',
+                             'data': []})
+    return Response({'message': 'success', 'data': []})
