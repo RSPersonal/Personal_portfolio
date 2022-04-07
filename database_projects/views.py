@@ -6,7 +6,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from .models import Portfolio, Positions
 from .forms import PortfolioForm, PositionForm
-from core.helpers_and_validators import calculator, input_validator, yahoo_api
+from core.helpers_and_validators import calculator, input_validator, yahoo_api, random_generator
 
 YAHOO_API_URL = "https://yfapi.net/v6/finance/quote"
 querystring = {"symbols": "ASHK"}
@@ -35,15 +35,15 @@ def stock_tracker_landing_page(request):
     # try:
     #     portfolio_monthly_profits = requests.request('GET', f"http://{os.getenv('DJANGO_ALLOWED_HOSTS', 'http://127.0.0.1:8000')}/api/v1/chart-data/{current_user_id}").json()
     # except ConnectionError as error:
-    #     portfolio_monthly_profits = {}
-    #     active_connection_endpoint_portfolio = False
+    portfolio_monthly_profits = {}
+    active_connection_endpoint_portfolio = False
 
     context['portfolios'] = portfolio_or_portfolios
     context['portfolio_form'] = portfolio_form
     context['labels_monthly'] = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec']
 
     # TODO BUG/01
-    # context[f"monthly_profit{request.user.id}"] = portfolio_monthly_profits['data']['monthly_profit'] if active_connection_endpoint_portfolio else []
+    context[f"monthly_profit{request.user.id}"] = portfolio_monthly_profits['data']['monthly_profit'] if active_connection_endpoint_portfolio else [random_generator.generate_random_number(0, 150000) for i in range(0, 13)]
 
 
     if request.method == 'POST':
