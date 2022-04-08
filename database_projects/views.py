@@ -111,7 +111,6 @@ def portfolio_detail(request, pk):
                     messages.add_message(request, messages.INFO, requested_stock_data_json["quoteResponse"]["error"])
                     break
                 elif input_validator.value(stock_data_object) and limit_exceeded is False:
-                    print(stock_data_object)
                     position.current_market_price = stock_data_object["regularMarketPrice"]
                     current_market_price_from_api_call = stock_data_object["regularMarketPrice"]
                 else:
