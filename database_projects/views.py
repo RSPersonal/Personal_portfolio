@@ -10,6 +10,7 @@ from django.contrib.auth.decorators import login_required
 from .models import Portfolio, Positions
 from .forms import PortfolioForm, PositionForm
 from core.helpers_and_validators import calculator, input_validator, yahoo_api
+from core.core_pdf_generator import core_pdf_generator
 
 YAHOO_API_URL = "https://yfapi.net/v6/finance/quote"
 querystring = {"symbols": "ASHK"}
@@ -220,26 +221,19 @@ def portfolio_detail(request, pk):
     return render(request, 'database-projects/portfolio_detail.html', context=context)
 
 
-
 @login_required()
 def show_pdf_report_lab(request):
     # Create a file-like buffer to receive PDF data.
-    buffer = io.BytesIO()
+    pdf = core_pdf_generator.GeneratePdf()
 
-    # Create the PDF object, using the buffer as its "file."
-    p = canvas.Canvas(buffer)
+    pdf.set_text('PLACEHOLDER FOR NOW')
 
-    # Draw things on the PDF. Here's where the PDF generation happens.
-    # See the ReportLab documentation for the full list of functionality.
-    starting_y = 800
-    p.drawString(35, starting_y, "Hello world.")
-
-    # Close the PDF object cleanly, and we're done.
-    p.showPage()
-    p.save()
+    # Close the PDF object cleanly.
+    pdf.show_page()
+    pdf.save_page()
 
     # FileResponse sets the Content-Disposition header so that browsers
     # present the option to save the file.
-    buffer.seek(0)
+    pdf.data_buffer_for_pdf.seek(0)
 
-    return FileResponse(buffer, as_attachment=False, filename='test.pdf')
+    return FileResponse(pdf.data_buffer_for_pdf, as_attachment=False, filename='test.pdf')
