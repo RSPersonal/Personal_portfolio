@@ -1,12 +1,16 @@
 import os
+import io
 import requests
 from django.contrib import messages
 from decouple import config
+from reportlab.pdfgen import canvas
+from django.http import FileResponse, HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from .models import Portfolio, Positions
 from .forms import PortfolioForm, PositionForm
-from core.helpers_and_validators import calculator, input_validator, yahoo_api, random_generator
+from core.helpers_and_validators import calculator, input_validator, yahoo_api
+from core.core_pdf_generator import core_pdf_generator
 
 YAHOO_API_URL = "https://yfapi.net/v6/finance/quote"
 querystring = {"symbols": "ASHK"}
@@ -33,7 +37,7 @@ def stock_tracker_landing_page(request):
     # TODO BUG/01 Fix connection error for api call, don't know why this happens yet.
     # active_connection_endpoint_portfolio = True
     # try:
-    #     portfolio_monthly_profits = requests.request('GET', f"http://{os.getenv('DJANGO_ALLOWED_HOSTS', 'http://127.0.0.1:8000')}/api/v1/chart-data/{current_user_id}").json()
+    # portfolio_monthly_profits = requests.request('GET', f"http://{os.getenv('DJANGO_ALLOWED_HOSTS', 'http://127.0.0.1:8000')}/api/v1/chart-data/{current_user_id}").json()
     # except ConnectionError as error:
     portfolio_monthly_profits = {}
     active_connection_endpoint_portfolio = False
@@ -43,9 +47,9 @@ def stock_tracker_landing_page(request):
     context['labels_monthly'] = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec']
 
     # TODO BUG/01, dummy data for now
-    context[f"monthly_profit{request.user.id}"] = portfolio_monthly_profits['data'][
-        'monthly_profit'] if active_connection_endpoint_portfolio else [
-        random_generator.generate_random_number(0, 150000) for i in range(0, 13)]
+    # context[f"monthly_profit{request.user.id}"] = portfolio_monthly_profits['data'][
+    #     'monthly_profit'] if active_connection_endpoint_portfolio else [
+    #     random_generator.generate_random_number(0, 150000) for i in range(0, 13)]
 
     if request.method == 'POST':
         form = PortfolioForm(request.POST)
@@ -215,3 +219,21 @@ def portfolio_detail(request, pk):
         portfolio.save()
 
     return render(request, 'database-projects/portfolio_detail.html', context=context)
+
+
+@login_required()
+def show_pdf_report_lab(request):
+    # Create a file-like buffer to receive PDF data.
+    pdf = core_pdf_generator.GeneratePdf()
+
+    pdf.set_text('PLACEHOLDER FOR NOW')
+
+    # Close the PDF object cleanly.
+    pdf.show_page()
+    pdf.save_page()
+
+    # FileResponse sets the Content-Disposition header so that browsers
+    # present the option to save the file.
+    pdf.data_buffer_for_pdf.seek(0)
+
+    return FileResponse(pdf.data_buffer_for_pdf, as_attachment=False, filename='test.pdf')
