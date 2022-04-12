@@ -1,6 +1,7 @@
 import os
 import io
 import requests
+import sentry_sdk
 from django.contrib import messages
 from decouple import config
 from reportlab.pdfgen import canvas
@@ -101,20 +102,26 @@ def portfolio_detail(request, pk):
 
         if active_connection:
             for position in positions:
-                # Get stock data
-                requested_stock_data_json = yahoo_api.get_stock_data(f"{position.ticker_name}")
+                key_error = False
 
-                if limit_exceeded is False:
+                # Get stock data
+                try:
+                    requested_stock_data_json = yahoo_api.get_stock_data(f"{position.ticker_name}")
+                except KeyError as captured_error:
+                    sentry_sdk.capture_exception(captured_error)
+                    key_error = True
+
+                if limit_exceeded is False and key_error is False:
                     stock_data_object = requested_stock_data_json["quoteResponse"]["result"][0]
                 else:
                     stock_data_object = {}
 
                 # Get current market price for profit calculation
-                if limit_exceeded is False and input_validator.no_value(
+                if limit_exceeded is False and key_error is False and input_validator.no_value(
                         requested_stock_data_json["quoteResponse"]["result"]):
                     messages.add_message(request, messages.INFO, requested_stock_data_json["quoteResponse"]["error"])
                     break
-                elif input_validator.value(stock_data_object) and limit_exceeded is False:
+                elif input_validator.value(stock_data_object) and limit_exceeded is False and key_error is False:
                     position.current_market_price = stock_data_object["regularMarketPrice"]
                     current_market_price_from_api_call = stock_data_object["regularMarketPrice"]
                 else:
