@@ -12,6 +12,7 @@ from .models import Portfolio, Positions
 from .forms import PortfolioForm, PositionForm
 from core.helpers_and_validators import calculator, input_validator, yahoo_api
 from core.core_pdf_generator import core_pdf_generator
+from core.csv_writer import csv_writer
 
 YAHOO_API_URL = "https://yfapi.net/v6/finance/quote"
 querystring = {"symbols": "ASHK"}
@@ -228,7 +229,7 @@ def portfolio_detail(request, pk):
     return render(request, 'database-projects/portfolio_detail.html', context=context)
 
 
-@login_required()
+@login_required
 def show_pdf_report_lab(request):
     # Create a file-like buffer to receive PDF data.
     pdf = core_pdf_generator.GeneratePdf()
@@ -244,3 +245,13 @@ def show_pdf_report_lab(request):
     pdf.data_buffer_for_pdf.seek(0)
 
     return FileResponse(pdf.data_buffer_for_pdf, as_attachment=False, filename='test.pdf')
+
+
+@login_required
+def download_portfolio_csv(request, request_id: int):
+    portfolio = Portfolio.objects.get(id=request_id)
+    position = Positions.objects.get(portfolio_id=request_id)
+    print(position)
+
+    buffer = csv_writer.write_portfolio_data_to_csv(f"2022/04/-test", ['stockticker'], [{position.ticker_name}])
+    return FileResponse(buffer, as_attachment=False, filename='')
