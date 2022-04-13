@@ -1,10 +1,9 @@
 import os
-import io
-import requests
+import csv
+from datetime import date
 import sentry_sdk
 from django.contrib import messages
 from decouple import config
-from reportlab.pdfgen import canvas
 from django.http import FileResponse, HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
@@ -12,7 +11,7 @@ from .models import Portfolio, Positions
 from .forms import PortfolioForm, PositionForm
 from core.helpers_and_validators import calculator, input_validator, yahoo_api
 from core.core_pdf_generator import core_pdf_generator
-from core.csv_writer import csv_writer
+
 
 YAHOO_API_URL = "https://yfapi.net/v6/finance/quote"
 querystring = {"symbols": "ASHK"}
@@ -159,6 +158,12 @@ def portfolio_detail(request, pk):
                 # Data for Portfolio chart
                 data_for_portfolio_chart.append(position.quantity)
 
+                # Save some to the position model
+                position.amount_invested = calculated_total_invested
+                position.position_profit = calculated_profit
+                position.position_profit_in_percentage = calculated_profit_perc
+                position.save()
+
             # Save it to the portfolio object to show later in portfolio overview
             portfolio.total_positions = calculated_total_positions
             portfolio.total_amount_invested = calculated_total_amount_invested_in_portfolio
@@ -250,8 +255,16 @@ def show_pdf_report_lab(request):
 @login_required
 def download_portfolio_csv(request, request_id: int):
     portfolio = Portfolio.objects.get(id=request_id)
-    position = Positions.objects.get(portfolio_id=request_id)
-    print(position)
+    positions = Positions.objects.filter(portfolio_id=request_id)
+    generate_filename = f"{date.today()}/{portfolio.portfolio_name}"
+    response = HttpResponse(
+        content_type='text/csv',
+        headers={'Content-Disposition': f'attachment; filename="{generate_filename}.csv"'},
+    )
+    writer = csv.writer(response)
+    headers = ['ID', 'Stockticker', 'Buy price', 'Quantity', 'Amount invested', 'Current market price', 'Profit', 'Profit %']
+    writer.writerow(headers)
+    for position in positions:
+        writer.writerow([position.id, position.ticker_name, position.buy_price, position.quantity, position.amount_invested, position.current_market_price, position.position_profit, position.position_profit_in_percentage])
 
-    buffer = csv_writer.write_portfolio_data_to_csv(f"2022/04/-test", ['stockticker'], [{position.ticker_name}])
-    return FileResponse(buffer, as_attachment=False, filename='')
+    return response
