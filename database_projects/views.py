@@ -59,7 +59,8 @@ def stock_tracker_landing_page(request):
             new_portfolio_entry = Portfolio(portfolio_name=cleaned_user_portfolio_name,
                                             user_id=request.user.id,
                                             data_for_chart_array=[],
-                                            labels_array=[]
+                                            labels_array=[],
+                                            monthly_profit=[]
                                             )
             new_portfolio_entry.save()
     return render(request, 'database-projects/stocktracker.html', context=context)
