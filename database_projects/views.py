@@ -1,12 +1,17 @@
 import os
-import requests
+import csv
+from datetime import date
+import sentry_sdk
 from django.contrib import messages
 from decouple import config
+from django.http import FileResponse, HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from .models import Portfolio, Positions
 from .forms import PortfolioForm, PositionForm
 from core.helpers_and_validators import calculator, input_validator, yahoo_api
+from core.core_pdf_generator import core_pdf_generator
+
 
 YAHOO_API_URL = "https://yfapi.net/v6/finance/quote"
 querystring = {"symbols": "ASHK"}
@@ -24,13 +29,28 @@ def database_homepage(request):
 @login_required
 def stock_tracker_landing_page(request):
     # Getting all portfolio's from user
-    portfolio_or_portfolios = Portfolio.objects.filter(user_id=request.user.id)
+    current_user_id = request.user.id
+    portfolio_or_portfolios = Portfolio.objects.filter(user_id=current_user_id)
     # Getting the position data from portfolio
     context = {}
 
     portfolio_form = PortfolioForm()
+    # TODO BUG/01 Fix connection error for api call, don't know why this happens yet.
+    # active_connection_endpoint_portfolio = True
+    # try:
+    # portfolio_monthly_profits = requests.request('GET', f"http://{os.getenv('DJANGO_ALLOWED_HOSTS', 'http://127.0.0.1:8000')}/api/v1/chart-data/{current_user_id}").json()
+    # except ConnectionError as error:
+    portfolio_monthly_profits = {}
+    active_connection_endpoint_portfolio = False
+
     context['portfolios'] = portfolio_or_portfolios
     context['portfolio_form'] = portfolio_form
+    context['labels_monthly'] = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec']
+
+    # TODO BUG/01, dummy data for now
+    # context[f"monthly_profit{request.user.id}"] = portfolio_monthly_profits['data'][
+    #     'monthly_profit'] if active_connection_endpoint_portfolio else [
+    #     random_generator.generate_random_number(0, 150000) for i in range(0, 13)]
 
     if request.method == 'POST':
         form = PortfolioForm(request.POST)
@@ -39,7 +59,8 @@ def stock_tracker_landing_page(request):
             new_portfolio_entry = Portfolio(portfolio_name=cleaned_user_portfolio_name,
                                             user_id=request.user.id,
                                             data_for_chart_array=[],
-                                            labels_array=[]
+                                            labels_array=[],
+                                            monthly_profit=[]
                                             )
             new_portfolio_entry.save()
     return render(request, 'database-projects/stocktracker.html', context=context)
@@ -47,6 +68,10 @@ def stock_tracker_landing_page(request):
 
 @login_required
 def portfolio_detail(request, pk):
+    # General checks for yahoo api calls
+    limit_exceeded = yahoo_api.test_yahoo_api_limit_exceeded()
+    active_connection = yahoo_api.test_yahoo_api_connection()
+
     portfolio = Portfolio.objects.get(id=pk)
     position_form = PositionForm()
 
@@ -54,7 +79,8 @@ def portfolio_detail(request, pk):
         'position_form': position_form,
         'portfolio': portfolio
     }
-    # See if there are any active positions
+
+    # Lookup if there are any active positions
     if Positions.objects.filter(portfolio=pk).exists():
         positions = Positions.objects.filter(portfolio=pk).order_by('added_on')
 
@@ -67,33 +93,36 @@ def portfolio_detail(request, pk):
         labels_for_portfolio_chart = []
         data_for_portfolio_chart = []
 
-        # Check if connection is accessible
-        active_connection = yahoo_api.test_yahoo_api_connection()
-
-        # Check if amount of api calls are exceeded
-        limit_exceeded = False
-        if not active_connection:
+        if not active_connection or limit_exceeded:
             if yahoo_api.test_yahoo_api_limit_exceeded():
                 limit_exceeded = True
                 messages.add_message(request, messages.INFO,
                                      'API call limit exceeded. Profit calculation is not correct due to market price is set to 0 in case of api call limit is exceeded.')
+            elif not active_connection:
+                messages.add_message(request, messages.INFO, 'No active connection')
 
         if active_connection:
             for position in positions:
-                # Get stock data
-                requested_stock_data_json = yahoo_api.get_stock_data(f"{position.ticker_name}")
+                key_error = False
 
-                if limit_exceeded is False:
+                # Get stock data
+                try:
+                    requested_stock_data_json = yahoo_api.get_stock_data(f"{position.ticker_name}")
+                except KeyError as captured_error:
+                    sentry_sdk.capture_exception(captured_error)
+                    key_error = True
+
+                if limit_exceeded is False and key_error is False:
                     stock_data_object = requested_stock_data_json["quoteResponse"]["result"][0]
                 else:
                     stock_data_object = {}
 
                 # Get current market price for profit calculation
-                if limit_exceeded is False and input_validator.no_value(
+                if limit_exceeded is False and key_error is False and input_validator.no_value(
                         requested_stock_data_json["quoteResponse"]["result"]):
                     messages.add_message(request, messages.INFO, requested_stock_data_json["quoteResponse"]["error"])
                     break
-                elif input_validator.value(stock_data_object) and limit_exceeded is False:
+                elif input_validator.value(stock_data_object) and limit_exceeded is False and key_error is False:
                     position.current_market_price = stock_data_object["regularMarketPrice"]
                     current_market_price_from_api_call = stock_data_object["regularMarketPrice"]
                 else:
@@ -129,6 +158,12 @@ def portfolio_detail(request, pk):
 
                 # Data for Portfolio chart
                 data_for_portfolio_chart.append(position.quantity)
+
+                # Save some to the position model
+                position.amount_invested = calculated_total_invested
+                position.position_profit = calculated_profit
+                position.position_profit_in_percentage = calculated_profit_perc
+                position.save()
 
             # Save it to the portfolio object to show later in portfolio overview
             portfolio.total_positions = calculated_total_positions
@@ -168,6 +203,8 @@ def portfolio_detail(request, pk):
                 new_stock_entry.save()
 
                 return redirect('portfolio_detail', pk)
+            elif limit_exceeded:
+                messages.add_message(request, messages.INFO, 'API CALL LIMIT EXCEEDED.')
             else:
                 messages.add_message(request, messages.INFO, "Could not find Stock, make sure you spelled it correct")
 
@@ -196,3 +233,39 @@ def portfolio_detail(request, pk):
         portfolio.save()
 
     return render(request, 'database-projects/portfolio_detail.html', context=context)
+
+
+@login_required
+def show_pdf_report_lab(request):
+    # Create a file-like buffer to receive PDF data.
+    pdf = core_pdf_generator.GeneratePdf()
+
+    pdf.set_text('PLACEHOLDER FOR NOW')
+
+    # Close the PDF object cleanly.
+    pdf.show_page()
+    pdf.save_page()
+
+    # FileResponse sets the Content-Disposition header so that browsers
+    # present the option to save the file.
+    pdf.data_buffer_for_pdf.seek(0)
+
+    return FileResponse(pdf.data_buffer_for_pdf, as_attachment=False, filename='test.pdf')
+
+
+@login_required
+def download_portfolio_csv(request, request_id: int):
+    portfolio = Portfolio.objects.get(id=request_id)
+    positions = Positions.objects.filter(portfolio_id=request_id)
+    generate_filename = f"{date.today()}/{portfolio.portfolio_name}"
+    response = HttpResponse(
+        content_type='text/csv',
+        headers={'Content-Disposition': f'attachment; filename="{generate_filename}.csv"'},
+    )
+    writer = csv.writer(response)
+    headers = ['ID', 'Stockticker', 'Buy price', 'Quantity', 'Amount invested', 'Current market price', 'Profit', 'Profit %']
+    writer.writerow(headers)
+    for position in positions:
+        writer.writerow([position.id, position.ticker_name, position.buy_price, position.quantity, position.amount_invested, position.current_market_price, position.position_profit, position.position_profit_in_percentage])
+
+    return response

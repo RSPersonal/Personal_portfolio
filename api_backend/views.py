@@ -10,8 +10,8 @@ from .forms import CurrencyForm
 from core.helpers_and_validators import input_validator
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from database_projects.models import Portfolio
-from .serializers import PortfolioSerializer
+from database_projects.models import Portfolio, MotivationLetter
+from .serializers import PortfolioSerializer, MotivationLetterSerializer
 
 
 # Create your views here.
@@ -24,7 +24,7 @@ def geo_api_get_ip(request):
 
     if request.method == "POST":
         user_ip_input = request.POST.get('ip-address')
-        if input_validator_helper.value(user_ip_input):
+        if input_validator.value(user_ip_input):
             try:
                 response: Response = requests.get(
                     f'http://api.ipstack.com/{user_ip_input}?access_key=9e190f3484c23275bc0cb044948ac119')
@@ -59,7 +59,7 @@ def currency_converter_call(request):
     if request.method == 'POST':
         from_currency_input = request.POST.get('to-currency')
         form = CurrencyForm(request.POST)
-        if input_validator_helper.value(from_currency_input) and form.is_valid():
+        if input_validator.value(from_currency_input) and form.is_valid():
             amount = form.cleaned_data['amount']
             api_key = os.getenv('CURRENCY_FREAKS_API_KEY', config('CURRENCY_FREAKS_API_KEY'))
             try:
@@ -82,18 +82,50 @@ def currency_converter_call(request):
     return render(request, 'api-examples/currency_converter.html', context=context)
 
 
-@api_view(['GET', 'POST'])
-def hello_world(request, pk):
+@api_view(['GET'])
+def endpoint_chart_data(request):
+    return Response({'message': 'success', 'endpoint': 'chart data from user portfolio'})
+
+
+@api_view(['GET'])
+def get_portfolio_monthly_profit(request, pk):
+    """
+    @param request:
+    @param pk: int portfolio id to get monthly profit data
+    @return: user_id and array with the monthly profits for requested portfolio
+    """
     if request.method == 'GET':
         user_input_id = int(pk)
         if Portfolio.objects.filter(pk=user_input_id).exists():
-            data = 'Found portfolio'
             portfolio = Portfolio.objects.get(pk=user_input_id)
             serializer = PortfolioSerializer(portfolio)
-            return Response({'message': 'succes',
+            return Response({'message': 'success',
                              'data': serializer.data})
         else:
-            data = 'Did not find requested portfolio'
             return Response({'message': 'failed',
                              'data': []})
-    return Response({'message': 'Hello World'})
+    return Response({'message': 'success', 'data': []})
+
+
+@api_view(['GET'])
+def endpoint_motivation_letter(request):
+    return Response({'message': 'success', 'endpoint': 'Endpoint for motivation letters'})
+
+
+@api_view(['GET'])
+def get_motivation_letter_for_firm(request, firm_name_api_request: str):
+    """
+    @param firm_name_api_request:
+    @param request:
+    @return:
+    """
+    if request.method == 'GET':
+        if MotivationLetter.objects.filter(firm_name=firm_name_api_request).exists():
+            motivation_letter = MotivationLetter.objects.get(firm_name=firm_name_api_request)
+            serializer = MotivationLetterSerializer(motivation_letter)
+            return Response({'message': 'success',
+                             'data': serializer.data})
+        else:
+            return Response({'message': 'failed',
+                             'data': ['No motivation letter found for given Firm name. Please contact me.']})
+    return Response({'message': 'success', 'data': []})
