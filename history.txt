@@ -1,6 +1,4 @@
-
-1.3 (2022-04-09)
-----------------
-
-1.1 (2022-04-09)
-----------------
+v1.3.4/(Better releaser functions)
+v1.3.3Better buttons and currency converter
+v1.3 (2022-04-09)
+v1.1 (2022-04-09)
