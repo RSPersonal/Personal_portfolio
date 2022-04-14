@@ -7,11 +7,11 @@
     </h2>
     <p>Its' a powerful, real-time IP to geolocation API capable of looking up accurate location data and assessing
         security threats originating from risky IP addresses. </p>
-    <form method="POST" action="">
+    <form method="post" action="">
         {% csrf_token %}
 
-        <input type="text" name="ip-address" size="60" value="Please enter IP address here">
-        <input type="submit" name="submit" class="btn btn-light">
+        <input type="text" name="ip-address" size="60" value="Please enter IP address here"/>
+        <input type="submit" name="submit" class="btn btn-light"/>
     </form>
     {% if ip != '' %}
     <table class="table">
@@ -48,10 +48,10 @@
     {% endif %}
     {% if status == 'failed' %}
     <p>Something went wrong with {{ data.message }}</p>
-    </ul>
     {% endif %}
     <div>
         <a class="btn btn-primary" href="/api/v1">Go back to API overview</a>
     </div>
 </div>
+</body>
 {% endblock %}

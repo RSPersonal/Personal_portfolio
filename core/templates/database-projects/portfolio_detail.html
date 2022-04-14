@@ -24,7 +24,7 @@
                             </button>
                         </div>
                         <div class="modal-body">
-                            <form name="portfolio_form" method="POST">
+                            <form name="portfolio_form" method="post">
                                 {% csrf_token %}
                                 <p>
                                     Are you sure you want to delete the portfolio?
@@ -32,7 +32,7 @@
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No
                                     </button>
-                                    <input class="btn btn-primary" name="delete_button" type="submit" value="Yes">
+                                    <input class="btn btn-primary" name="delete_button" type="submit" value="Yes"/>
                                 </div>
                             </form>
                         </div>
@@ -74,7 +74,7 @@
                                     </p>
                                 </div>
                                 <div class="col-4">
-                                    <form name="position_form" method="POST">
+                                    <form name="position_form" method="post">
                                         {% csrf_token %}
                                         <p>
                                             {{ position_form.ticker_name }}
@@ -165,10 +165,10 @@
                                         </button>
                                     </div>
                                     <div class="modal-body">
-                                        <form name="portfolio_form" method="POST">
+                                        <form name="portfolio_form" method="post">
                                             {% csrf_token %}
                                             <p>
-                                                <br>Are you sure you want to delete the position?
+                                                <br/>Are you sure you want to delete the position?
                                             </p>
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
@@ -176,8 +176,8 @@
                                                 </button>
                                                 <input class="btn btn-primary" name="delete_position_button"
                                                        type="submit"
-                                                       value="Yes">
-                                                <input type='hidden' value='{{ position.id }}' name='id'>
+                                                       value="Yes"/>
+                                                <input type='hidden' value='{{ position.id }}' name='id'/>
                                             </div>
                                         </form>
                                     </div>
@@ -198,17 +198,16 @@
                             <div class="modal-dialog" role="document">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h5 class="modal-title" id="edit_position_modal_label">{{ position.ticker_name
-                                            }}</h5>
+                                        <h5 class="modal-title" id="edit_position_modal_label">{{ position.ticker_name }}</h5>
                                         <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                                             <span aria-hidden="true">&times;</span>
                                         </button>
                                     </div>
                                     <div class="modal-body">
-                                        <form name="portfolio_form" method="POST">
+                                        <form name="portfolio_form" method="post">
                                             {% csrf_token %}
                                             <p>
-                                                <br>Edit the position?
+                                                <br/>Edit the position?
                                             </p>
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
@@ -216,8 +215,8 @@
                                                 </button>
                                                 <input class="btn btn-primary" name="edit_position_button"
                                                        type=""
-                                                       value="Yes">
-                                                <input type='hidden' value='{{ position.id }}' name='id'>
+                                                       value="Yes"/>
+                                                <input type='hidden' value='{{ position.id }}' name='id'/>
                                             </div>
                                         </form>
                                     </div>
