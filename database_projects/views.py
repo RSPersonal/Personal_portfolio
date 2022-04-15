@@ -1,5 +1,6 @@
 import os
 import csv
+import requests
 from datetime import date
 import sentry_sdk
 from django.contrib import messages
@@ -11,6 +12,7 @@ from .models import Portfolio, Positions
 from .forms import PortfolioForm, PositionForm
 from core.helpers_and_validators import calculator, input_validator, yahoo_api
 from core.core_pdf_generator import core_pdf_generator
+from datetime import datetime
 
 
 YAHOO_API_URL = "https://yfapi.net/v6/finance/quote"
@@ -36,21 +38,22 @@ def stock_tracker_landing_page(request):
 
     portfolio_form = PortfolioForm()
     # TODO BUG/01 Fix connection error for api call, don't know why this happens yet.
-    # active_connection_endpoint_portfolio = True
+    active_connection_endpoint_portfolio = True
     # try:
-    # portfolio_monthly_profits = requests.request('GET', f"http://{os.getenv('DJANGO_ALLOWED_HOSTS', 'http://127.0.0.1:8000')}/api/v1/chart-data/{current_user_id}").json()
+    #     portfolio_monthly_profits = requests.request('GET', f"http://{os.getenv('DJANGO_ALLOWED_HOSTS', 'http://127.0.0.1:8000')}/api/v1/chart-data/{current_user_id}").json()
     # except ConnectionError as error:
-    portfolio_monthly_profits = {}
-    active_connection_endpoint_portfolio = False
+    #     portfolio_monthly_profits = {}
+    #     active_connection_endpoint_portfolio = False
 
     context['portfolios'] = portfolio_or_portfolios
     context['portfolio_form'] = portfolio_form
     context['labels_monthly'] = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec']
 
-    # TODO BUG/01, dummy data for now
-    # context[f"monthly_profit{request.user.id}"] = portfolio_monthly_profits['data'][
-    #     'monthly_profit'] if active_connection_endpoint_portfolio else [
-    #     random_generator.generate_random_number(0, 150000) for i in range(0, 13)]
+    current_month = datetime.now()
+
+    for portfolio in portfolio_or_portfolios:
+        current_month_for_data_array = (current_month.month - 1)
+        new_monthly_profit = portfolio.monthly_profit[current_month_for_data_array] = portfolio.total_profit
 
     if request.method == 'POST':
         form = PortfolioForm(request.POST)

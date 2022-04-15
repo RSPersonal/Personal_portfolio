@@ -17,7 +17,8 @@ with open('history.txt', 'r') as file:
 new_history_entry = input('Enter changelog entry: ')
 
 with open('history.txt', 'w') as file:
-    file.write(f"v{new_version_number}/({new_history_entry})")
+    file.write(f"v{new_version_number}--{new_history_entry}")
     file.write('\n')
+    file.write('----------------')
     file.write(old_history_content)
     file.close()
