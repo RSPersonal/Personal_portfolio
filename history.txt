@@ -1,4 +1,15 @@
-v1.3.4/(Better releaser functions)
-v1.3.3Better buttons and currency converter
-v1.3 (2022-04-09)
-v1.1 (2022-04-09)
+v1.3.8--2022-04-15--Correct date without time
+----------------
+v1.3.7--2022-04-15 17--Correct date for logs
+----------------
+v1.3.6--2041--Added date for releaser logs
+----------------
+v1.3.5--Contact page revamp, REST API connection for monthly profit
+----------------
+v1.3.4--Better releaser functions)
+----------------
+v1.3.3--Better buttons and currency converter
+----------------
+v1.3--2022-04-09
+----------------
+v1.1--2022-04-09

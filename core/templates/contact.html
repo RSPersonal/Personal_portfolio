@@ -4,13 +4,28 @@
 
 {% block page_content %}
 <div class="container">
-    <div class="card">
-        <div class="card-body">
-            <h5 class="card-title">Contact details</h5>
-            <p class="card-text">Name: Raphael Sparenberg</p>
-            <p class="card-text">Email: *</p>
-            <p class="card-text">Phone: *</p>
+    <div class="row">
+        <div class="col-6">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Contact details</h5>
+                    <p class="card-text">Name: Raphael S.</p>
+                    <p class="card-text">Email: *</p>
+                    <p class="card-text">Phone: *</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Technologies used:</h5>
+                    <img src="{% static 'img/django-logo-positive.png' %} " alt="" width="15%">
+                    <p>v.4.0.3</p>
+                    <img src="{% static 'img/JavaScript-Logo.png' %} " alt="" width="15%">
+                </div>
+            </div>
         </div>
     </div>
+</div>
 </div>
 {% endblock %}
