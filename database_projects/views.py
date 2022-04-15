@@ -160,9 +160,9 @@ def portfolio_detail(request, pk):
                 data_for_portfolio_chart.append(position.quantity)
 
                 # Save some to the position model
-                position.amount_invested = calculated_total_invested
-                position.position_profit = calculated_profit
-                position.position_profit_in_percentage = calculated_profit_perc
+                position.amount_invested = round(calculated_total_invested, 2)
+                position.position_profit = round(calculated_profit, 2)
+                position.position_profit_in_percentage = round(calculated_profit_perc, 2)
                 position.save()
 
             # Save it to the portfolio object to show later in portfolio overview
