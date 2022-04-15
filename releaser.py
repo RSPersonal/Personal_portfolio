@@ -1,3 +1,4 @@
+from datetime import datetime
 old_history_content = ''
 
 with open('version.txt', 'r') as file:
@@ -15,10 +16,12 @@ with open('history.txt', 'r') as file:
     file.close()
 
 new_history_entry = input('Enter changelog entry: ')
-
+date = datetime.now()
+current_date = date.strftime("%Y-%m-%d")
 with open('history.txt', 'w') as file:
-    file.write(f"v{new_version_number}--{new_history_entry}")
+    file.write(f"v{new_version_number}--{current_date}--{new_history_entry}")
     file.write('\n')
     file.write('----------------')
+    file.write('\n')
     file.write(old_history_content)
     file.close()

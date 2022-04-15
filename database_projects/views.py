@@ -14,7 +14,6 @@ from core.helpers_and_validators import calculator, input_validator, yahoo_api
 from core.core_pdf_generator import core_pdf_generator
 from datetime import datetime
 
-
 YAHOO_API_URL = "https://yfapi.net/v6/finance/quote"
 querystring = {"symbols": "ASHK"}
 YAHOO_API_HEADERS = {
@@ -35,26 +34,31 @@ def stock_tracker_landing_page(request):
     portfolio_or_portfolios = Portfolio.objects.filter(user_id=current_user_id)
     # Getting the position data from portfolio
     context = {}
-
     portfolio_form = PortfolioForm()
-    # TODO BUG/01 Fix connection error for api call, don't know why this happens yet.
-    active_connection_endpoint_portfolio = True
-    # try:
-    #     portfolio_monthly_profits = requests.request('GET', f"http://{os.getenv('DJANGO_ALLOWED_HOSTS', 'http://127.0.0.1:8000')}/api/v1/chart-data/{current_user_id}").json()
-    # except ConnectionError as error:
-    #     portfolio_monthly_profits = {}
-    #     active_connection_endpoint_portfolio = False
 
     context['portfolios'] = portfolio_or_portfolios
     context['portfolio_form'] = portfolio_form
     context['labels_monthly'] = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec']
 
+    #  Adding the total profit to correct month.
     current_month = datetime.now()
-
     for portfolio in portfolio_or_portfolios:
         current_month_for_data_array = (current_month.month - 1)
         new_monthly_profit = portfolio.monthly_profit[current_month_for_data_array] = portfolio.total_profit
+        portfolio.save()
 
+        # Get the monthly profits for visualisation
+        # try:
+        #     response = requests.request('GET', f"http://127.0.0.1:8000/api/v1/chart-data/{portfolio.id}",
+        #                                 timeout=5).json()
+        #     portfolio_monthly_profits = response['data']['monthly_profit']
+        # except ConnectionError as error:
+        #     sentry_sdk.capture_exception(error)
+        #     portfolio_monthly_profits = []
+        #
+        # context[f"monthly_profit_{portfolio.id}"] = portfolio_monthly_profits
+
+    # Adding new portfolio
     if request.method == 'POST':
         form = PortfolioForm(request.POST)
         if form.is_valid():
@@ -266,9 +270,12 @@ def download_portfolio_csv(request, request_id: int):
         headers={'Content-Disposition': f'attachment; filename="{generate_filename}.csv"'},
     )
     writer = csv.writer(response)
-    headers = ['ID', 'Stockticker', 'Buy price', 'Quantity', 'Amount invested', 'Current market price', 'Profit', 'Profit %']
+    headers = ['ID', 'Stockticker', 'Buy price', 'Quantity', 'Amount invested', 'Current market price', 'Profit',
+               'Profit %']
     writer.writerow(headers)
     for position in positions:
-        writer.writerow([position.id, position.ticker_name, position.buy_price, position.quantity, position.amount_invested, position.current_market_price, position.position_profit, position.position_profit_in_percentage])
+        writer.writerow(
+            [position.id, position.ticker_name, position.buy_price, position.quantity, position.amount_invested,
+             position.current_market_price, position.position_profit, position.position_profit_in_percentage])
 
     return response
