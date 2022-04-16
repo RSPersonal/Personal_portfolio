@@ -15,6 +15,22 @@ def home_page_en(request):
     num_current_visits = active_visitor_count
     profile_posts = ProfilePosts.objects.order_by('order').filter(language='EN')
 
+    # TODO Possible this can be done more elegant. Probably to many database calls
+    if VersionHistory.objects.filter(pk=1).exists():
+        with open('version.txt', 'r') as file:
+            current_version_number = file.read()
+            file.close()
+        version_db_object = VersionHistory.objects.get(id=1)
+        if version_db_object.version_number is not current_version_number:
+            version_db_object.version_number = current_version_number
+            version_db_object.save()
+    else:
+        # Get current version number from text file
+        with open('version.txt', 'r') as file:
+            current_version_from_txt = file.read()
+            new_version_entry = VersionHistory(id=1, version_number=current_version_from_txt)
+            new_version_entry.save()
+
     context = {
         'num_visits': num_current_visits,
         'profile_posts': profile_posts
