@@ -10,8 +10,8 @@ from .forms import CurrencyForm
 from core.helpers_and_validators import input_validator
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from database_projects.models import Portfolio, MotivationLetter
-from .serializers import PortfolioSerializer, MotivationLetterSerializer
+from database_projects.models import Portfolio
+from .serializers import PortfolioSerializer
 
 
 # Create your views here.
@@ -106,26 +106,3 @@ def get_portfolio_monthly_profit(request, pk):
                              'data': []})
     return Response({'message': 'success', 'data': []})
 
-
-@api_view(['GET'])
-def endpoint_motivation_letter(request):
-    return Response({'message': 'success', 'endpoint': 'Endpoint for motivation letters'})
-
-
-@api_view(['GET'])
-def get_motivation_letter_for_firm(request, firm_name_api_request: str):
-    """
-    @param firm_name_api_request:
-    @param request:
-    @return:
-    """
-    if request.method == 'GET':
-        if MotivationLetter.objects.filter(firm_name=firm_name_api_request).exists():
-            motivation_letter = MotivationLetter.objects.get(firm_name=firm_name_api_request)
-            serializer = MotivationLetterSerializer(motivation_letter)
-            return Response({'message': 'success',
-                             'data': serializer.data})
-        else:
-            return Response({'message': 'failed',
-                             'data': ['No motivation letter found for given Firm name. Please contact me.']})
-    return Response({'message': 'success', 'data': []})
