@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .models import VisitorCount, ProfilePosts
+from .models import VisitorCount, ProfilePosts, VersionHistory
 
 
 # Create your views here.
@@ -13,7 +13,6 @@ def home_page_en(request):
         active_visitor_count.save()
 
     num_current_visits = active_visitor_count
-
     profile_posts = ProfilePosts.objects.order_by('order').filter(language='EN')
 
     context = {
@@ -54,4 +53,7 @@ def contact(request):
     """
     Function for contact render
     """
-    return render(request, 'contact.html')
+    current_version_number = VersionHistory.objects.get(id=1)
+    context = {'version_history': current_version_number}
+    print(context)
+    return render(request, 'contact.html', context=context)

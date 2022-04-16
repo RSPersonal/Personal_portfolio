@@ -42,10 +42,13 @@ def stock_tracker_landing_page(request):
 
     #  Adding the total profit to correct month.
     current_month = datetime.now()
+    current_month_for_data_array = (current_month.month - 1)
     for portfolio in portfolio_or_portfolios:
-        current_month_for_data_array = (current_month.month - 1)
-        new_monthly_profit = portfolio.monthly_profit[current_month_for_data_array] = portfolio.total_profit
-        portfolio.save()
+        try:
+            new_monthly_profit = portfolio.monthly_profit[current_month_for_data_array] = portfolio.total_profit
+            portfolio.save()
+        except KeyError as error:
+            sentry_sdk.capture_exception(error)
 
         # Get the monthly profits for visualisation
         # try:
@@ -62,12 +65,17 @@ def stock_tracker_landing_page(request):
     if request.method == 'POST':
         form = PortfolioForm(request.POST)
         if form.is_valid():
+            monthly_profit_array_until_current_month = []
+            for i in range(0, current_month.month):
+                monthly_profit_array_until_current_month.append(0)
+
+            print(monthly_profit_array_until_current_month)
             cleaned_user_portfolio_name = form.cleaned_data['portfolio_name']
             new_portfolio_entry = Portfolio(portfolio_name=cleaned_user_portfolio_name,
                                             user_id=request.user.id,
                                             data_for_chart_array=[],
                                             labels_array=[],
-                                            monthly_profit=[]
+                                            monthly_profit=monthly_profit_array_until_current_month
                                             )
             new_portfolio_entry.save()
     return render(request, 'database-projects/stocktracker.html', context=context)
