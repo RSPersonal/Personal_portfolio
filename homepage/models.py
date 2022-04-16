@@ -13,3 +13,10 @@ class ProfilePosts(models.Model):
 
     def __str__(self):
         return self.post
+
+
+class VersionHistory(models.Model):
+    version_number = models.CharField(max_length=40, default='')
+
+    def __str__(self):
+        return self.version_number

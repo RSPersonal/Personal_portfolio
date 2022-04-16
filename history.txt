@@ -1,3 +1,5 @@
+v1.3.9--2022-04-16--Stocktracker overview improvements and version number 
+----------------
 v1.3.8--2022-04-15--Correct date without time
 ----------------
 v1.3.7--2022-04-15 17--Correct date for logs
