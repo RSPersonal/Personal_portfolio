@@ -122,6 +122,7 @@
             <table class="table">
                 <thead>
                 <tr>
+                    <th scope="col">Info</th>
                     <th scope="col">Stock ticker</th>
                     <th scope="col" class="text-end">Price bought</th>
                     <th scope="col" class="text-end">Quantity</th>
@@ -135,14 +136,17 @@
                 <tbody>
                 {% for position in positions %}
                 <tr>
-                    <td>{{ position.ticker_name }}</td>
-                    <td class="text-end">{{ position.buy_price }}</td>
-                    <td class="text-end">{{ position.quantity }}</td>
-                    <td class="text-end">{{ position.amount_invested }}</td>
-                    <td class="text-end">{{ position.current_market_price }}</td>
-                    <td class="text-end">{{ position.market }}</td>
-                    <td class="text-end">{{ position.position_profit }}</td>
-                    <td class="text-end">{{ position.position_profit_in_percentage }} %</td>
+                    <td>
+                        <a class="btn" href="https://finance.yahoo.com/quote/{{ position.ticker_name }}/" target="_blank" rel="noopener">?</a>
+                    </td>
+                    <td class="pt-3">{{ position.ticker_name }}</td>
+                    <td class="text-end pt-3">{{ position.buy_price }}</td>
+                    <td class="text-end pt-3">{{ position.quantity }}</td>
+                    <td class="text-end pt-3">{{ position.amount_invested }}</td>
+                    <td class="text-end pt-3">{{ position.current_market_price }}</td>
+                    <td class="text-end pt-3">{{ position.market }}</td>
+                    <td class="text-end pt-3">{{ position.position_profit }}</td>
+                    <td class="text-end pt-3">{{ position.position_profit_in_percentage }} %</td>
                     <td class="text-end">
                         <div class="btn-group">
                         <!-- Button trigger modal -->

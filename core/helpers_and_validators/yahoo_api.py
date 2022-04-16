@@ -19,10 +19,10 @@ def test_yahoo_api_connection():
                                                         params=query_string)
         return True
     except ConnectionError as error:
-        print('Connection error', error)
+        print('Connection error', test_response_for_connection, error)
         return False
     except KeyError as error:
-        print('KeyError', error)
+        print('KeyError', test_response_for_connection, error)
         return False
 
 
