@@ -2,7 +2,7 @@
 <b>!WIP!</b>  
 
 Main language = Python 3.9  
-Framework = Django 4.0.3 
+Framework = Django 4.0.3  
 Logger = SentrySDK 1.5.9  
 
 Dependencies:
