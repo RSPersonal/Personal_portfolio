@@ -8,7 +8,7 @@
         <div class="col-6">
             <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title">Contact details</h5>
+                    <h5 class="card-title"><b>Contact details</b></h5>
                     <p class="card-text">Name: Raphael S.</p>
                     <p class="card-text">Email: *</p>
                     <p class="card-text">Phone: *</p>
@@ -18,7 +18,8 @@
         <div class="col-6">
             <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title">Technologies used:</h5>
+                    <h5 class="card-title"><b>Core version:</b> {{ version_history.version_number }}</h5>
+                    <p>Technologies used:</p>
                     <img src="{% static 'img/django-logo-positive.png' %} " alt="" width="15%">
                     <p>v.4.0.3</p>
                     <img src="{% static 'img/JavaScript-Logo.png' %} " alt="" width="15%">
@@ -26,6 +27,5 @@
             </div>
         </div>
     </div>
-</div>
 </div>
 {% endblock %}
