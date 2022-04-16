@@ -151,9 +151,12 @@ def portfolio_detail(request, pk):
                 calculated_total_amount_invested_in_portfolio += calculated_total_invested
 
                 # Profit calculation
-                calculated_profit = calculator.calculate_stock_profit(position.buy_price,
-                                                                      current_market_price_from_api_call,
-                                                                      position.quantity)
+                if position.current_market_price == 0:
+                    calculated_profit = 0
+                else:
+                    calculated_profit = calculator.calculate_stock_profit(position.buy_price,
+                                                                          current_market_price_from_api_call,
+                                                                          position.quantity)
                 position.position_profit = round(calculated_profit, 2)
                 calculated_total_profit_portfolio += calculated_profit
 

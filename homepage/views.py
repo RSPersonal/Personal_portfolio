@@ -53,7 +53,14 @@ def contact(request):
     """
     Function for contact render
     """
-    current_version_number = VersionHistory.objects.get(id=1)
+    if VersionHistory.objects.filter(id=1).exists():
+        current_version_number = VersionHistory.objects.get(id=1)
+    else:
+        # Get current version number from text file
+        with open('version.txt', 'r') as file:
+            current_version_from_txt = file.read()
+            new_version_entry = VersionHistory(id=1, version_number=current_version_from_txt)
+            new_version_entry.save()
+            current_version_number = current_version_from_txt
     context = {'version_history': current_version_number}
-    print(context)
     return render(request, 'contact.html', context=context)
