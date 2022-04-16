@@ -1,0 +1,5 @@
+* {
+    outline-offset: -1px;
+    font-family: monospace;
+}*
+#outline: 1px solid blue;
