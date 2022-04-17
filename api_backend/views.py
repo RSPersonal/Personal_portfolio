@@ -106,3 +106,7 @@ def get_portfolio_monthly_profit(request, pk):
                              'data': []})
     return Response({'message': 'success', 'data': []})
 
+
+def property_key_finder(request):
+    return render(request, 'api-examples/property_key_finder.html')
+
