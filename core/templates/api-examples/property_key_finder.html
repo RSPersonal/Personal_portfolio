@@ -1,6 +1,42 @@
 {% extends 'base.html' %}
 {% block page_content %}
 <body>
+<div class="container-fluid">
+    <div class="p-4">
 
+
+        <h2>
+            PropertyKeyFinder
+        </h2>
+        <p>
+            A tool to find certain keywords in .txt file. I wrote this tool because at some point I needed to find
+            certain
+            keywords in a (sometimes long) class file. Instead of manually looking through the whole code I wrote this
+            script to find these
+            keywords and write them out in an array or single per keyword.
+        </p>
+        <p>
+            Step by step guide.
+        <ol>
+            <li>
+                Open Notepad or any text file editor of your choice.
+            </li>
+            <li>
+                Open your (class)file in an IDE of your choice, in which you want to find the keywords(propertyKeys)
+            </li>
+            <li>
+                Copy the content from the file to
+            </li>
+            <li>
+                Open your file in which you want to find the keywords(propertyKeys)
+            </li>
+        </ol>
+        <form enctype="multipart/form-data" action="" method="post">
+            {% csrf_token %}
+            <p>Upload File: <input type="file" name="filename"/></p>
+            <p><input type="submit" value="Upload"/></p>
+        </form>
+    </div>
+</div>
 </body>
 {% endblock %}

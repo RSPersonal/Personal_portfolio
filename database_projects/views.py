@@ -49,6 +49,8 @@ def stock_tracker_landing_page(request):
             portfolio.save()
         except KeyError as error:
             sentry_sdk.capture_exception(error)
+        except IndexError as error:
+            sentry_sdk.capture_exception(error)
 
         # Get the monthly profits for visualisation
         # try:
