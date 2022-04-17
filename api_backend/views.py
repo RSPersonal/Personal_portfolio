@@ -12,6 +12,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from database_projects.models import Portfolio
 from .serializers import PortfolioSerializer
+from core.scripts import keyword_finder
 
 
 # Create your views here.
@@ -108,5 +109,13 @@ def get_portfolio_monthly_profit(request, pk):
 
 
 def property_key_finder(request):
-    return render(request, 'api-examples/property_key_finder.html')
-
+    context = {}
+    if request.method == 'POST' and 'user_file' in request.FILES:
+        uploaded_file = request.FILES['user_file']
+        file_text = uploaded_file.read().decode('utf8')
+        uploaded_file.close()
+        single_or_array = request.POST.get('user_input_single_or_array')
+        found_keywords = keyword_finder.find_keywords_in_text_file('valuation_', file_text)
+        context['found_keywords'] = found_keywords['data']
+        context['keys_found'] = found_keywords['keys_found']
+    return render(request, 'api-examples/property_key_finder.html', context=context)
