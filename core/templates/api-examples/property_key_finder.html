@@ -32,7 +32,7 @@
                     file as .txt</b>
                 </li>
                 <li class="pt-2">
-                    Enter the keyword to search for: <input type="text" name="keyword" size="20" value="Keyword"/>
+                    Enter the keyword to search for: <input type="text" name="keyword" size="20" value=""/>
                     *Example = <b>valuation_</b>
                 </li>
                 <li class="pt-2">
@@ -47,18 +47,25 @@
                     Upload the file down below
                 </li>
             </ol>
+            {% for message in messages %}
+            <ul>
+                <li
+                        {% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}
+                </li>
+            </ul>
+            {% endfor %}
             <p>Upload File: <input type="file" name="user_file"/></p>
             <p><input type="submit" value="Upload and start script"/></p>
             {% if found_keywords %}
             <p>
-                Found {{ amount_keys_found }} keyword in uploaded file! Keywords are:
+                Found {{ amount_keys_found }} keyword/s in uploaded file! Keywords are:
                 {% for keyword in found_keywords %}
                 <br>{{ keyword }}
+                {% endfor %}
             </p>
-            {% endfor %}
-            {% else %}
+            {% elif amount_keys_found == 0 %}
             <p>
-                No keyword occurrences found in file.
+                <b>Found no keyword occurrences in text file!</b>
             </p>
             {% endif %}
         </form>

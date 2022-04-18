@@ -1,4 +1,5 @@
 import re
+import io
 
 
 def find_keywords_in_text_file(keyword: str, output_format: str, text_file):
@@ -22,9 +23,13 @@ def find_keywords_in_text_file(keyword: str, output_format: str, text_file):
     if keywords_amount_found > 0:
         # Return desired output
         if output_format == 'outputinbrowser' or output_format == 'json':
-            result['keys_found'] = str(keywords_amount_found)
+            result['keys_found'] = keywords_amount_found
             result['data'] = keys_without_duplicates
             return result
         else:
-            return
+            string_for_generation = ''
+            for keyword in keys_without_duplicates:
+                string_for_generation = string_for_generation + keyword + '\n'
+            text_file_stream = io.StringIO(string_for_generation)
+            return text_file_stream
     return result

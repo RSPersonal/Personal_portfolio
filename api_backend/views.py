@@ -1,8 +1,9 @@
+import io
 import os
 
 import requests
 from json.decoder import JSONDecodeError
-from django.http import JsonResponse
+from django.http import JsonResponse, FileResponse, HttpResponse
 from django.shortcuts import render
 from django.contrib import messages
 from requests import Response
@@ -110,9 +111,11 @@ def get_portfolio_monthly_profit(request, pk):
 
 
 def property_key_finder(request):
+    # TODO build unittest for this functionality
     context = {}
     if request.method == 'POST' and 'user_file' in request.FILES:
         # Get the file and decode it for the regex
+        # TODO Build check to validate uploaded file is only .txt file extension
         uploaded_file = request.FILES['user_file']
         file_text = uploaded_file.read().decode('utf8')
         uploaded_file.close()
@@ -120,13 +123,24 @@ def property_key_finder(request):
         # Get desired output and clean the input
         user_desired_output = request.POST.get('txt_file_or_output').lower().replace(' ', '')
         user_input_keyword = request.POST.get('keyword').lower().strip()
-
-        # Start the search and return desired output
-        found_keywords = keyword_finder.find_keywords_in_text_file(user_input_keyword, user_desired_output, file_text)
-        if user_desired_output == 'outputinbrowser':
-            context['found_keywords'] = found_keywords['data']
-            context['amount_keys_found'] = found_keywords['keys_found']
-        elif user_desired_output == 'json':
-            return JsonResponse(found_keywords)
-
+        if user_input_keyword == '':
+            messages.add_message(request, messages.INFO, 'No keyword entered.')
+        else:
+            # Start the search and return desired output
+            found_keywords = keyword_finder.find_keywords_in_text_file(user_input_keyword, user_desired_output,
+                                                                       file_text)
+            if user_desired_output == 'outputinbrowser':
+                context['amount_keys_found'] = found_keywords['keys_found']
+                context['found_keywords'] = found_keywords['data']
+            elif user_desired_output == 'json':
+                return JsonResponse(found_keywords)
+            else:
+                response = HttpResponse(found_keywords,
+                                        content_type='text/plain',
+                                        headers={'Content-Disposition': 'attachment; filename="found_keywords.txt"'},
+                                        )
+                return response
+    else:
+        context['no_file'] = True
+    print(context)
     return render(request, 'api-examples/property_key_finder.html', context=context)
