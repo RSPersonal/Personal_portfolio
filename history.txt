@@ -1,3 +1,5 @@
+v1.4--2022-04-18--Added Keyword finder script and general overhaul of pages
+----------------
 v1.3.10--2022-04-16--Set Version number on init
 ----------------
 v1.3.9--2022-04-16--Stocktracker overview improvements and version number 
