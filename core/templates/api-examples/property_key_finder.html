@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+{% block page_content %}
+<body>
+<div class="container-fluid">
+    <div class="p-4">
+        <form enctype="multipart/form-data" action="" method="post">
+            {% csrf_token %}
+            <h2>
+                Keyword finder
+            </h2>
+            <p>
+                A tool to find a keyword with multiple occurrences in a .txt file. I wrote this tool because at some
+                point I needed to find
+                certain
+                keywords in a (sometimes long) class file. Instead of manually looking through the whole code I wrote
+                this
+                script to find these
+                keywords and write them out in the desired user output.
+            </p>
+            <p>
+                Step by step guide.
+            <ol>
+                <li class="pt-2">
+                    Open Notepad or any text file editor of your choice.
+                </li>
+                <li class="pt-2">
+                    Open your (class)file in an IDE of your choice, in which you want to find the keyword
+                </li>
+                <li class="pt-2">
+                    Copy the content from the file to the text file in Notepad and save the file. <b>*Important to save
+                    the
+                    file as .txt</b>
+                </li>
+                <li class="pt-2">
+                    Enter the keyword to search for: <input type="text" name="keyword" size="20" value=""/>
+                    *Example = <b>valuation_</b>
+                </li>
+                <li class="pt-2">
+                    Select desired output:
+                    <select id="output" name="txt_file_or_output">
+                        <option>Output in browser</option>
+                        <option>JSON</option>
+                        <option>Text file</option>
+                    </select>
+                </li>
+                <li class="pt-2">
+                    Upload the file down below
+                </li>
+            </ol>
+            {% for message in messages %}
+            <ul>
+                <li
+                        {% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}
+                </li>
+            </ul>
+            {% endfor %}
+            <p>Upload File: <input type="file" name="user_file"/></p>
+            <p><input type="submit" value="Upload and start script"/></p>
+            {% if found_keywords %}
+            <p>
+                Found {{ amount_keys_found }} keyword/s in uploaded file! Keywords are:
+                {% for keyword in found_keywords %}
+                <br>{{ keyword }}
+                {% endfor %}
+            </p>
+            {% elif amount_keys_found == 0 %}
+            <p>
+                <b>Found no keyword occurrences in text file!</b>
+            </p>
+            {% endif %}
+        </form>
+    </div>
+</div>
+</body>
+{% endblock %}
