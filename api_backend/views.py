@@ -110,7 +110,7 @@ def get_portfolio_monthly_profit(request, pk):
     return Response({'message': 'success', 'data': []})
 
 
-def property_key_finder(request):
+def keyword_finder(request):
     # TODO build unittest for this functionality
     context = {}
     if request.method == 'POST' and 'user_file' in request.FILES:
@@ -143,4 +143,4 @@ def property_key_finder(request):
     else:
         context['no_file'] = True
     print(context)
-    return render(request, 'api-examples/property_key_finder.html', context=context)
+    return render(request, 'api-examples/keyword_finder.html', context=context)
