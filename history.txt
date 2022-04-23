@@ -1,3 +1,5 @@
+v1.4.2--2022-04-23--Functionality to edit existing position in portfolio
+----------------
 v1.4.1--2022-04-18--Added text file as desired output to keyword finder 
 ----------------
 v1.4--2022-04-18--Added Keyword finder script and general overhaul of pages

@@ -1,9 +1,7 @@
-import io
 import os
-
 import requests
 from json.decoder import JSONDecodeError
-from django.http import JsonResponse, FileResponse, HttpResponse
+from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render
 from django.contrib import messages
 from requests import Response
@@ -46,7 +44,7 @@ def geo_api_get_ip(request):
                     'longitude': geo_data['longitude']
                 }
             else:
-                context['succes'] = False
+                context['success'] = False
         else:
             messages.add_message(request, messages.INFO, "Input field is empty, please enter you ip!")
     else:
@@ -111,6 +109,10 @@ def get_portfolio_monthly_profit(request, pk):
 
 
 def keyword_finder(request):
+    """
+    @param request:
+    @return:
+    """
     # TODO build unittest for this functionality
     context = {}
     if request.method == 'POST' and 'user_file' in request.FILES:
@@ -142,5 +144,4 @@ def keyword_finder(request):
                 return response
     else:
         context['no_file'] = True
-    print(context)
     return render(request, 'api-examples/keyword_finder.html', context=context)

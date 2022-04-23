@@ -99,6 +99,7 @@ def portfolio_detail(request, pk):
 
     # Lookup if there are any active positions
     if Positions.objects.filter(portfolio=pk).exists():
+        # Get all positions
         positions = Positions.objects.filter(portfolio=pk).order_by('added_on')
 
         # Standard variables for total calculation of portfolio
@@ -199,10 +200,10 @@ def portfolio_detail(request, pk):
         context['active_positions'] = False
 
     # Adding new positions to database
-    if request.method == 'POST':
+    if request.method == 'POST' and 'add_position_button' in request.POST:
         form = PositionForm(request.POST)
         if form.is_valid():
-            # Getting all the cleaned data for the database entry
+            # Getting all the cleaned data for the dsatabase entry
             user_input_stock_name = form.cleaned_data['ticker_name']
             user_input_buy_price = form.cleaned_data['buy_price']
             user_input_quantity = form.cleaned_data['quantity']
@@ -234,6 +235,25 @@ def portfolio_detail(request, pk):
         # Check if remaining positions in portfolio
         portfolio.total_positions -= 1
         portfolio.save()
+        return redirect('portfolio_detail', pk)
+
+    # Edit position
+    if request.method == 'POST' and 'edit_position_button' in request.POST:
+        form = PositionForm(request.POST)
+        if form.is_valid():
+            # Getting all the cleaned data for the database entry
+            user_input_stock_name = form.cleaned_data['ticker_name']
+            user_input_buy_price = form.cleaned_data['buy_price']
+            user_input_quantity = form.cleaned_data['quantity']
+            user_input_market = form.cleaned_data['market']
+
+            position_from_db = Positions.objects.get(id=request.POST.get('id'))
+            position_from_db.ticker_name = user_input_stock_name
+            position_from_db.buy_price = user_input_buy_price
+            position_from_db.quantity = user_input_quantity
+            position_from_db.market = user_input_market
+            position_from_db.save()
+            print('edit successfull')
         return redirect('portfolio_detail', pk)
 
     # Delete portfolio
