@@ -201,33 +201,41 @@ def portfolio_detail(request, pk):
 
     # Adding new positions to database
     if request.method == 'POST' and 'add_position_button' in request.POST:
-        form = PositionForm(request.POST)
-        if form.is_valid():
-            # Getting all the cleaned data for the dsatabase entry
-            user_input_stock_name = form.cleaned_data['ticker_name']
-            user_input_buy_price = form.cleaned_data['buy_price']
-            user_input_quantity = form.cleaned_data['quantity']
-            user_input_market = form.cleaned_data['market']
+        add_position_form = PositionForm(request.POST)
+        if add_position_form.is_valid():
+            # Getting all the cleaned data for the database entry
+            user_input_add_form_stock_name = add_position_form.cleaned_data['ticker_name']
+            user_input_add_form_buy_price = add_position_form.cleaned_data['buy_price']
+            user_input_add_form_quantity = add_position_form.cleaned_data['quantity']
+            user_input_add_form_market = add_position_form.cleaned_data['market']
+            found_stock = False
 
-            result_stock_data_json = yahoo_api.get_stock_data(f"{user_input_stock_name}")
+            if active_connection and limit_exceeded is False:
+                result_stock_data_json = yahoo_api.get_stock_data(f"{user_input_add_form_stock_name}")
 
-            # Checking if results came back, otherwise give user notification for bad request
-            if input_validator.value(result_stock_data_json["quoteResponse"]["result"]) and \
-                    result_stock_data_json["quoteResponse"]["result"][0]["symbol"] == user_input_stock_name:
-                # Adding new entry to Database
-                new_stock_entry = Positions(portfolio=portfolio, ticker_name=user_input_stock_name,
-                                            buy_price=user_input_buy_price,
-                                            current_market_price=result_stock_data_json["quoteResponse"]["result"][0][
-                                                "regularMarketPrice"],
-                                            quantity=user_input_quantity, market=user_input_market)
-                # Saving the entry to database
-                new_stock_entry.save()
-
-                return redirect('portfolio_detail', pk)
-            elif limit_exceeded:
-                messages.add_message(request, messages.INFO, 'API CALL LIMIT EXCEEDED.')
+                if input_validator.value(result_stock_data_json["quoteResponse"]["result"]) and \
+                        result_stock_data_json["quoteResponse"]["result"][0]["symbol"] == user_input_add_form_stock_name:
+                    found_stock = True
+                    current_market_price_from_api_call_or_zero = result_stock_data_json["quoteResponse"]["result"][0][
+                        "regularMarketPrice"]
             else:
+                current_market_price_from_api_call_or_zero = 0
+
+            if limit_exceeded:
+                messages.add_message(request, messages.INFO, 'API CALL LIMIT EXCEEDED.')
+            elif found_stock is False:
                 messages.add_message(request, messages.INFO, "Could not find Stock, make sure you spelled it correct")
+
+            # Adding new entry to Database
+            new_stock_entry = Positions(portfolio=portfolio, ticker_name=user_input_add_form_stock_name,
+                                        buy_price=user_input_add_form_buy_price,
+                                        current_market_price=current_market_price_from_api_call_or_zero,
+                                        quantity=user_input_add_form_quantity,
+                                        market=user_input_add_form_market)
+            # Saving the entry to database
+            new_stock_entry.save()
+
+            return redirect('portfolio_detail', pk)
 
     # Delete position
     if request.method == 'POST' and 'delete_position_button' in request.POST:
@@ -253,7 +261,6 @@ def portfolio_detail(request, pk):
             position_from_db.quantity = user_input_quantity
             position_from_db.market = user_input_market
             position_from_db.save()
-            print('edit successfull')
         return redirect('portfolio_detail', pk)
 
     # Delete portfolio
