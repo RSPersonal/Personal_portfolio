@@ -9,7 +9,8 @@ urlpatterns = [
     path('accounts/', include('django.contrib.auth.urls')),
     path('', include("homepage.urls")),
     path('api/v1/', include("api_backend.urls")),
-    path('database-projects', include('database_projects.urls'))
+    path('database-projects', include('database_projects.urls')),
+    path('website-projects/', include('website_projects.urls'))
 ]
 
 urlpatterns += static(settings.IMAGES_URL, document_root=settings.IMAGES_ROOT)
