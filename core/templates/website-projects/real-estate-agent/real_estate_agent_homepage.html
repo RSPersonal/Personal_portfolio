@@ -1,0 +1,45 @@
+{% extends 'website-projects/real-estate-agent/real_estate_base.html' %}
+{% load static %}
+
+{% block page_content %}
+<body>
+<div >
+    <img src="{% static  'img/background-placeholder.jpg' %}" width="100%" height="700" alt="">
+    <p class="carousel-caption">Uw lokale makelaar</p>
+</div>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-6 text-center p-5">
+            <h2>Lorum ipsum Lorum ipsum Lorum ipsum Lorum ipsum Lorum ipsum </h2>
+        </div>
+        <div class="col-6">
+            <div id="homepageCarousel" class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-inner p-5">
+                    <div class="carousel-item active" data-bs-interval="7000">
+                        <p>
+                            "Lorum ipsum Lorum ipsumLorum ipsumLorum ipsumLorum ipsumLorum ipsumLorum ipsum"
+                            <br><br><b>Klant 1 via PlaceholderPlatform</b>
+                        </p>
+                    </div>
+                    <div class="carousel-item" data-bs-interval="7000">
+                        <p>
+                          "Lorum ipsum Lorum ipsumLorum ipsumLorum ipsumLorum ipsumLorum ipsumLorum ipsum"
+                            <br><br><b>Klant 2 via PlaceholderPlatform</b>
+                        </p>
+                    </div>
+                    <button class="carousel-control-prev" type="button" data-bs-target="homepageCarousel">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Previous</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleInterval"
+                            data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Next</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+{% endblock %}

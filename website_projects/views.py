@@ -6,4 +6,4 @@ def projects_overview(request):
 
 
 def real_estate_example(request):
-    return render(request, 'website-projects/real_estate_example.html')
+    return render(request, 'website-projects/real-estate-agent/real_estate_agent_homepage.html')
