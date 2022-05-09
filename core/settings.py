@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
     'rest_framework_jwt',
+    'crispy_forms',
     'core',
     'homepage',
     'api_backend',
@@ -181,3 +182,4 @@ CSRF_COOKIE_SECURE = True
 SESSION_COOKIE_SECURE = True
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
