@@ -5,9 +5,9 @@
 .img-text {
 	top:15%;
 	left:10%;
-	width:350px;
+	width:400px;
     position: absolute;
     background-color: #f2f2f2;
-    opacity: .3;
+    opacity: .4;
     display:block;
 }
