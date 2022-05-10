@@ -1,0 +1,13 @@
+* {
+    font-family: 'Open Sans', sans-serif;
+}*
+
+.img-text {
+	top:18%;
+	left:10%;
+	width:400px;
+    position: absolute;
+    background-color: #f2f2f2;
+    opacity: .4;
+    display:block;
+}

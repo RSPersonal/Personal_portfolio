@@ -1,0 +1,110 @@
+{% extends 'website-projects/real-estate-agent/real_estate_base.html' %}
+{% load static %}
+
+{% block page_content %}
+<body>
+<div class="container-fluid p-0" style="height: 600px;">
+    <img class="h-100 w-100" src="{% static  'img/background-placeholder.jpg' %}" alt="">
+    <p class="img-text rounded p-2 text-dark">
+        Your local real estate agent
+        <br><br>Lorum ipsum lorum ipsum lorum ipsum lorum ipsum lorum ipsum lorum ipsum lorum ipsumlorum ipsum lorum
+        ipsum lorum ipsum
+        <br><br>lorum ipsum lorum ipsum lorum ipsum lorum ipsum lorum ipsum lorum ipsum lorum ipsum lorum ipsum lorum
+        ipsum
+    </p>
+</div>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-6 text-center p-5">
+            <h2>Lorum ipsum Lorum ipsum Lorum ipsum Lorum ipsum Lorum ipsum </h2>
+        </div>
+        <div class="col-6">
+            <div id="homepageCarousel" class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-inner p-5">
+                    <div class="carousel-item active" data-bs-interval="7000">
+                        <p>
+                            "Lorum ipsum Lorum ipsumLorum ipsumLorum ipsumLorum ipsumLorum ipsumLorum ipsum"
+                            <br><br><b>Klant 1 via PlaceholderPlatform</b>
+                        </p>
+                    </div>
+                    <div class="carousel-item" data-bs-interval="7000">
+                        <p>
+                            "Lorum ipsum Lorum ipsumLorum ipsumLorum ipsumLorum ipsumLorum ipsumLorum ipsum"
+                            <br><br><b>Klant 2 via PlaceholderPlatform</b>
+                        </p>
+                    </div>
+                    <button class="carousel-control-prev" type="button" data-bs-target="homepageCarousel">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Previous</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleInterval"
+                            data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Next</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-3">
+            <div class="card border-0">
+                <div class="card-body text-center">
+                    <i class="bi bi-house-heart" style="font-size: 3rem"></i>
+
+                    <h4>
+                        WONING KOPEN
+                    </h4>
+                    <p class="card-text pt-2">
+                        Vanaf het zoeken, tot aan de sleuteloverdracht, we begeleiden het hele proces.
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="col-3">
+            <div class="card border-0">
+                <div class="card-body text-center">
+                    <i class="bi bi-house-door" style="font-size: 3rem"></i>
+                    <h4>
+                        WONING VERKOPEN
+                    </h4>
+
+                    <p class="card-text pt-2">
+                        Uw woning verkopen op originele wijze, met echte aandacht voor u en uw woning.
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="col-3">
+            <div class="card border-0">
+                <div class="card-body text-center">
+                    <i class="bi bi-file-text" style="font-size: 3rem"></i>
+                    <h4>
+                        TAXATIES
+                    </h4>
+                    <p class="card-text pt-2">
+                        Snel en kwalitatief hoogwaardige taxaties
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="col-3">
+            <div class="card border-0">
+                <div class="card-body text-center">
+                    <i class="bi bi-calculator" style="font-size: 3rem"></i>
+
+                    <h4>
+                        HYPOTHEKEN
+                    </h4>
+                    <p class="card-text pt-2">
+                        Vraag vrijblijvend één advies gesprek aan met een van onze hypotheek adviseurs
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+{% endblock %}
