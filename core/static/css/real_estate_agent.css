@@ -1,5 +1,6 @@
 * {
     font-family: 'Open Sans', sans-serif;
+
 }*
 
 .img-text {
@@ -11,3 +12,5 @@
     opacity: .4;
     display:block;
 }
+
+#outline: 1px solid blue
