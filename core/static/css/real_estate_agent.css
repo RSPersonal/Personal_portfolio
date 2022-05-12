@@ -5,12 +5,10 @@
 
 .img-text {
 	top:18%;
-	left:10%;
 	width:400px;
     position: absolute;
     background-color: #f2f2f2;
-    opacity: .4;
-    display:block;
+    display:flex;
 }
 
 #outline: 1px solid blue
