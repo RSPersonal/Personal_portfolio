@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'homepage',
     'api_backend',
     'database_projects',
+    'website_projects',
 ]
 
 MIDDLEWARE = [
@@ -148,6 +149,10 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 IMAGES_URL = 'images/'
 
 IMAGES_ROOT = os.path.join(BASE_DIR, 'static/images')
+
+MEDIA_URL = '/media/'
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field

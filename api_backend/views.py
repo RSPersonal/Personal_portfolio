@@ -12,7 +12,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from database_projects.models import Portfolio
 from .serializers import PortfolioSerializer
-from core.scripts import keyword_finder_core
+from core.core_scripts import keyword_finder_core
 
 
 # Create your views here.
