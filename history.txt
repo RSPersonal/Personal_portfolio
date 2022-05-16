@@ -1,3 +1,7 @@
+v1.4.5--2022-05-15--S3 AWS integration for image functionality
+----------------
+v1.4.4--2022-05-15--Real estate agend example frame
+----------------
 v1.4.3--2022-05-08--Added website projects and real estate agent example
 ----------------
 v1.4.2--2022-04-23--Functionality to edit existing position in portfolio

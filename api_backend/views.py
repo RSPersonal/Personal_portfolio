@@ -12,7 +12,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from database_projects.models import Portfolio
 from .serializers import PortfolioSerializer
-from core.scripts import keyword_finder
+from core.core_scripts import keyword_finder_core
 
 
 # Create your views here.
@@ -129,8 +129,7 @@ def keyword_finder(request):
             messages.add_message(request, messages.INFO, 'No keyword entered.')
         else:
             # Start the search and return desired output
-            found_keywords = keyword_finder.find_keywords_in_text_file(user_input_keyword, user_desired_output,
-                                                                       file_text)
+            found_keywords = keyword_finder_core.find_keywords_in_text_file(user_input_keyword, user_desired_output, file_text)
             if user_desired_output == 'outputinbrowser':
                 context['amount_keys_found'] = found_keywords['keys_found']
                 context['found_keywords'] = found_keywords['data']
