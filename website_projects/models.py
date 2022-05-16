@@ -14,17 +14,17 @@ class PropertyModel(models.Model):
     construction_year = models.IntegerField(blank=True, null=True)
     amount_rooms = models.IntegerField(default=0, null=True)
     description = models.TextField(blank=True, null=True)
-    thumbnail_photo = models.ImageField(upload_to='images/', blank=True, null=True)
-    other_photos = models.ImageField(blank=True,null=True)
+    thumbnail_photo = models.FileField(blank=True)
+    other_photos = models.FileField(blank=True)
     added_on = models.DateTimeField(auto_now=True)
 
     def remove_on_image_update(self):
         try:
-            obj = PropertyModel.objects.get(id=self.id)
+            obj = PropertyModel.objects.get(pk=self.pk)
         except PropertyModel.DoesNotExist:
             return
 
-        if obj.thumbnail_photo and self.thumbnail_photo and obj.thumbnail_photo != self.image:
+        if obj.thumbnail_photo and self.thumbnail_photo and obj.thumbnail_photo != self.thumbnail_photo:
             obj.thumbnail_photo.delete()
         elif obj.other_photos and self.other_photos and obj.other_photos != self.other_photos:
             obj.thumbnail_photo.delete()
