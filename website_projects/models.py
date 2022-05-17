@@ -1,4 +1,6 @@
 from django.db import models
+from core.storage_backends import PublicMediaStorage, StaticStorage
+from django.dispatch import receiver
 
 
 # Create your models here.
@@ -14,8 +16,8 @@ class PropertyModel(models.Model):
     construction_year = models.IntegerField(blank=True, null=True)
     amount_rooms = models.IntegerField(default=0, null=True)
     description = models.TextField(blank=True, null=True)
-    thumbnail_photo = models.FileField(blank=True)
-    other_photos = models.FileField(blank=True)
+    thumbnail_photo = models.FileField(blank=True, storage=PublicMediaStorage)
+    other_photos = models.FileField(blank=True, storage=PublicMediaStorage)
     added_on = models.DateTimeField(auto_now=True)
 
     def remove_on_image_update(self):
@@ -32,3 +34,8 @@ class PropertyModel(models.Model):
     def safe(self, *args, **kwargs):
         self.remove_on_image_update()
         return super(PropertyModel, self).save(*args, **kwargs)
+
+
+@receiver(models.signals.post_delete, sender=PropertyModel)
+def remove_file_from_s3(sender, instance, using, **kwargs):
+    instance.img.delete(save=False)
