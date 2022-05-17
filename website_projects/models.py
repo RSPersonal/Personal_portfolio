@@ -38,4 +38,4 @@ class PropertyModel(models.Model):
 
 @receiver(models.signals.post_delete, sender=PropertyModel)
 def remove_file_from_s3(sender, instance, using, **kwargs):
-    instance.img.delete(save=False)
+    instance.thumbnail_photo.delete(save=False)
