@@ -17,6 +17,99 @@
         ipsum
     </p>
 </div>
+
+<div class="container-fluid bg-light">
+    <div class="container">
+        <div class="row">
+            <div class="col-3">
+                <div class="card border-0 bg-light">
+                    <div class="card-body text-center">
+                        <i class="bi bi-house-heart" style="font-size: 3rem"></i>
+                        <h5>
+                            WONING KOPEN
+                        </h5>
+                        <p class="card-text pt-2">
+                            Vanaf het zoeken, tot aan de sleuteloverdracht, wij begeleiden het hele proces.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-3">
+                <div class="card border-0 bg-light">
+                    <div class="card-body text-center">
+                        <i class="bi bi-house-door" style="font-size: 3rem"></i>
+                        <h5>
+                            WONING VERKOPEN
+                        </h5>
+
+                        <p class="card-text pt-2">
+                            Uw woning verkopen op originele wijze, met echte aandacht voor u en uw woning.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-3">
+                <div class="card border-0 bg-light">
+                    <div class="card-body text-center">
+                        <i class="bi bi-file-text" style="font-size: 3rem"></i>
+                        <h5 class="">
+                            TAXATIES
+                        </h5>
+                        <p class="card-text pt-2">
+                            Snel en kwalitatief hoogwaardige taxaties
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-3">
+                <div class="card border-0 bg-light ">
+                    <div class="card-body text-center">
+                        <i class="bi bi-calculator" style="font-size: 3rem"></i>
+                        <h5>
+                            HYPOTHEKEN
+                        </h5>
+                        <p class="card-text pt-2">
+                            Vraag vrijblijvend één advies gesprek aan met een van onze hypotheek adviseurs
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container pt-3">
+    <h3>
+        Recent aanbod
+    </h3>
+</div>
+<div class="container">
+    <div class="row">
+        {% for property in properties %}
+        <div class="col-4">
+            <div class="card">
+                <div class="card-body">
+                    {% if property.thumbnail_photo.url != '' %}
+                    <img src="{{ property.thumbnail_photo.url }}" class="card-img-top"/>
+                    {% endif %}
+                    <h5 class="card-title pt-2">
+                        {{ property.street }} {{ property.housenumber }}
+                    </h5>
+                    <a href="#" class="stretched-link"></a>
+                    <p>
+                        {{ property.zipcode}}, {{ property.city }}
+                    </p>
+                    <p class="card-text">
+                        € {{ property.ask_price }}
+                    </p>
+                    <p>
+                        {{ property.woon_oppervlak }} m² / {{ property.perceel_oppervlak }} / {{ property.amount_rooms }} kamers
+                    </p>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
 <div class="container">
     <div class="row">
         <div class="col-6 text-left p-5">
@@ -50,93 +143,6 @@
                 </div>
             </div>
         </div>
-    </div>
-</div>
-<div class="container-fluid bg-light">
-    <div class="container">
-        <div class="row">
-            <div class="col-3">
-                <div class="card border-0 bg-light">
-                    <div class="card-body text-center">
-                        <i class="bi bi-house-heart" style="font-size: 3rem"></i>
-                        <h5>
-                            WONING KOPEN
-                        </h5>
-                        <p class="card-text pt-2 d-none d-md-block">
-                            Vanaf het zoeken, tot aan de sleuteloverdracht, wij begeleiden het hele proces.
-                        </p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-3">
-                <div class="card border-0 bg-light">
-                    <div class="card-body text-center">
-                        <i class="bi bi-house-door" style="font-size: 3rem"></i>
-                        <h5>
-                            WONING VERKOPEN
-                        </h5>
-
-                        <p class="card-text pt-2 d-none d-md-block">
-                            Uw woning verkopen op originele wijze, met echte aandacht voor u en uw woning.
-                        </p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-3">
-                <div class="card border-0 bg-light">
-                    <div class="card-body text-center">
-                        <i class="bi bi-file-text" style="font-size: 3rem"></i>
-                        <h5 class="">
-                            TAXATIES
-                        </h5>
-                        <p class="card-text pt-2 d-none">
-                            Snel en kwalitatief hoogwaardige taxaties
-                        </p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-3">
-                <div class="card border-0 bg-light ">
-                    <div class="card-body text-center">
-                        <i class="bi bi-calculator" style="font-size: 3rem"></i>
-
-                        <h5 class="d-none d-md-block d-xl-none">
-                            HYPOTHEKEN
-                        </h5>
-                        <p class="card-text pt-2">
-                            Vraag vrijblijvend één advies gesprek aan met een van onze hypotheek adviseurs
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="container pt-3">
-    <h3>
-        Recent aanbod
-    </h3>
-</div>
-<div class="container">
-    <div class="row">
-        {% for property in properties %}
-        <div class="col-4">
-            <div class="card">
-                <div class="card-body">
-                    {% if property.thumbnail_photo.url != '' %}
-                    <img src="{{ property.thumbnail_photo.url }}" class="card-img-top"/>
-                    {% endif %}
-                    <h5 class="card-title pt-2">
-                        {{ property.street }} {{ property.housenumber }}<br>{{ property.zipcode}} {{ property.city }}
-                    </h5>
-                    <p class="card-text">
-                        Vraagprijs: € {{ property.ask_price }},- k.k.
-                    </p>
-                    <button class="btn btn-light" href="#">Ga naar </button>
-                </div>
-            </div>
-        </div>
-        {% endfor %}
     </div>
 </div>
 </body>

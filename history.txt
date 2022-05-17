@@ -1,3 +1,5 @@
+v1.4.7--2022-05-17--S3 filestorage delete and better page layout
+----------------
 v1.4.6--2022-05-17--S3 public and static storages
 ----------------
 v1.4.5--2022-05-15--S3 AWS integration for image functionality

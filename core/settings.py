@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     'database_projects',
     'website_projects',
     'storages',
+    'django_cleanup.apps.CleanupConfig',
 ]
 
 MIDDLEWARE = [
