@@ -1,3 +1,5 @@
+v1.4.8--2022-05-19--Beginning of responsive for mobile
+----------------
 v1.4.7--2022-05-17--S3 filestorage delete and better page layout
 ----------------
 v1.4.6--2022-05-17--S3 public and static storages

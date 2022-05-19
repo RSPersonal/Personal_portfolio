@@ -3,8 +3,12 @@
 
 {% block page_content %}
 <body>
-<div class="container-fluid p-0" style="height: 700px;">
-    <img class="w-100 h-100" src="{% static  'img/desk-placeholder.jpg' %}" alt="">
+<div class="container-fluid">
+    <div class="bg-image img-fluid"
+     style="background-image: url({% static  'img/desk-placeholder.jpg' %});
+            height: 600px; width: 100%;">
+</div>
+<!--    <img class="img-responsive" width="500" height="650" src="{% static  'img/desk-placeholder.jpg' %}" alt="">-->
 </div>
 <div class="container">
     <p class="img-text rounded p-2 text-white bg-transparent">
@@ -21,7 +25,7 @@
 <div class="container-fluid bg-light">
     <div class="container">
         <div class="row">
-            <div class="col-3">
+            <div class="col-sm-3">
                 <div class="card border-0 bg-light">
                     <div class="card-body text-center">
                         <i class="bi bi-house-heart" style="font-size: 3rem"></i>
@@ -34,7 +38,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-3">
+            <div class="col-sm-3">
                 <div class="card border-0 bg-light">
                     <div class="card-body text-center">
                         <i class="bi bi-house-door" style="font-size: 3rem"></i>
@@ -48,7 +52,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-3">
+            <div class="col-sm-3">
                 <div class="card border-0 bg-light">
                     <div class="card-body text-center">
                         <i class="bi bi-file-text" style="font-size: 3rem"></i>
@@ -61,7 +65,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-3">
+            <div class="col-sm-3">
                 <div class="card border-0 bg-light ">
                     <div class="card-body text-center">
                         <i class="bi bi-calculator" style="font-size: 3rem"></i>
@@ -85,7 +89,7 @@
 <div class="container">
     <div class="row">
         {% for property in properties %}
-        <div class="col-4">
+        <div class="col-sm-4">
             <div class="card">
                 <div class="card-body">
                     {% if property.thumbnail_photo.url != '' %}
@@ -94,7 +98,7 @@
                     <h5 class="card-title pt-2">
                         {{ property.street }} {{ property.housenumber }}
                     </h5>
-                    <a href="#" class="stretched-link"></a>
+                    <a href="{% url 'property_detail' property.pk%}" class="stretched-link"></a>
                     <p>
                         {{ property.zipcode}}, {{ property.city }}
                     </p>
