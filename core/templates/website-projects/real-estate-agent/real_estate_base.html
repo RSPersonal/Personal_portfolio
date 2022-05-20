@@ -12,21 +12,20 @@
 </head>
 
 <!-- Navigation -->
-<body class="d-flex flex-column h-100">
+<body>
 <header>
-    <nav class="navbar navbar-expand-md navbar-light  sticky-top">
+    <nav class="navbar navbar-expand-lg navbar-light sticky-top">
         <div class="container justify-content-between">
-            <img src="{% static  'img/logo-placeholder.png' %}" width="14%" height="40" alt="" />
+            <img src="{% static  'img/logo-placeholder.png' %}" width="14%" height="40" alt=""/>
             <a class="text-dark" href="real-estate-agent">HOME</a>
-            <div class="dropdown">
-                <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton1"
-                        data-bs-toggle="dropdown" aria-expanded="false">
+            <div class="nav-item dropdown">
+                <div class="dropdown-toggle" href="#" id="woningAanbod-1" role="button" data-bs-toggle="dropdown">
                     WONINGAANBOD
-                </button>
-                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                    <li><a class="dropdown-item" href="#">HUIS KOPEN</a></li>
-                    <li><a class="dropdown-item" href="#">HUIS HUREN</a></li>
-                </ul>
+                </div>
+                <div class="dropdown-menu" aria-labelledby="woningAanbod1">
+                    <a class="dropdown-item" href="#">HUIS KOPEN</a>
+                    <a class="dropdown-item" href="#">HUIS HUREN</a>
+                </div>
             </div>
             <a class="text-dark" href="#">DIENSTEN</a>
             <div class="dropdown">

@@ -19,6 +19,7 @@
             </p>
             <p>
                 Step by step guide.
+            </p>
             <ol>
                 <li class="pt-2">
                     Open Notepad or any text file editor of your choice.
@@ -60,7 +61,7 @@
             <p>
                 Found {{ amount_keys_found }} keyword/s in uploaded file! Keywords are:
                 {% for keyword in found_keywords %}
-                <br>{{ keyword }}
+                <br/>{{ keyword }}
                 {% endfor %}
             </p>
             {% elif amount_keys_found == 0 %}

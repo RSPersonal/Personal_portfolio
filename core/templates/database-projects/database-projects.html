@@ -2,51 +2,55 @@
 {% block page_content %}
 <body>
 <div class="container-fluid">
-    <div class="col md-7">
-        <div class="card mb-2">
-            <div class="card-body">
-                <h2 class="card-title">Stock tracker</h2>
-                <div class="row">
-                    <div class="col-12">
-                        <p>I build this stocktracker app to learn database operations. To get current stock data, I
-                            linked this to
-                            the free API from Yahoo finance. It's only possible to do 100 API calls a day. You will see
-                            an error
-                            message whenever the api calls are exceeded.
-                            
-                            <br/>You can login with username: test.user and password: Seemywebsite123!
-                            <br/><br/>Current features are:
-                        <ol>
-                            <li>Basic CRUD database operation</li>
-                            <li>Adding portfolio's linked to user</li>
-                            <li>Only show portfolio's linked to user</li>
-                            <li>Show general KPI's in portfolio overview</li>
-                            <li>KPI's calculated based on positions in portfolio</li>
-                            <li>Adding position to portfolio</li>
-                            <li>API connection with YahooFinance to get live stock data</li>
-                            <li>Chart.js integration for visual representation of portfolio metrics</li>
-                            <li>Monthly profit chart in portfolio overview is linked to the REST API to showcase REST API</li>
-                        </ol>
-                        </p>
+    <div class="row">
+        <div class="col-6 md-7">
+            <div class="card mb-2">
+                <div class="card-body">
+                    <h2 class="card-title">Stock tracker</h2>
+                    <div class="row">
+                        <div class="col-12">
+                            <p>I build this stocktracker app to learn database operations. To get current stock data, I
+                                linked this to
+                                the free API from Yahoo finance. It's only possible to do 100 API calls a day. You will
+                                see
+                                an error
+                                message whenever the api calls are exceeded.
+
+                                <br/><br/>You can login with username: <b>test.user</b> and password: <b>Seemywebsite123!</b>
+                                <br/><br/>Current features are:
+                            <ol>
+                                <li>Basic CRUD database operation</li>
+                                <li>Adding portfolio's linked to user</li>
+                                <li>Only show portfolio's linked to user</li>
+                                <li>Show general KPI's in portfolio overview</li>
+                                <li>KPI's calculated based on positions in portfolio</li>
+                                <li>Adding position to portfolio</li>
+                                <li>API connection with YahooFinance to get live stock data</li>
+                                <li>Chart.js integration for visual representation of portfolio metrics</li>
+                                <li>Monthly profit chart in portfolio overview is linked to the REST API to showcase
+                                    REST API
+                                </li>
+                            </ol>
+                            </p>
+                        </div>
                     </div>
+                    <p class="card-text"></p>
+                    {% if user.is_authenticated %}
+                    <a class="btn btn-primary" href="{% url 'stocktracker' %}">Go to stock tracker</a>
+                    {% else %}
+                    <a class="btn btn-primary" href="{% url 'login' %}">Login</a>
+                    {% endif %}
                 </div>
-                <p class="card-text"></p>
-                {% if user.is_authenticated %}
-                <a class="btn btn-primary" href="database-projects-stocktracker/">Go to stock tracker</a>
-                {% else %}
-                <a class="btn btn-primary" href="accounts/login">Login</a>
-                {% endif %}
             </div>
         </div>
-        <div class="col">
+        <div class="col-6">
             <div class="card mb-2">
                 <div class="card-body">
                     <h2 class="card-title">Company car mileage registration</h2>
                     <p>Placeholder</p>
-                    <a class="btn btn-primary" href="">Go to second project</a>
+                    <a class="btn btn-primary" href="#">Go to second project</a>
                 </div>
             </div>
-
         </div>
     </div>
 </div>
