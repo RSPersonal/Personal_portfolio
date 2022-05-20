@@ -19,4 +19,5 @@ def real_estate_example(request):
 def property_detail(request, property_id):
     context = {}
     property_data = get_object_or_404(PropertyModel, id=property_id)
+    context['property'] = property_data
     return render(request, 'website-projects/real-estate-agent/property_detail.html', context=context)
