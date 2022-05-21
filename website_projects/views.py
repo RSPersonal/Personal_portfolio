@@ -27,4 +27,7 @@ def sale_properties(request):
     context = {}
     # Here comes the form
 
-    return render(request, 'website-projects/real-estate-agent/property_detail.html', context=context)
+    active_cities = PropertyModel.objects.all().values_list('city', flat=True).distinct()
+
+    context['city_filters'] = active_cities
+    return render(request, 'website-projects/real-estate-agent/sale_properties.html', context=context)

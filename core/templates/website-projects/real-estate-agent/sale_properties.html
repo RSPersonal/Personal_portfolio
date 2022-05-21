@@ -2,5 +2,24 @@
 {% load static %}
 
 {% block page_content %}
-
+<div class="container">
+    <div class="row">
+        <div class="col-sm-3">
+            <p>
+                <b>Plaats</b>
+            </p>
+            <div class="dropdown">
+                <div class="btn-btn-secondary dropdown-toggle" type="button" id="plaatsMenuButton"
+                        data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    -Maak een keuze
+                </div>
+                <div class="dropdown-menu" aria-labelledby="plaatsMenuButton">
+                    {% for city in city_filters %}
+                    <button class="dropdown-item" type="button">{{ city }}</button>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
