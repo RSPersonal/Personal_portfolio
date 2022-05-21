@@ -9,7 +9,7 @@ def projects_overview(request):
     return render(request, 'website-projects/website_overview.html')
 
 
-def real_estate_example(request):
+def real_estate_homepage(request):
     context = {}
     properties = PropertyModel.objects.order_by('added_on')
     context['properties'] = properties
@@ -20,4 +20,11 @@ def property_detail(request, property_id):
     context = {}
     property_data = get_object_or_404(PropertyModel, id=property_id)
     context['property'] = property_data
+    return render(request, 'website-projects/real-estate-agent/property_detail.html', context=context)
+
+
+def sale_properties(request):
+    context = {}
+    # Here comes the form
+
     return render(request, 'website-projects/real-estate-agent/property_detail.html', context=context)

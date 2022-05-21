@@ -4,49 +4,41 @@
 <body>
 <div class="container-fluid bg-light">
     <div class="container">
-        <div class="row pt-5 pb-5">
+        <div class="row pt-3 pb-3">
             <div class="col-sm-6">
-                <h3>{{ property.city }} - {{ property.street }} {{property.housenumber}}</h3>
+                <h4>{{ property.city }} - {{ property.street }} {{property.housenumber}}</h4>
             </div>
             <div class="col-sm-6 text-end">
-                <h3>
+                <h4>
                     {{ property.ask_price }}
-                </h3>
+                </h4>
             </div>
         </div>
     </div>
 </div>
 <div class="container">
-    <img src="{{ property.thumbnail_photo.url }}" width="50%" height="50%">
+    <div class="pt-2 pb-2">
+        <img src="{{ property.thumbnail_photo.url }}" width="50%" height="50%">
+    </div>
 </div>
 <div class="container-fluid bg-light">
     <div class="container">
-        <nav class="navbar navbar-expand-lg navbar-light">
-            <div class="container">
-                <a class="text-dark" href="real-estate-agent">HOME</a>
-                <div class="nav-item dropdown">
-                    <div class="dropdown-toggle" href="#" id="woningAanbod-1" role="button" data-bs-toggle="dropdown">
-                        WONINGAANBOD
-                    </div>
-                    <div class="dropdown-menu" aria-labelledby="woningAanbod1">
-                        <a class="dropdown-item" href="#">HUIS KOPEN</a>
-                        <a class="dropdown-item" href="#">HUIS HUREN</a>
-                    </div>
-                </div>
-                <a class="text-dark" href="#">DIENSTEN</a>
-                <div class="dropdown">
-                    <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton1"
-                            data-bs-toggle="dropdown" aria-expanded="false">
-                        OVER ONS
-                    </button>
-                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                        <li><a class="dropdown-item" href="#">CONTACT</a></li>
-                    </ul>
-                </div>
-                <a class="text-dark" href="#">VACATURE</a>
+        <div class="row">
+            <div class="col-sm-3">
+                <a onclick="getElementById('demo').innerHTML=b">Omschrijving</a>
+                <p id="demo"></p>
             </div>
-        </nav>
+            <div class="col-sm-3">
+               <a onclick="getElementById('demo').innerHTML=c">Kenmerken</a>
+            </div>
+        </div>
     </div>
 </div>
+<script>
+    var b = "{{ property.description }}";
+    var c = "{{ property.
+    console.log(b);
+
+</script>
 </body>
 {% endblock %}
