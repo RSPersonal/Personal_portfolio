@@ -12,4 +12,9 @@ height: 40vh;
 object-fit: cover;
 }
 
+.card-horizontal {
+    display: flex;
+    flex; 1 1 auto;
+}
+
 #outline: 1px solid blue

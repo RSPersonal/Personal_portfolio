@@ -1,3 +1,4 @@
+import uuid
 from django.db import models
 from core.storage_backends import PublicMediaStorage, StaticStorage
 
@@ -10,7 +11,6 @@ class PropertyModel(models.Model):
         (SALE, 'Sale'),
         (RENTAL, 'Rental')
     ]
-
     street = models.CharField(max_length=50, blank=True, null=True)
     housenumber = models.IntegerField(blank=True, null=True)
     housenumber_add = models.CharField(max_length=15, blank=True, null=True)

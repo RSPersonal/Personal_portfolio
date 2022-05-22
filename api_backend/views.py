@@ -11,7 +11,8 @@ from core.helpers_and_validators import input_validator
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from database_projects.models import Portfolio
-from .serializers import PortfolioSerializer
+from website_projects.models import PropertyModel
+from .serializers import PortfolioSerializer, PropertySerializer
 from core.core_scripts import keyword_finder_core
 
 
@@ -108,6 +109,37 @@ def get_portfolio_monthly_profit(request, pk):
     return Response({'message': 'success', 'data': []})
 
 
+@api_view(['GET'])
+def get_user_desired_properties(request, user_input_city):
+    """
+    @param request:
+    @param user_input_city:
+    @return:
+    """
+    if request.method == 'GET':
+        # TODO JUST FOR TESTING
+        if PropertyModel.objects.filter(city=user_input_city).exists() or PropertyModel.objects.filter(city__icontains=user_input_city).exists():
+            data = {'message': 'success',
+                    'status': 200,
+                    'data': {
+                        'properties': {}
+                        }
+                    }
+
+            properties_in_city = PropertyModel.objects.filter(city=user_input_city)
+            print(data['data'], properties_in_city)
+            for count, query_property in enumerate(properties_in_city):
+                serializer = PropertySerializer(query_property)
+                print(data['data'])
+                data['data']['properties'][count] = serializer.data
+            return Response(data)
+        else:
+            return Response({'message': 'success',
+                             'status': 404,
+                             'data': f'No properties found for {user_input_city}'})
+    return Response({'message': 'success', 'data': []})
+
+
 def keyword_finder(request):
     """
     @param request:
@@ -116,7 +148,7 @@ def keyword_finder(request):
     # TODO build unittest for this functionality
     context = {}
     if request.method == 'POST' and 'user_file' in request.FILES:
-        # Get the file and decode it for the regex
+        # We want to decode it for the regex
         # TODO Build check to validate uploaded file is only .txt file extension
         uploaded_file = request.FILES['user_file']
         file_text = uploaded_file.read().decode('utf8')

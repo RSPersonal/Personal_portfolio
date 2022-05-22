@@ -10,7 +10,7 @@
             </p>
             <div class="dropdown">
                 <div class="btn-btn-secondary dropdown-toggle" type="button" id="plaatsMenuButton"
-                        data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                     data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     -Maak een keuze
                 </div>
                 <div class="dropdown-menu" aria-labelledby="plaatsMenuButton">
@@ -21,5 +21,25 @@
             </div>
         </div>
     </div>
+</div>
+<div class="container">
+    {% for property in active_properties %}
+    <div class="row p-2">
+        <div class="card">
+            <div class="card-horizontal">
+                <div class="img-square-wrapper p-1">
+                    <img class="" src="{{ property.thumbnail_photo.url }}" width="300" height="230"/>
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">{{ property.street }}</h5>
+                    <p class="card-text">This is a wider card with supporting text below as a natural lead-in to
+                        additional
+                        content. This content is a little bit longer.</p>
+                    <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
 </div>
 {% endblock %}
