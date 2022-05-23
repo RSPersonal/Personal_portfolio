@@ -23,22 +23,34 @@
 </div>
 <div class="container-fluid bg-light">
     <div class="container">
-        <div class="row">
-            <div class="col-sm-3">
-                <a onclick="getElementById('demo').innerHTML=b">Omschrijving</a>
-                <p id="demo"></p>
+        <ul class="nav nav-tabs">
+            <li class="nav-link"><a data-bs-toggle="tab" href=""/>Omschrijving</li>
+            <li class="nav-link"><a data-bs-toggle="tab" href="#menu1">Menu 1</a></li>
+            <li class="nav-link"><a data-bs-toggle="tab" href="#menu2">Menu 2</a></li>
+        </ul>
+
+        <div class="tab-content">
+            <div id="home" class="tab-pane">
+                <h3>HOME</h3>
+                <p>{{ property.description }}</p>
             </div>
-            <div class="col-sm-3">
-               <a onclick="getElementById('demo').innerHTML=c">Kenmerken</a>
+            <div id="menu1" class="tab-pane fade">
+                <h3>Menu 1</h3>
+                <p>Some content in menu 1.</p>
+            </div>
+            <div id="menu2" class="tab-pane fade">
+                <h3>Menu 2</h3>
+                <p>Some content in menu 2.</p>
             </div>
         </div>
     </div>
-</div>
-<script>
+    <script>
     var b = "{{ property.description }}";
     var c = "{{ property.
     console.log(b);
 
-</script>
+
+
+    </script>
 </body>
 {% endblock %}

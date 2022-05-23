@@ -1,8 +1,6 @@
 import requests
-import sentry_sdk
 from django.shortcuts import render
 from .models import PropertyModel
-from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import get_object_or_404
 
 
