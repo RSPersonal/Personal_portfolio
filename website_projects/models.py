@@ -1,6 +1,6 @@
 import uuid
 from django.db import models
-from core.storage_backends import PublicMediaStorage, StaticStorage
+from core.storage_backends import PublicMediaStorage
 
 
 # Create your models here.
@@ -11,6 +11,28 @@ class PropertyModel(models.Model):
         (SALE, 'Sale'),
         (RENTAL, 'Rental')
     ]
+
+    TWO_UNDER_ONE = 'TOO'
+    END_HOME = 'EH'
+    TERRACES_HOUSE = 'TH'
+    CORNER_HOUSE = 'COH'
+    IN_BETWEEN_HOUSE = 'IBH'
+    DETACHED_HOUSE = 'DH'
+    APARTMENT = 'AP'
+    NONE = 'NONE'
+
+    BUILDING_TYPE_CHOICES = [
+        (TWO_UNDER_ONE, '2-onder-1-kapwoning'),
+        (END_HOME, 'Eindwoning'),
+        (TERRACES_HOUSE, 'Geschakelde woning'),
+        (CORNER_HOUSE, 'Hoekwoning'),
+        (IN_BETWEEN_HOUSE, 'Tussenwoning'),
+        (DETACHED_HOUSE, 'Vrijstaande woning'),
+        (APARTMENT, 'Appartement'),
+        (NONE, 'Onbekend'),
+    ]
+
+    property_id = models.UUIDField(default=uuid.uuid4)
     street = models.CharField(max_length=50, blank=True, null=True)
     housenumber = models.IntegerField(blank=True, null=True)
     housenumber_add = models.CharField(max_length=15, blank=True, null=True)
@@ -18,7 +40,10 @@ class PropertyModel(models.Model):
     city = models.CharField(max_length=100, blank=True, null=True)
     municipality = models.CharField(max_length=60, blank=True, null=True)
     province = models.CharField(max_length=60, blank=True, null=True)
-    type_of_property = models.CharField(blank=True, null=True, max_length=5, choices=TYPE_OF_PROPERTY_CHOICES, default=SALE)
+    type_of_property = models.CharField(blank=True, null=True, max_length=5, choices=TYPE_OF_PROPERTY_CHOICES,
+                                        default=SALE)
+    building_type = models.CharField(blank=True, null=True, max_length=20, choices=BUILDING_TYPE_CHOICES,
+                                     default=NONE)
     woon_oppervlak = models.IntegerField(default=0, blank=True, null=True)
     perceel_oppervlak = models.IntegerField(default=0, blank=True, null=True)
     amount_rooms = models.IntegerField(default=0, null=True)
@@ -28,6 +53,3 @@ class PropertyModel(models.Model):
     thumbnail_photo = models.FileField(blank=True, storage=PublicMediaStorage)
     other_photos = models.FileField(blank=True, storage=PublicMediaStorage)
     added_on = models.DateTimeField(auto_now=True)
-
-
-

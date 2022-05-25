@@ -1,3 +1,19 @@
 from django.test import TestCase
+from . import models
 
-# Create your tests here.
+TEST_STREETNAME = 'Teststraat'
+
+
+def clean_up():
+    models.PropertyModel.objects.get(street=TEST_STREETNAME).delete()
+
+
+class TestPropertyModel(TestCase):
+    def setUp(self):
+        models.PropertyModel.objects.create(street=TEST_STREETNAME)
+
+    def test_property_model(self):
+        test_instance = models.PropertyModel.objects.get(street=TEST_STREETNAME)
+        self.assertEqual(test_instance.street, TEST_STREETNAME)
+        if test_instance:
+            clean_up()
