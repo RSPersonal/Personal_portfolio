@@ -1,11 +1,11 @@
 {% extends 'base.html' %}
 {% load static %}
-<link rel="stylesheet" type="text/css" href="{% static 'homepage/css/contact.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'homepage/css/contact.css' %}"/>
 
 {% block page_content %}
 <div class="container">
     <div class="row">
-        <div class="col-6 ">
+        <div class="col-sm-6 ">
             <div class="card h-100">
                 <div class="card-body">
                     <h5 class="card-title"><b>Contact details</b></h5>
@@ -15,14 +15,14 @@
                 </div>
             </div>
         </div>
-        <div class="col-6">
+        <div class="col-sm-6">
             <div class="card">
                 <div class="card-body h-100">
                     <h5 class="card-title"><b>Core version:</b> {{ version_history.version_number }}</h5>
                     <p>Technologies used:</p>
-                    <img src="{% static 'img/django-logo-positive.png' %} " alt="" width="15%">
+                    <img src="{% static 'img/django-logo-positive.png' %} " alt="" width="15%"/>
                     <p>v.4.0.3</p>
-                    <img src="{% static 'img/JavaScript-Logo.png' %} " alt="" width="15%">
+                    <img src="{% static 'img/JavaScript-Logo.png' %} " alt="" width="15%"/>
                 </div>
             </div>
         </div>

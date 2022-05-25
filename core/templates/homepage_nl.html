@@ -2,13 +2,14 @@
 {% load static %}
 
 {% block page_content %}
+<body>
 <div class="container-fluid">
     <div class="row">
         <div class="col-1 text-left">
             <p>Visitor count</p>
             {{ num_visits.visitor_count }}
         </div>
-        <div class="col text-center">
+        <div class="col-sm text-center">
             <h3 class="mt-4">
                 <p>Raphael Sparenberg</p>
             </h3>
@@ -16,7 +17,7 @@
                 <br/>REAL ESTATE ADVISOR | INTERNATIONAL BUSINESS IT-CONSULTANT ZWOLLE, NEDERLAND +31 (0)6 41237152
             </p>
         </div>
-        <div class="col-1 text-right">
+        <div class="col-sm-1 text-right">
             <a class="btn btn-primary" href="/">EN</a>
         </div>
     </div>
@@ -24,7 +25,7 @@
 <div class="container">
     <!-- Left column -->
     <div class="row">
-        <div class="col-4 text-center">
+        <div class="col-sm-4 text-center">
             <h5><b>PERSONALIA</b></h5>
             <p>Zwolle
                 <br/>Nederland
@@ -83,7 +84,7 @@
         </div>
         <!-- Middle column -->
         <!-- Right column -->
-        <div class="col text-left">
+        <div class="col-sm text-left">
             <h5><b>PROFIEL</b></h5>
             {% for profile_post in profile_posts %}
             <p>{{ profile_post.post }}</p>
@@ -153,5 +154,5 @@
         </div>
     </div>
 </div>
-</html>
+</body>
 {% endblock %}

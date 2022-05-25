@@ -1,0 +1,56 @@
+{% extends 'website-projects/real-estate-agent/real_estate_base.html' %}
+
+{% block page_content %}
+<body>
+<div class="container-fluid bg-light">
+    <div class="container">
+        <div class="row pt-3 pb-3">
+            <div class="col-sm-6">
+                <h4>{{ property.city }} - {{ property.street }} {{property.housenumber}}</h4>
+            </div>
+            <div class="col-sm-6 text-end">
+                <h4>
+                    {{ property.ask_price }}
+                </h4>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="pt-2 pb-2">
+        <img src="{{ property.thumbnail_photo.url }}" width="50%" height="50%">
+    </div>
+</div>
+<div class="container-fluid bg-light">
+    <div class="container">
+        <ul class="nav nav-tabs">
+            <li class="nav-link"><a data-bs-toggle="tab" href=""/>Omschrijving</li>
+            <li class="nav-link"><a data-bs-toggle="tab" href="#menu1">Menu 1</a></li>
+            <li class="nav-link"><a data-bs-toggle="tab" href="#menu2">Menu 2</a></li>
+        </ul>
+
+        <div class="tab-content">
+            <div id="home" class="tab-pane">
+                <h3>HOME</h3>
+                <p>{{ property.description }}</p>
+            </div>
+            <div id="menu1" class="tab-pane fade">
+                <h3>Menu 1</h3>
+                <p>Some content in menu 1.</p>
+            </div>
+            <div id="menu2" class="tab-pane fade">
+                <h3>Menu 2</h3>
+                <p>Some content in menu 2.</p>
+            </div>
+        </div>
+    </div>
+    <script>
+    var b = "{{ property.description }}";
+    var c = "{{ property.
+    console.log(b);
+
+
+
+    </script>
+</body>
+{% endblock %}

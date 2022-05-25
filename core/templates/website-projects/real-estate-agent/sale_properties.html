@@ -1,0 +1,54 @@
+{% extends 'website-projects/real-estate-agent/real_estate_base.html' %}
+{% load static %}
+
+{% block page_content %}
+<div class="container">
+    <div class="row">
+        <form name="filter_form" method="post" id="cityFilter">
+            {% csrf_token %}
+            <div class="col-sm-3">
+                <p>
+                    <b>Plaats</b>
+                </p>
+                <div class="">
+                    <p>
+                        {{ filter_form.city }}
+                    </p>
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <p>
+                    <b>Vraagprijs</b>
+                </p>
+                <div class="">
+                    <p>
+                        {{ filter_form.ask_price }}
+                    </p>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="container">
+    {% for property in active_properties %}
+    <div class="row p-2">
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-horizontal">
+                    <div class="img-square-wrapper p-1">
+                        <img class="" src="{{ property.thumbnail_photo.url }}" width="300" height="230"/>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">{{ property.street }} {{ property.housenumber}}</h5>
+                        <p class="card-text">This is a wider card with supporting text below as a natural lead-in to
+                            additional
+                            content. This content is a little bit longer.</p>
+                        <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

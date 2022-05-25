@@ -23,7 +23,7 @@
                         <div class="modal-header">
                             <h5 class="modal-title" id="addPortfolioLabel">Modal title</h5>
                             <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
+                                <span aria-hidden="true"></span>
                             </button>
                         </div>
                         <div class="modal-body">
@@ -51,7 +51,8 @@
                         <div class="row pt-2">
                             <div class="col-4">
                                 <div class="btn-group">
-                                    <a class="btn btn-primary" href="{% url 'portfolio_detail' portfolio.pk%}">Go to {{ portfolio }}</a>
+                                    <a class="btn btn-primary" href="{% url 'portfolio_detail' portfolio.pk%}">Go to {{
+                                        portfolio }}</a>
                                     <div class="btn-group" role="group">
                                         <button class="btn btn-light dropdown-toggle" type="button"
                                                 id="optionsPortfolioDropdown"
@@ -70,7 +71,7 @@
                             {% if portfolio.total_positions > 0 %}
                             <div class="row">
                                 <div class="col-4 text-start" style="width: 50%;">
-                    <script>
+                                    <script>
                     var randomNum_{{ portfolio.pk }} = () => Math.floor(Math.random() * (235 - 52 + 1) + 52);
                     function rgbToHex(r, g, b) {
                         return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
@@ -122,6 +123,7 @@
                          var ctx2 = document.getElementById('barChart{{ portfolio.pk }}').getContext('2d');
                         window.myBar = new Chart(ctx2, configBarChart_{{ portfolio.pk }});
                     });
+
                                     </script>
                                     <canvas id="pie-chart{{ portfolio.pk }}"></canvas>
                                 </div>
@@ -133,9 +135,9 @@
                             <div class="row">
                                 <div class="col-4 pt-2">
                                     <b>Total amount invested:</b> {{ portfolio.total_amount_invested }}
-                                    <br><b>Total Positions:</b> {{ portfolio.total_positions }}
-                                    <br><b>Total Profit:</b> {{ portfolio.total_profit }}
-                                    <br><b>Total Profit %:</b> {{ portfolio.total_profit_percentage }} %
+                                    <br/><b>Total Positions:</b> {{ portfolio.total_positions }}
+                                    <br/><b>Total Profit:</b> {{ portfolio.total_profit }}
+                                    <br/><b>Total Profit %:</b> {{ portfolio.total_profit_percentage }} %
                                 </div>
                             </div>
                         </div>
@@ -146,6 +148,7 @@
         </div>
     </div>
 </div>
+</body>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
 {% endif %}
 {% endblock %}
