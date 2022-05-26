@@ -2,28 +2,38 @@
 {% load static %}
 
 {% block page_content %}
-<div class="container">
-    <div class="row">
+<div class="container-fluid bg-light">
+    <div class="container">
         <form name="filter_form" method="post" id="cityFilter">
             {% csrf_token %}
-            <div class="col-sm-3">
-                <p>
-                    <b>Plaats</b>
-                </p>
-                <div class="">
+            <div class="row">
+                <div class="col-sm-3">
                     <p>
-                        {{ filter_form.city }}
+                        <b>Plaats</b>
                     </p>
+                    <div>
+                        <a class="btn-secondary">{{ filter_form.city }}</a>
+                    </div>
                 </div>
-            </div>
-            <div class="col-sm-3">
-                <p>
-                    <b>Vraagprijs</b>
-                </p>
-                <div class="">
+                <div class="col-sm-3">
                     <p>
-                        {{ filter_form.ask_price }}
+                        <b>Vraagprijs</b>
                     </p>
+                    <div class="">
+                        <p>
+                            {{ filter_form.ask_price }}
+                        </p>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <p>
+                        <b>Type object</b>
+                    </p>
+                    <div class="">
+                        <p>
+                            {{ filter_form.building_type }}
+                        </p>
+                    </div>
                 </div>
             </div>
         </form>
@@ -31,7 +41,7 @@
 </div>
 <div class="container">
     {% for property in active_properties %}
-    <div class="row p-2">
+    <div class="row pt-2 bg-2">
         <div class="col-sm-12">
             <div class="card">
                 <div class="card-horizontal">

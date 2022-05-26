@@ -32,7 +32,19 @@ class PropertyModel(models.Model):
         (NONE, 'Onbekend'),
     ]
 
+    SOLD = 'SD'
+    UNDER_OFFER = 'UO'
+    SOLD_WITH_RESERVATION = 'SWR'
+
+    STATUS_CHOICES = [
+        (SOLD, 'Verkocht'),
+        (UNDER_OFFER, 'Onder bod'),
+        (SOLD_WITH_RESERVATION, 'Verkocht onder voorbehoud'),
+        (NONE, 'Onbekend')
+    ]
+
     property_id = models.UUIDField(default=uuid.uuid4)
+    status = models.CharField(max_length=40, null=True, choices=STATUS_CHOICES, default=NONE)
     street = models.CharField(max_length=50, blank=True, null=True)
     housenumber = models.IntegerField(blank=True, null=True)
     housenumber_add = models.CharField(max_length=15, blank=True, null=True)
@@ -48,8 +60,11 @@ class PropertyModel(models.Model):
     perceel_oppervlak = models.IntegerField(default=0, blank=True, null=True)
     amount_rooms = models.IntegerField(default=0, null=True)
     construction_year = models.IntegerField(blank=True, null=True)
-    ask_price = models.CharField(max_length=30, default=0)
+    ask_price = models.IntegerField(default=0)
     description = models.TextField(blank=True, null=True)
     thumbnail_photo = models.FileField(blank=True, storage=PublicMediaStorage)
     other_photos = models.FileField(blank=True, storage=PublicMediaStorage)
     added_on = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return '{} {} {} {} {}'.format(self.street, self.zipcode, self.city, self.province, self.description)
