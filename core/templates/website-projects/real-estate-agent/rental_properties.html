@@ -45,12 +45,22 @@
         <div class="col-sm-12">
             <div class="card">
                 <div class="card-horizontal">
-                    <div class="img-square-wrapper p-1">
-                        <img class="" src="{{ property.thumbnail_photo.url }}" width="300" height="230"/>
+                    <div class="row">
+                        <a href="{% url 'property_detail' property.pk%}" class="stretched-link"></a>
+                        <div class="col-sm-6">
+                            <div class="p-1">
+                                <img class="" src="{{ property.thumbnail_photo.url }}" width="460" height="350"/>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <p>
+                                test
+                            </p>
+                        </div>
                     </div>
                     <div class="card-body">
                         <h5 class="card-title">{{ property.street }} {{ property.housenumber}}</h5>
-                        <p class="card-text">This is a wider card with supporting text below as a natural lead-in to
+                        <p class="card-text">This is a wider ctith supporting ta natural lead-in to
                             additional
                             content. This content is a little bit longer.</p>
                         <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>

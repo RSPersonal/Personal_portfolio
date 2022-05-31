@@ -11,7 +11,7 @@ def projects_overview(request):
 
 def real_estate_homepage(request):
     context = {}
-    properties = PropertyModel.objects.order_by('added_on')
+    properties = PropertyModel.objects.order_by('added_on')[:3]
     context['properties'] = properties
     return render(request, 'website-projects/real-estate-agent/real_estate_agent_homepage.html', context=context)
 
@@ -42,10 +42,10 @@ def rental_properties(request):
     # Here comes the form
     form = FilterForm()
     active_cities = PropertyModel.objects.all().values_list('city', flat=True).distinct()
-    active_sale_properties = PropertyModel.objects.filter(type_of_property='RT')
+    active_rental_properties = PropertyModel.objects.filter(type_of_property='RT')
 
     # response = requests.request("GET", "http://127.0.0.1:8000/api/v1/properties/sale/Zwolle").json()
     context['city_filters'] = active_cities
-    context['active_properties'] = active_sale_properties
+    context['active_properties'] = active_rental_properties
     context['filter_form'] = form
-    return render(request, 'website-projects/real-estate-agent/sale_properties.html', context=context)
+    return render(request, 'website-projects/real-estate-agent/rental_properties.html', context=context)

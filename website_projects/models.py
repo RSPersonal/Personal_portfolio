@@ -63,6 +63,7 @@ class PropertyModel(models.Model):
     amount_rooms = models.IntegerField(default=0, null=True)
     construction_year = models.IntegerField(blank=True, null=True)
     ask_price = models.IntegerField(default=0)
+    ask_price_suffix = models.CharField(max_length=10, blank=True, null=True)
     description = models.TextField(blank=True, null=True)
     thumbnail_photo = models.FileField(blank=True, storage=PublicMediaStorage)
     other_photos = models.FileField(blank=True, storage=PublicMediaStorage)
