@@ -16,13 +16,16 @@ def test_yahoo_api_connection():
     query_string = {"symbol": "AAPL"}
     try:
         test_response_for_connection = requests.request("GET", YAHOO_API_URL, headers=YAHOO_API_HEADERS,
-                                                        params=query_string)
-        return True
+                                                        params=query_string).json()
+        if test_response_for_connection['message'] and test_response_for_connection['message'] != 'Forbidden':
+            return True
+        else:
+            return False
     except ConnectionError as error:
-        print('Connection error', test_response_for_connection, error)
+        print('Connection error', error)
         return False
     except KeyError as error:
-        print('KeyError', test_response_for_connection, error)
+        print('KeyError', error)
         return False
 
 

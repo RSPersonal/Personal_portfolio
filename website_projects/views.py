@@ -35,3 +35,17 @@ def sale_properties(request):
     context['active_properties'] = active_sale_properties
     context['filter_form'] = form
     return render(request, 'website-projects/real-estate-agent/sale_properties.html', context=context)
+
+
+def rental_properties(request):
+    context = {}
+    # Here comes the form
+    form = FilterForm()
+    active_cities = PropertyModel.objects.all().values_list('city', flat=True).distinct()
+    active_sale_properties = PropertyModel.objects.filter(type_of_property='RT')
+
+    # response = requests.request("GET", "http://127.0.0.1:8000/api/v1/properties/sale/Zwolle").json()
+    context['city_filters'] = active_cities
+    context['active_properties'] = active_sale_properties
+    context['filter_form'] = form
+    return render(request, 'website-projects/real-estate-agent/sale_properties.html', context=context)

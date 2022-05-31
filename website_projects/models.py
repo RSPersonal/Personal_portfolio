@@ -35,11 +35,13 @@ class PropertyModel(models.Model):
     SOLD = 'SD'
     UNDER_OFFER = 'UO'
     SOLD_WITH_RESERVATION = 'SWR'
+    AVAILABLE = 'AV'
 
     STATUS_CHOICES = [
         (SOLD, 'Verkocht'),
         (UNDER_OFFER, 'Onder bod'),
         (SOLD_WITH_RESERVATION, 'Verkocht onder voorbehoud'),
+        (AVAILABLE, 'Beschikbaar'),
         (NONE, 'Onbekend')
     ]
 
