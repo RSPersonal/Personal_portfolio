@@ -32,6 +32,7 @@ def sale_properties(request):
 
     # response = requests.request("GET", "http://127.0.0.1:8000/api/v1/properties/sale/Zwolle").json()
     context['city_filters'] = active_cities
+    print(active_cities)
     context['active_properties'] = active_sale_properties
     context['filter_form'] = form
     return render(request, 'website-projects/real-estate-agent/sale_properties.html', context=context)
@@ -49,3 +50,9 @@ def rental_properties(request):
     context['active_properties'] = active_rental_properties
     context['filter_form'] = form
     return render(request, 'website-projects/real-estate-agent/rental_properties.html', context=context)
+
+
+def real_estate_services(request):
+    context = {}
+
+    return render(request, 'website-projects/real-estate-agent/real_estate_services.html')

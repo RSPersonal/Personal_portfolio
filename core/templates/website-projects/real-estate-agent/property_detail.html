@@ -10,7 +10,7 @@
             </div>
             <div class="col-sm-6 text-end">
                 <h5>
-                    {{ property.ask_price }},- {{ property.suffix }}
+                    € {{ property.ask_price }},- {{ property.ask_price_suffix }}
                 </h5>
             </div>
         </div>
@@ -23,32 +23,37 @@
 </div>
 <div class="container-fluid bg-light">
     <div class="container">
-        <ul class="nav nav-tabs">
-            <li class="nav-link"><a data-bs-toggle="tab" href="#home">Omschrijving</a></li>
-            <li class="nav-link"><a data-bs-toggle="tab" href="#menu1">Menu 1</a></li>
-            <li class="nav-link"><a data-bs-toggle="tab" href="#menu2">Menu 2</a></li>
-        </ul>
-
-        <div class="tab-content-active">
-            <div id="home" class="tab-pane">
-                <h3>HOME</h3>
-                <p>{{ property.description }}</p>
+        <nav>
+            <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                <button class="nav-link active text-dark" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home"
+                        type="button" role="tab" aria-controls="nav-home" aria-selected="true">Omschrijving
+                </button>
+                <button class="nav-link text-dark" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile"
+                        type="button" role="tab" aria-controls="nav-profile" aria-selected="false">Kenmerken
+                </button>
+                <button class="nav-link text-dark" id="nav-contact-tab" data-bs-toggle="tab" data-bs-target="#nav-contact"
+                        type="button" role="tab" aria-controls="nav-contact" aria-selected="false">Foto's
+                </button>
             </div>
-            <div id="menu1" class="tab-pane fade">
-                <h3>Menu 1</h3>
-                <p>Some content in menu 1.</p>
+        </nav>
+        <div class="tab-content" id="nav-tabContent">
+            <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+                <h5></h5>
+                <p>
+                    {{ property.description }}
+                </p>
             </div>
-            <div id="menu2" class="tab-pane fade">
-                <h3>Menu 2</h3>
-                <p>Some content in menu 2.</p>
-            </div>
+            <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">...</div>
+            <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">...</div>
         </div>
     </div>
 </div>
-    <script>
+<script>
     var b = "{{ property.description }}";
     var c = "{{ property.
     console.log(b);
-    </script>
+
+
+</script>
 </body>
 {% endblock %}

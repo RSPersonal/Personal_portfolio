@@ -12,5 +12,9 @@ height: 40vh;
 object-fit: cover;
 }
 
+.navbar-custom .navbar-nav .nav-link {
+    color: #000000;
+}
+
 
 #outline: 1px solid blue
