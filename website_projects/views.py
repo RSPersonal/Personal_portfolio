@@ -1,7 +1,6 @@
 import requests
 from django.shortcuts import render
 from .models import PropertyModel
-from .forms  import FilterForm
 from django.shortcuts import get_object_or_404
 
 
@@ -26,33 +25,34 @@ def property_detail(request, property_id):
 def sale_properties(request):
     context = {}
     # Here comes the form
-    form = FilterForm()
     active_cities = PropertyModel.objects.all().values_list('city', flat=True).distinct()
     active_sale_properties = PropertyModel.objects.filter(type_of_property='SL')
 
     # response = requests.request("GET", "http://127.0.0.1:8000/api/v1/properties/sale/Zwolle").json()
     context['city_filters'] = active_cities
-    print(active_cities)
     context['active_properties'] = active_sale_properties
-    context['filter_form'] = form
     return render(request, 'website-projects/real-estate-agent/sale_properties.html', context=context)
 
 
 def rental_properties(request):
     context = {}
     # Here comes the form
-    form = FilterForm()
     active_cities = PropertyModel.objects.all().values_list('city', flat=True).distinct()
     active_rental_properties = PropertyModel.objects.filter(type_of_property='RT')
 
     # response = requests.request("GET", "http://127.0.0.1:8000/api/v1/properties/sale/Zwolle").json()
     context['city_filters'] = active_cities
     context['active_properties'] = active_rental_properties
-    context['filter_form'] = form
     return render(request, 'website-projects/real-estate-agent/rental_properties.html', context=context)
 
 
 def real_estate_services(request):
     context = {}
 
-    return render(request, 'website-projects/real-estate-agent/real_estate_services.html')
+    return render(request, 'website-projects/real-estate-agent/real_estate_services.html', context=context)
+
+
+def real_estate_valuation(request):
+    context = {}
+
+    return render(request, 'website-projects/real-estate-agent/real_estate_valuation.html', context=context)
