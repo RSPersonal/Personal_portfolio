@@ -2,6 +2,7 @@ import requests
 from django.shortcuts import render
 from .models import PropertyModel
 from django.shortcuts import get_object_or_404
+from django.db.models import Max
 
 
 def projects_overview(request):
@@ -24,13 +25,33 @@ def property_detail(request, property_id):
 
 def sale_properties(request):
     context = {}
-    # Here comes the form
     active_cities = PropertyModel.objects.all().values_list('city', flat=True).distinct()
-    active_sale_properties = PropertyModel.objects.filter(type_of_property='SL')
+    active_property_types = PropertyModel.objects.all().values_list('building_type', flat=True).distinct()
+    active_sale_properties = PropertyModel.objects.filter(type_of_property='SL').order_by('added_on')
 
     # response = requests.request("GET", "http://127.0.0.1:8000/api/v1/properties/sale/Zwolle").json()
+
+    if request.method == 'POST' and 'filterSubmitButton' in request.POST:
+        user_city_input = request.POST.get('userCityInput')
+        from_price_range_input = int(request.POST.get('priceRangeFromInput'))
+        to_price_range_input = int(request.POST.get('priceRangeToInput'))
+        max_ask_price = PropertyModel.objects.aggregate(Max('ask_price'))
+        if user_city_input and from_price_range_input and to_price_range_input:
+            query_result = PropertyModel.objects.filter(city=user_city_input).filter(ask_price__range=(from_price_range_input, to_price_range_input))
+        elif user_city_input and from_price_range_input:
+            query_result = PropertyModel.objects.filter(city=user_city_input).filter(ask_price__range=(from_price_range_input, max_ask_price['ask_price__max']))
+        elif user_city_input:
+            query_result = PropertyModel.objects.filter(city=user_city_input)
+        else:
+            query_result = []
+
+        # if from_price_range_input != 0 or to_price_range_input != 0:
+        #     filtered_properties = PropertyModel.objects.generated_query
+        active_sale_properties = query_result
     context['city_filters'] = active_cities
     context['active_properties'] = active_sale_properties
+    context['object_types'] = active_property_types
+    print(active_property_types)
     return render(request, 'website-projects/real-estate-agent/sale_properties.html', context=context)
 
 

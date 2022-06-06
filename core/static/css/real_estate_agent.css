@@ -12,8 +12,9 @@ height: 40vh;
 object-fit: cover;
 }
 
-.navbar-custom .navbar-nav .nav-link {
-    color: #000000;
+.priceRangeDropdownFilter {
+    max-height: 280px;
+    overflow-y: auto;
 }
 
 
