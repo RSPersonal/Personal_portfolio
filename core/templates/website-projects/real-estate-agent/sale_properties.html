@@ -92,7 +92,7 @@
                     </select>
                 </div>
                 <div class="col-sm-2 align-self-end">
-                    <label for="filterSubmitButton" class="form-label ps-2"></label>
+                    <label for="filterSubmitButton" class="form-label"></label>
                     <button type="submit" class="btn btn-primary" id="filterSubmitButton" name="filterSubmitButton">
                         Submit
                     </button>
@@ -112,10 +112,10 @@
                         <a href="{% url 'property_detail' property.pk%}" class="stretched-link"></a>
                         <div class="col-sm-6 pt-1">
                             <div class="p-1">
-                                <img class="" src="{{ property.thumbnail_photo.url }}" width="30%" height="25%"/>
+                                <img class="img-responsive rounded" src="{{ property.thumbnail_photo.url }}" width="350" height="240"/>
                             </div>
                         </div>
-                        <div class="col-6 col-sm-3 pt-1">
+                        <div class="col-6 col-sm-3 pt-1 ps-4">
                             <p>
                                 <b>Bouwjaar:</b>
                                 <br/><b>Type object:</b>

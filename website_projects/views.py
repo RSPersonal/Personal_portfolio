@@ -18,7 +18,7 @@ def real_estate_homepage(request):
 
 def property_detail(request, property_id):
     context = {}
-    property_data = get_object_or_404(PropertyModel, id=property_id)
+    property_data = get_object_or_404(PropertyModel, pk=property_id)
     context['property'] = property_data
     return render(request, 'website-projects/real-estate-agent/property_detail.html', context=context)
 
@@ -36,10 +36,13 @@ def sale_properties(request):
         from_price_range_input = int(request.POST.get('priceRangeFromInput'))
         to_price_range_input = int(request.POST.get('priceRangeToInput'))
         max_ask_price = PropertyModel.objects.aggregate(Max('ask_price'))
+
         if user_city_input and from_price_range_input and to_price_range_input:
-            query_result = PropertyModel.objects.filter(city=user_city_input).filter(ask_price__range=(from_price_range_input, to_price_range_input))
+            query_result = PropertyModel.objects.filter(city=user_city_input).filter(
+                ask_price__range=(from_price_range_input, to_price_range_input))
         elif user_city_input and from_price_range_input:
-            query_result = PropertyModel.objects.filter(city=user_city_input).filter(ask_price__range=(from_price_range_input, max_ask_price['ask_price__max']))
+            query_result = PropertyModel.objects.filter(city=user_city_input).filter(
+                ask_price__range=(from_price_range_input, max_ask_price['ask_price__max']))
         elif user_city_input:
             query_result = PropertyModel.objects.filter(city=user_city_input)
         else:

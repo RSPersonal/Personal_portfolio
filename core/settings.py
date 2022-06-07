@@ -12,10 +12,10 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 
 import os
 import sys
+from pathlib import Path
 import dj_database_url
 import sentry_sdk
 from sentry_sdk.integrations.django import DjangoIntegration
-from pathlib import Path
 from decouple import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -46,7 +46,6 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
     'rest_framework_jwt',
-    'crispy_forms',
     'core',
     'homepage',
     'api_backend',
