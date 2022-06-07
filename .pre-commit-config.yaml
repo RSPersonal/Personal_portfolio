@@ -11,3 +11,8 @@ repos:
       - id: name-tests-test
         args: [ "--django" ]
       - id: trailing-whitespace
+  - repo: https://github.com/pycqa/bandit
+    rev: 1.6.2
+    hooks:
+      - id: bandit
+        args: ['-iii', '-ll']
