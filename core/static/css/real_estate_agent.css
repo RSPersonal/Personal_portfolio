@@ -12,5 +12,16 @@ height: 40vh;
 object-fit: cover;
 }
 
+.priceRangeDropdownFilter {
+    max-height: 280px;
+    overflow-y: auto;
+}
+
+#map {
+  height: 400px;
+  /* The height is 400 pixels */
+  width: 100%;
+  /* The width is the width of the web page */
+}
 
 #outline: 1px solid blue

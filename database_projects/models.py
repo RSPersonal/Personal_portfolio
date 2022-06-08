@@ -34,4 +34,3 @@ class Positions(models.Model):
 
     def __str__(self):
         return '{} {}'.format(self.ticker_name, self.market)
-

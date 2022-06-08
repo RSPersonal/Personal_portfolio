@@ -2,45 +2,148 @@
 {% load static %}
 
 {% block page_content %}
-<div class="container">
-    <div class="row">
-        <form name="filter_form" method="post" id="cityFilter">
+<div class="container-fluid bg-light">
+    <div class="container">
+        <form name="" method="post" id="cityFilter">
             {% csrf_token %}
-            <div class="col-sm-3">
-                <p>
-                    <b>Plaats</b>
-                </p>
-                <div class="">
-                    <p>
-                        {{ filter_form.city }}
-                    </p>
+            <div class="row">
+                <div class="col-sm-3">
+                    <label for="cities" class="form-label ps-2">City</label>
+                    <select class="form-select" aria-label="Default select example" id="cities" name="userCityInput">
+                        {% for city in city_filters %}
+                        <option>{{ city }}</option>
+                        {% endfor %}
+                    </select>
                 </div>
-            </div>
-            <div class="col-sm-3">
-                <p>
-                    <b>Vraagprijs</b>
-                </p>
-                <div class="">
-                    <p>
-                        {{ filter_form.ask_price }}
-                    </p>
+                <div class="col-sm-3">
+                    <label for="objectTypes" class="form-label ps-2">Type object</label>
+                    <select class="form-select" aria-label="Default select example" id="objectTypes" name="userObjectTypeInput">
+                        {% for object_type in object_types %}
+                        <option>{{ object_type }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-sm-2">
+                    <label for="priceRangeDropdownFilter" class="form-label ps-2">Prijs van</label>
+                    <select class="form-select" aria-label="Default select example" id="priceRangeDropdownFilter"
+                            name="priceRangeFromInput">
+                        <option class="text-end" value="0">€ 0</option>
+                        <option class="text-end" value="50000">€ 50.0000</option>
+                        <option class="text-end" value="75000">€ 75.0000</option>
+                        <option class="text-end" value="100000">€ 100.000</option>
+                        <option class="text-end" value="125000">€ 125.000</option>
+                        <option class="text-end" value="150000">€ 150.000</option>
+                        <option class="text-end" value="175000">€ 175.000</option>
+                        <option class="text-end" value="200000">€ 200.000</option>
+                        <option class="text-end" value="225000">€ 225.000</option>
+                        <option class="text-end" value="250000">€ 250.000</option>
+                        <option class="text-end" value="275000">€ 275.000</option>
+                        <option class="text-end" value="300000">€ 300.000</option>
+                        <option class="text-end" value="325000">€ 325.000</option>
+                        <option class="text-end" value="350000">€ 350.000</option>
+                        <option class="text-end" value="375000">€ 375.000</option>
+                        <option class="text-end" value="400000">€ 400.000</option>
+                        <option class="text-end" value="450000">€ 450.000</option>
+                        <option class="text-end" value="500000">€ 500.000</option>
+                        <option class="text-end" value="550000">€ 550.000</option>
+                        <option class="text-end" value="600000">€ 600.000</option>
+                        <option class="text-end" value="650000">€ 650.000</option>
+                        <option class="text-end" value="700000">€ 700.000</option>
+                        <option class="text-end" value="750000">€ 750.000</option>
+                        <option class="text-end" value="800000">€ 800.000</option>
+                        <option class="text-end" value="900000">€ 900.000</option>
+                        <option class="text-end" value="1000000">€ 1.000.000</option>
+                        <option class="text-end" value="15000000">€ 1.500.000</option>
+                        <option class="text-end" value="20000000">€ 2.000.000</option>
+                    </select>
+                </div>
+                <div class="col-sm-2">
+                    <label for="priceRangeDropdownFilter" class="form-label ps-2">Prijs van</label>
+                    <select class="form-select" aria-label="Default select example" id="priceRangeDropdownFilter"
+                            name="priceRangeToInput">
+                        <option class="text-end" value="0">€ 0</option>
+                        <option class="text-end" value="50000">€ 50.0000</option>
+                        <option class="text-end" value="75000">€ 75.0000</option>
+                        <option class="text-end" value="100000">€ 100.000</option>
+                        <option class="text-end" value="125000">€ 125.000</option>
+                        <option class="text-end" value="150000">€ 150.000</option>
+                        <option class="text-end" value="175000">€ 175.000</option>
+                        <option class="text-end" value="200000">€ 200.000</option>
+                        <option class="text-end" value="225000">€ 225.000</option>
+                        <option class="text-end" value="250000">€ 250.000</option>
+                        <option class="text-end" value="275000">€ 275.000</option>
+                        <option class="text-end" value="300000">€ 300.000</option>
+                        <option class="text-end" value="325000">€ 325.000</option>
+                        <option class="text-end" value="350000">€ 350.000</option>
+                        <option class="text-end" value="375000">€ 375.000</option>
+                        <option class="text-end" value="400000">€ 400.000</option>
+                        <option class="text-end" value="450000">€ 450.000</option>
+                        <option class="text-end" value="500000">€ 500.000</option>
+                        <option class="text-end" value="550000">€ 550.000</option>
+                        <option class="text-end" value="600000">€ 600.000</option>
+                        <option class="text-end" value="650000">€ 650.000</option>
+                        <option class="text-end" value="700000">€ 700.000</option>
+                        <option class="text-end" value="750000">€ 750.000</option>
+                        <option class="text-end" value="800000">€ 800.000</option>
+                        <option class="text-end" value="900000">€ 900.000</option>
+                        <option class="text-end" value="1000000">€ 1.000.000</option>
+                        <option class="text-end" value="15000000">€ 1.500.000</option>
+                        <option class="text-end" value="20000000">€ 2.000.000</option>
+                    </select>
+                </div>
+                <div class="col-sm-2 align-self-end">
+                    <label for="filterSubmitButton" class="form-label"></label>
+                    <button type="submit" class="btn btn-primary" id="filterSubmitButton" name="filterSubmitButton">
+                        Submit
+                    </button>
                 </div>
             </div>
         </form>
     </div>
 </div>
 <div class="container">
+    {% if active_properties %}
     {% for property in active_properties %}
-    <div class="row p-2">
+    <div class="row pt-2 bg-2">
         <div class="col-sm-12">
             <div class="card">
                 <div class="card-horizontal">
-                    <div class="img-square-wrapper p-1">
-                        <img class="" src="{{ property.thumbnail_photo.url }}" width="300" height="230"/>
+                    <div class="row">
+                        <a href="{% url 'property_detail' property.pk%}" class="stretched-link"></a>
+                        <div class="col-sm-6 pt-1">
+                            <div class="p-1">
+                                <img class="img-responsive rounded" src="{{ property.thumbnail_photo.url }}" width="350" height="240"/>
+                            </div>
+                        </div>
+                        <div class="col-6 col-sm-3 pt-1 ps-4">
+                            <p>
+                                <b>Bouwjaar:</b>
+                                <br/><b>Type object:</b>
+                                <br/><b>Woonoppervlak:</b>
+                                <br/><b>Perceeloppervlak:</b>
+                                <br/><b>Aantal kamers:</b>
+                                <br/><b>Energielabel:</b>
+                                <br/><b>Type verwarming:</b>
+                                <br/><b>Koopconditie:</b>
+                            </p>
+                        </div>
+                        <div class="col-3 col-sm-3 pt-1">
+                            <p>
+                                {{ property.construction_year|cut:"," }}
+                                <br/>{{ property.get_building_type_display }}
+                                <br/>{{ property.woon_oppervlak }} m²
+                                <br/>{{ property.perceel_oppervlak }} m²
+                                <br/>{{ property.amount_rooms }}
+                                <br/>{{ property.energy_label }}
+                                <br/>{{ property.type_of_heating }}
+                                <br/>{{ property.ask_price_suffix }}
+                            </p>
+
+                        </div>
                     </div>
                     <div class="card-body">
                         <h5 class="card-title">{{ property.street }} {{ property.housenumber}}</h5>
-                        <p class="card-text">This is a wider card with supporting text below as a natural lead-in to
+                        <p class="card-text">This is a wider ctith supporting ta natural lead-in to
                             additional
                             content. This content is a little bit longer.</p>
                         <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
@@ -50,5 +153,14 @@
         </div>
     </div>
     {% endfor %}
+    {% else %}
+    <div class="row pt-2 bg-2">
+        <div class="col-sm-12">
+            <h5 class="text-center">
+                Geen resultaat gevonden
+            </h5>
+        </div>
+    </div>
+    {% endif %}
 </div>
 {% endblock %}
