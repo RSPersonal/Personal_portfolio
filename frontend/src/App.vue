@@ -1,13 +1,16 @@
 <template>
   <div id="app">
-    <img src="./assets/logo.png">
-    <router-view/>
+    <Tasks />
   </div>
 </template>
 
 <script>
+import Tasks from './components/Tasks.vue'
 export default {
-  name: 'App'
+  name: 'App',
+  components: {
+    Tasks
+  }
 }
 </script>
 

@@ -12,8 +12,12 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from database_projects.models import Portfolio
 from website_projects.models import PropertyModel
-from .serializers import PortfolioSerializer, PropertySerializer
+from .models import Task
+from .serializers import PortfolioSerializer, PropertySerializer, TaskSerializer
 from core.core_scripts import keyword_finder_core
+from rest_framework.parsers import JSONParser
+from django.views.decorators.csrf import csrf_exempt
+from django.shortcuts import get_object_or_404
 
 
 # Create your views here.
@@ -118,19 +122,19 @@ def get_user_desired_properties(request, user_input_city):
     """
     if request.method == 'GET':
         # TODO JUST FOR TESTING
-        if PropertyModel.objects.filter(city=user_input_city).exists() or PropertyModel.objects.filter(city__icontains=user_input_city).exists():
+        user_input_city = user_input_city.capitalize()
+        if PropertyModel.objects.filter(city=user_input_city).exists() or PropertyModel.objects.filter(
+                city__icontains=user_input_city).exists():
             data = {'message': 'success',
                     'status': 200,
                     'data': {
                         'properties': {}
-                        }
+                    }
                     }
 
             properties_in_city = PropertyModel.objects.filter(city=user_input_city)
-            print(data['data'], properties_in_city)
             for count, query_property in enumerate(properties_in_city):
                 serializer = PropertySerializer(query_property)
-                print(data['data'])
                 data['data']['properties'][count] = serializer.data
             return Response(data)
         else:
@@ -161,7 +165,8 @@ def keyword_finder(request):
             messages.add_message(request, messages.INFO, 'No keyword entered.')
         else:
             # Start the search and return desired output
-            found_keywords = keyword_finder_core.find_keywords_in_text_file(user_input_keyword, user_desired_output, file_text)
+            found_keywords = keyword_finder_core.find_keywords_in_text_file(user_input_keyword, user_desired_output,
+                                                                            file_text)
             if user_desired_output == 'outputinbrowser':
                 context['amount_keys_found'] = found_keywords['keys_found']
                 context['found_keywords'] = found_keywords['data']
@@ -176,3 +181,41 @@ def keyword_finder(request):
     else:
         context['no_file'] = True
     return render(request, 'api-examples/keyword_finder.html', context=context)
+
+
+@csrf_exempt
+def get_all_tasks(request):
+    if request.method == 'GET':
+        all_tasks = Task.objects.all()
+        serializer = TaskSerializer(all_tasks, many=True)
+        return JsonResponse(serializer.data, safe=False)
+    elif request.method == 'POST':
+        data = JSONParser().parse(request)
+        serializer = TaskSerializer(data=data)
+
+        if serializer.is_valid():
+            serializer.save()
+
+            return JsonResponse(serializer.data, status=201)
+        return JsonResponse(serializer.errors, status=400)
+
+
+@csrf_exempt
+def task_detail(request, pk):
+    try:
+        task = Task.objects.get(pk=pk)
+    except:
+        return HttpResponse(status=404)
+    if request.method == 'PUT':
+        print('test')
+        data = JSONParser().parse(request)
+        serializer = TaskSerializer(task, data=data)
+        print(serializer)
+        if serializer.is_valid():
+            serializer.save()
+            return JsonResponse(serializer.data, status=200)
+        else:
+            return JsonResponse(serializer.errors, status=400)
+    elif request.method == 'DELETE':
+        task.delete()
+        return HttpResponse(status=204)
