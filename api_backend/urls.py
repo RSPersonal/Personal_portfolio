@@ -10,5 +10,6 @@ urlpatterns = [
     path('chart-data/<int:pk>', views.get_portfolio_monthly_profit, name="chart_data_id"),
     path('properties/sale/<str:user_input_city>', views.get_user_desired_properties, name="properties_sale"),
     path('tasks/all', views.get_all_tasks, name="get_all_tasks"),
-    path('task/<int:pk>', views.task_detail, name="tasks_detail")
+    path('task/<int:pk>', views.task_detail, name="tasks_detail"),
+    path('visitor-count', views.get_visitor_count, name="get_visitor_count")
 ]

@@ -1,6 +1,7 @@
 from rest_framework import serializers, viewsets
 from database_projects.models import Portfolio
 from website_projects.models import PropertyModel
+from homepage.models import VisitorCount
 from .models import Task
 
 
@@ -34,3 +35,9 @@ class TaskSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Task
         fields = ['id', 'title', 'description', 'completed', 'created_at']
+
+
+class VisitorCountSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = VisitorCount
+        fields = ['visitor_count']

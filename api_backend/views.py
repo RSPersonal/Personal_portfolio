@@ -12,8 +12,9 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from database_projects.models import Portfolio
 from website_projects.models import PropertyModel
+from homepage.models import VisitorCount
 from .models import Task
-from .serializers import PortfolioSerializer, PropertySerializer, TaskSerializer
+from .serializers import PortfolioSerializer, PropertySerializer, TaskSerializer, VisitorCountSerializer
 from core.core_scripts import keyword_finder_core
 from rest_framework.parsers import JSONParser
 from django.views.decorators.csrf import csrf_exempt
@@ -207,10 +208,8 @@ def task_detail(request, pk):
     except:
         return HttpResponse(status=404)
     if request.method == 'PUT':
-        print('test')
         data = JSONParser().parse(request)
         serializer = TaskSerializer(task, data=data)
-        print(serializer)
         if serializer.is_valid():
             serializer.save()
             return JsonResponse(serializer.data, status=200)
@@ -219,3 +218,14 @@ def task_detail(request, pk):
     elif request.method == 'DELETE':
         task.delete()
         return HttpResponse(status=204)
+
+
+@csrf_exempt
+def get_visitor_count(request):
+    try:
+        visitor_count = VisitorCount.objects.get()
+    except:
+        return HttpResponse(status=404)
+    if request.method == 'GET':
+        serializer = VisitorCountSerializer(visitor_count)
+        return JsonResponse(serializer.data, safe=False)
