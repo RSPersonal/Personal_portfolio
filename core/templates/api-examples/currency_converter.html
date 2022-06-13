@@ -5,7 +5,7 @@
         <div>
             <h2>Currency Converter</h2>
         </div>
-        <div class="col-4">
+        <div class="col-sm-4">
             <p>Base currency is USD
                 <br/>Supported Currencies at the moment are:
             </p>
@@ -14,9 +14,9 @@
                 <li>GBP</li>
                 <li>PKR</li>
             </ul>
-            <a class="btn btn-primary" href="/api/v1">Go back to api overview</a>
+
         </div>
-        <div class="col-3">
+        <div class="col-sm-3">
             <form method="post" action="">
                 {% csrf_token %}
                 <label for="currencies">Select a currency</label>
@@ -30,7 +30,7 @@
             </form>
 
         </div>
-        <div class="col-5">
+        <div class="col-sm-5">
             <h1>Result = {{ from_currency }} {{ converted_amount }}</h1>
         </div>
         {% for message in messages %}
@@ -40,7 +40,9 @@
             </li>
         </ul>
         {% endfor %}
-
+        <div class="col-sm-6">
+            <a class="btn btn-primary" href="/api/v1">Go back to api overview</a>
+        </div>
     </div>
 </div>
 {% endblock %}

@@ -1,6 +1,5 @@
 import os
 import csv
-import requests
 from datetime import date
 import sentry_sdk
 from django.contrib import messages
@@ -51,6 +50,18 @@ def stock_tracker_landing_page(request):
             sentry_sdk.capture_exception(error)
         except IndexError as error:
             sentry_sdk.capture_exception(error)
+            new_monthly_profit = portfolio.monthly_profit.append(0)
+            portfolio.save()
+
+        # Reset the portfolio figures if no active positions
+        if portfolio.total_positions == 0:
+            portfolio.total_amount_invested = 0
+            portfolio.total_profit = 0
+            portfolio.total_profit_percentage = 0.0
+            portfolio.data_for_chart_array = []
+            portfolio.labels_array = []
+            portfolio.total_positions = 0
+            portfolio.save()
 
         # Get the monthly profits for visualisation
         # try:
@@ -117,7 +128,7 @@ def portfolio_detail(request, pk):
                 messages.add_message(request, messages.INFO,
                                      'API call limit exceeded. Profit calculation is not correct due to market price is set to 0 in case of api call limit is exceeded.')
             elif not active_connection:
-                messages.add_message(request, messages.INFO, 'No active connection')
+                messages.add_message(request, messages.INFO, 'No active connection, check if API key is valid.')
 
         if active_connection:
             for position in positions:
@@ -268,16 +279,6 @@ def portfolio_detail(request, pk):
         if Positions.objects.filter(portfolio=pk).exists() or Portfolio.objects.get(id=pk):
             Portfolio.objects.get(id=pk).delete()
             return redirect('stocktracker')
-
-    # If no active positions reset the portfolio main values
-    if portfolio.total_positions == 0:
-        portfolio.total_amount_invested = 0
-        portfolio.total_profit = 0
-        portfolio.total_profit_percentage = 0.0
-        portfolio.data_for_chart_array = []
-        portfolio.labels_array = []
-        portfolio.total_positions = 0
-        portfolio.save()
 
     return render(request, 'database-projects/portfolio_detail.html', context=context)
 

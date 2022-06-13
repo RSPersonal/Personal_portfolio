@@ -22,7 +22,7 @@ def find_keywords_in_text_file(keyword: str, output_format: str, text_file):
     result = {'keys_found': 0, 'data': []}
     if keywords_amount_found > 0:
         # Return desired output
-        if output_format == 'outputinbrowser' or output_format == 'json':
+        if 'outputinbrowser' in output_format or 'json' in output_format:
             result['keys_found'] = keywords_amount_found
             result['data'] = keys_without_duplicates
             return result

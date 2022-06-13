@@ -49,10 +49,9 @@
                 <div class="card mb-2">
                     <div class="card-body">
                         <div class="row pt-2">
-                            <div class="col-4">
+                            <div class="col-sm-4">
                                 <div class="btn-group">
-                                    <a class="btn btn-primary" href="{% url 'portfolio_detail' portfolio.pk%}">Go to {{
-                                        portfolio }}</a>
+                                    <a class="btn btn-primary" href="{% url 'portfolio_detail' portfolio.pk%}">Go to {{ portfolio }}</a>
                                     <div class="btn-group" role="group">
                                         <button class="btn btn-light dropdown-toggle" type="button"
                                                 id="optionsPortfolioDropdown"
@@ -70,7 +69,7 @@
                             </div>
                             {% if portfolio.total_positions > 0 %}
                             <div class="row">
-                                <div class="col-4 text-start" style="width: 50%;">
+                                <div class="col-4 text-start d-none d-sm-block" style="width: 50%;">
                                     <script>
                     var randomNum_{{ portfolio.pk }} = () => Math.floor(Math.random() * (235 - 52 + 1) + 52);
                     function rgbToHex(r, g, b) {
@@ -127,13 +126,13 @@
                                     </script>
                                     <canvas id="pie-chart{{ portfolio.pk }}"></canvas>
                                 </div>
-                                <div class="col-4 text-end" style="width: 50%;">
+                                <div class="col-4 text-end d-none d-sm-block" style="width: 50%;">
                                     <canvas id="barChart{{ portfolio.pk }}"></canvas>
                                 </div>
                             </div>
                             {% endif %}
                             <div class="row">
-                                <div class="col-4 pt-2">
+                                <div class="col-sm-4 pt-2">
                                     <b>Total amount invested:</b> {{ portfolio.total_amount_invested }}
                                     <br/><b>Total Positions:</b> {{ portfolio.total_positions }}
                                     <br/><b>Total Profit:</b> {{ portfolio.total_profit }}

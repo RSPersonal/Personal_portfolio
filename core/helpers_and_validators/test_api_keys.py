@@ -1,37 +1,43 @@
+import unittest
 import os
 import requests
-import unittest
 import sentry_sdk
 from decouple import config
 
-url = "https://yfapi.net/v6/finance/quote"
+URL = "https://yfapi.net/v6/finance/quote"
 
-querystring = {"symbols": "AAPL"}
+QUERYSTRING = {"symbols": "AAPL"}
 
-headers = {
+HEADERS = {
     'x-api-key': os.getenv("YAHOO_FINANCE_API", config("YAHOO_FINANCE_API"))
 }
 
 try:
-    response = requests.request("GET", url, headers=headers, params=querystring)
+    response = requests.request("GET", URL, headers=HEADERS, params=QUERYSTRING)
     RESPONSE_API_CALL_YAHOO_API = response.json()
 except KeyError as error:
     sentry_sdk.capture_exception(error)
     RESPONSE_API_CALL_YAHOO_API = {}
 
-limit_exceeded = False
+LIMIT_EXCEEDED = False
 if RESPONSE_API_CALL_YAHOO_API and RESPONSE_API_CALL_YAHOO_API['message'] == 'Limit Exceeded':
-    limit_exceeded = True
+    LIMIT_EXCEEDED = True
 
 
 class TestApiKeys(unittest.TestCase):
+    """
+    Test api keys from yahoo
+    """
 
     def test_yahoo_connection(self):
-        if limit_exceeded is False:
+        """
+        @return: None
+        """
+        if LIMIT_EXCEEDED is False:
             self.assertEqual(RESPONSE_API_CALL_YAHOO_API["quoteResponse"]["result"][0]["symbol"], 'AAPL')
         else:
             print('!YAHOO API CALLS EXCEEDED!')
-            self.assertEqual(limit_exceeded, True)
+            self.assertEqual(LIMIT_EXCEEDED, True)
 
 
 if __name__ == '__main__':

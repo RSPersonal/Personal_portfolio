@@ -2,17 +2,18 @@
 
 def value(input_value):
     """
-    Function to check if there is a value
+    @param input_value:
+    @return: bool
     """
     if not no_value(input_value):
         return True
-    else:
-        return False
+    return False
 
 
 def no_value(input_value):
     """
-    Function to check if there is no value
+    @param input_value:
+    @return: bool
     """
     if input_value == '' or input_value == [] or input_value is None:
         return True
