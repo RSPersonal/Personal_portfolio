@@ -112,7 +112,9 @@
                         <a href="{% url 'property_detail' property.pk%}" class="stretched-link"></a>
                         <div class="col-sm-6 pt-1">
                             <div class="p-1">
+                                {% if property.thumbnail_photo.url != '' %}
                                 <img class="img-responsive rounded" src="{{ property.thumbnail_photo.url }}" width="350" height="240"/>
+                                {% endif %}
                             </div>
                         </div>
                         <div class="col-6 col-sm-3 pt-1 ps-4">

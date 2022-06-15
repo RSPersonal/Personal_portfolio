@@ -320,3 +320,7 @@ def download_portfolio_csv(request, request_id: int):
              position.current_market_price, position.position_profit, position.position_profit_in_percentage])
 
     return response
+
+
+def mileage_project(request):
+    return render(request, 'database-projects/car_mileage_project.html')
