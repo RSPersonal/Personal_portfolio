@@ -18,7 +18,9 @@
 </div>
 <div class="container">
     <div class="pt-2 pb-2">
+        {% if property.thumbnail_photo.url != '' %}
         <img src="{{ property.thumbnail_photo.url }}" width="50%" height="50%">
+        {% endif %}
     </div>
 </div>
 <div class="container-fluid bg-light">
