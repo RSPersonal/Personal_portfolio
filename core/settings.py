@@ -145,7 +145,7 @@ USE_TZ = True
 
 USE_S3_STORAGE = os.getenv('S3_ACTIVE', config('S3_ACTIVE'))
 
-if USE_S3_STORAGE:
+if USE_S3_STORAGE == 'True':
     AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID', config('AWS_ACCESS_KEY_ID'))
     AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY', config('AWS_SECRET_ACCESS_KEY'))
     AWS_STORAGE_BUCKET_NAME = os.getenv('AWS_STORAGE_BUCKET_NAME', config('AWS_STORAGE_BUCKET_NAME'))
@@ -161,8 +161,8 @@ if USE_S3_STORAGE:
     MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{PUBLIC_MEDIA_LOCATION}/'
     DEFAULT_FILE_STORAGE = 'core.storage_backends.PublicMediaStorage'
 else:
-    STATIC_URL = 'static/'
-    STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+    STATIC_URL = '/core/static/'
+    STATIC_ROOT = os.path.join(BASE_DIR, 'core/static')
 
     MEDIA_URL = 'media/'
     MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
