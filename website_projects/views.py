@@ -78,5 +78,9 @@ def real_estate_services(request):
 
 def real_estate_valuation(request):
     context = {}
-
     return render(request, 'website-projects/real-estate-agent/real_estate_valuation.html', context=context)
+
+
+def real_estate_sale_service(request):
+    context = {}
+    return render(request, 'website-projects/real-estate-agent/real_estate_sale_service.html', context=context)
