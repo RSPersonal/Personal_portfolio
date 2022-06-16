@@ -24,4 +24,13 @@ object-fit: cover;
   /* The width is the width of the web page */
 }
 
+#realEstateCard {
+    height: 240px;
+}
+
+#realEstateHomePageImg {
+    max-height: 55vh;
+    overflow: hidden;
+}
+
 #outline: 1px solid blue
