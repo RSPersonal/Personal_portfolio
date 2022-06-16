@@ -3,12 +3,21 @@
 
 {% block page_content %}
 <body>
-<div class="container-fluid">
-    <div class="d-none d-block-sm h-50">
-        <img class="h-75 w-100" src="{% static  'img/desk-placeholder.jpg' %}" />
+<!--<div class="container-fluid">-->
+<!--    <div class="bg-image d-none d-sm-block w-100"-->
+<!--         style="background-image: url('https://mdbootstrap.com/img/Photos/Others/images/76.jpg');-->
+<!--            height: 50vh">-->
+<!--    </div>-->
+<!--    -->
+<!--</div>-->
+<div class="container-fluid px-0" id="homepageBackgroundContainer">
+    <div class="row mx-0">
+        <div class="col-12 px-0">
+            <img src="{% static  'img/desk-placeholder.jpg' %}" class="w-100">
+        </div>
     </div>
 </div>
-<div class="container">
+<div class="container d-none d-sm-block">
     <p class="img-text rounded p-2 text-white bg-transparent">
         Your local real estate agent
         <br><br>Lorum ipsum lorum ipsum lorum ipsum lorum ipsum lorum ipsum lorum ipsum lorum ipsumlorum ipsum lorum
@@ -80,20 +89,20 @@
     </div>
 </div>
 <div class="container pt-3">
-    <h3>
+    <h5>
         Recent aanbod
-    </h3>
+    </h5>
 </div>
 <div class="container">
     <div class="row">
         {% for property in properties %}
         <div class="col-sm-4 pt-2 pb-2">
             <div class="card">
-                <div class="card-body">
+                <div class="card-body bg-light">
                     {% if property.thumbnail_photo.url != '' %}
-                    <img src="{{ property.thumbnail_photo.url }}" class="card-img-top"/>
+                    <img src="{{ property.thumbnail_photo.url }}" class="card-img-top rounded"/>
                     {% endif %}
-                    <h5 class="card-title pt-2">
+                    <h5 class="card-title pt-2 ">
                         {{ property.street }} {{ property.housenumber }}
                     </h5>
                     <a href="{% url 'property_detail' property.pk%}" class="stretched-link"></a>
@@ -104,7 +113,8 @@
                         € {{ property.ask_price }}
                     </p>
                     <p>
-                        {{ property.woon_oppervlak }} m² / {{ property.perceel_oppervlak }} m² / {{ property.amount_rooms }} kamers
+                        {{ property.woon_oppervlak }} m² / {{ property.perceel_oppervlak }} m² / {{
+                        property.amount_rooms }} kamers
                     </p>
                 </div>
             </div>

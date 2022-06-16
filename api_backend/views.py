@@ -222,10 +222,7 @@ def task_detail(request, pk):
 
 @csrf_exempt
 def get_visitor_count(request):
-    try:
-        visitor_count = VisitorCount.objects.get()
-    except:
-        return HttpResponse(status=404)
+    visitor_count = VisitorCount.objects.get()
     if request.method == 'GET':
         serializer = VisitorCountSerializer(visitor_count)
         return JsonResponse(serializer.data, safe=False)

@@ -12,6 +12,7 @@ from .forms import PortfolioForm, PositionForm
 from core.helpers_and_validators import calculator, input_validator, yahoo_api
 from core.core_pdf_generator import core_pdf_generator
 from datetime import datetime
+from django.views.generic import TemplateView
 
 YAHOO_API_URL = "https://yfapi.net/v6/finance/quote"
 querystring = {"symbols": "ASHK"}
@@ -320,3 +321,7 @@ def download_portfolio_csv(request, request_id: int):
              position.current_market_price, position.position_profit, position.position_profit_in_percentage])
 
     return response
+
+
+def mileage_project(request):
+    return render(request, 'database-projects/mileage_project.html')

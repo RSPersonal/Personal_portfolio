@@ -24,4 +24,8 @@ object-fit: cover;
   /* The width is the width of the web page */
 }
 
+#homepageBackgroundContainer {
+    height: 400px;
+}
+
 #outline: 1px solid blue

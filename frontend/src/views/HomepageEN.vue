@@ -2,155 +2,9 @@
   <main>
     <div class="container-fluid">
       <div class="row">
-        <div class="col-1 text-left">
-          <p>Visitor count</p> {{ visitorCount }}
-        </div>
-        <div class="col-sm text-center">
-          <h3 class="mt-4">
-            <p>Raphael Sparenberg</p>
-          </h3>
-          <p>
-            <br/>REAL ESTATE ADVISOR | INTERNATIONAL BUSINESS IT-CONSULTANT ZWOLLE, NEDERLAND +31 (0)6 41237152
-          </p>
-        </div>
-        <div class="col-sm-1 text-right">
-          <a class="btn btn-primary" href="/nl">NL</a>
-        </div>
-      </div>
-    </div>
-    <div class="container">
-      <!-- Left column -->
-      <div class="row">
-        <div class="col-sm-4 text-center">
-          <h5><b>PERSONALIA</b></h5>
-          <p>Zwolle
-            <br/>Nederland
-            <br/>+31 (0) *
-            <br/>*@gmail.com
-          </p>
-          <p><b>Birthdate/City</b>
-            <br/>20-01-1992
-            <br/>Wesel
-          </p>
-          <p><b>Nationality</b>
-            <br/>Nederlands
-          </p>
-          <p>
-            <b>Driver license
-            </b>
-            <br/>B
-          </p>
-          <h5><b>LINKS</b></h5>
-          <a href="https://nl.linkedin.com/in/raphael-sparenberg-637885173">LinkedIn</a>
-          <br/>
-          <a href="https://github.com/RSPersonal">Github</a>
-          <h5 class="pt-3"><b>Skills</b></h5>
-          <p>
-            Flexible
-            <br/>Ambitious
-            <br/>Analytical
-            <br/>Problem solving
-            <br/>Strong work ethic
-            <br/>Agile and scrum
-          </p>
-          <h5><b>TECHNICAL</b></h5>
-          <p>
-            PHP
-            <br/>PYTHON
-            <br/>POSTGRESQL
-            <br/>SQLITE
-            <br/>GIT
-          </p>
-          <h5><b>HOBBY'S</b></h5>
-          <p>
-            Music
-            <br/>Coding
-            <br/>Hiking
-            <br/>Bouldering
-            <br/>Outdoor activity's
-            <br/>Big fantasy book's fan
-          </p>
-          <h5><b>Languages</b></h5>
-          <p>
-            Dutch
-            <br/>German
-            <br/>English
-          </p>
-        </div>
-        <!-- Middle column -->
-        <!-- Right column -->
-        <div class="col-sm text-left">
-          <h5><b>PROFILE</b></h5>
-          <p></p>
-          <h5><b>WORK EXPERIENCE</b></h5>
-          <p>
-            <b>International Business IT-Consultant | Real Estate Advisor, KATE Innovations B.V., Utrecht</b>
-            <br/>november 2020- until now
-          <ul>
-            <li>International project management</li>
-            <li>Facilitate training in software packages</li>
-            <li>Implementing and managing complex software solutions</li>
-            <li>Translating business cases into technical features/solutions</li>
-          </ul>
-          </p>
-          <p>
-            <b>Business Development & Portfolio Manager, RdB Real Estate GmbH, Essen (DE) & Meppel (NL)</b>
-            <br/>january 2018 - october 2020
-          </p>
-          <p>
-            Full management of the Dutch Portfolio and the property management of the German real estate branch
-            Also project leader of various projects in both real estate development, as internal IT projects.
-          </p>
-          <p>
-            <b>Property Management Nederland & Risk-manager, RdB Real Estate GmbH, Essen (DE) & Meppel (NL)</b>
-            <br/>january 2015 — december 2017
-          </p>
-          <p>
-            Responsible for analyzing and investing in various instruments including equities, bonds and
-            derivatives. Also performed object analyzes for both the German real estate branch and the Dutch real
-            estate branch of RdB Real Estate. Based on these analyses, advice was given to the management.
-          </p>
-          <h5><b>EDUCATION</b></h5>
-          <p>
-            <b>Crash course PHP, KATE Innovations, Utrecht</b>
-            <br/>december 2020 — march 2021
-          </p>
-          <p>
-            Crash course in PHP 7/8.
-            <br/>Topics:
-          <ul>
-            <li>OOP (Object oriented programming)</li>
-            <li>PHP Basics (Syntax)</li>
-            <li>SQL</li>
-            <li>GIT version control</li>
-          </ul>
-          </p>
-          <p>
-            <b>Basic Theory Real Estate Expert (Evening course), Windesheim , Zwolle</b>
-            <br/>january 2019 — october 2020
-          </p>
-          <p>
-            <b>Social Worker, Deltion College, Zwolle</b>
-            <br/>september 2012 — january 2015
-          </p>
-          <p>
-            <b>VeVa Grondoptreden, Training Center Marine Corps, Rotterdam</b>
-            <br/>september 2009 — july 2011
-          </p>
-          <h5><b>COURSES</b></h5>
-          <p>
-            <b>Crash course PHP, KATE Innovations, Utrecht</b>
-            <br/>december 2020 — march 2021
-          </p>
-          <p>
-            <b>Vision, mission, objectives and the business Strategy, Sociëteit Vastgoed Academy</b>
-            <br/>october 2019 — october 2019
-          </p>
-          <p>
-            <b>Cash Flow Principles in Real Estate Calculation, Sociëteit Vastgoed Academy</b>
-            <br/>september 2019 — october 2019
-          </p>
-        </div>
+        <h1>
+          Placeholder
+        </h1>
       </div>
     </div>
   </main>
@@ -158,22 +12,30 @@
 
 <script>
 export default {
-  data () {
+  data() {
     return {
       visitorCount: 0
     }
   },
   methods: {
-    async getVisitorCount () {
+    async getVisitorCount() {
       try {
         const response = await this.axios.get('http://localhost:8000/api/v1/visitor-count');
         this.visitorCount = response.data['visitor_count'];
       } catch (error) {
         console.log(error);
+        this.visitorCount = "API connection error"
+      }
+    },
+    async getProfilePost() {
+      try {
+        const response = await this.axios.get('')
+      } catch (error) {
+        console.log(error)
       }
     }
   },
-  created () {
+  created() {
     this.getVisitorCount();
   }
 }
