@@ -1,21 +1,26 @@
 {% extends 'base.html' %}
-
+{% load static %}
 {% block page_content %}
 <div class="container-fluid">
-    <div class="row">
-        <div class="col-sm-6">
-            <div class="card">
-                <div class="card-body">
-                    <div class="card-title">
-                        !WIP! Real Estate agent website !WIP!
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="card">
+                    <img class="card-img-top" src="{% static 'img/placeholder-real-estate.jpg' %}" alt="Card image cap">
+                    <div class="card-body">
+                        <div class="card-title">
+                            !WIP! Real Estate agent website !WIP!
+                        </div>
+                        <div class="card-text">
+                            <p>
+                                <b>Features:</b>
+                                <br>- Database for real estate properties
+                                <br>- Contact me/request for offer functionality
+                                <br>- Amazon S3 Bucket for static files storage
+                            </p>
+                        </div>
+                        <a class="btn btn-primary" href="{% url 'real_estate_homepage' %}">Go to website</a>
                     </div>
-                    <div class="card-text">
-                        <p>
-                            Features:
-                            <br>Database for real estate properties
-                        </p>
-                    </div>
-                    <a class="btn btn-primary" href="{% url 'real_estate_homepage' %}">Go to website</a>
                 </div>
             </div>
         </div>
