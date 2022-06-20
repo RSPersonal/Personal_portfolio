@@ -3,11 +3,11 @@
 
 {% block page_content %}
 <div class="container-fluid bg-light">
-    <div class="container">
+    <div class="container mt-2">
         <form name="" method="post" id="cityFilter">
             {% csrf_token %}
             <div class="row">
-                <div class="col-sm-3">
+                <div class="col-sm-3 mb-3">
                     <label for="cities" class="form-label ps-2">City</label>
                     <select class="form-select" aria-label="Default select example" id="cities" name="userCityInput">
                         {% for city in city_filters %}
@@ -17,7 +17,8 @@
                 </div>
                 <div class="col-sm-3">
                     <label for="objectTypes" class="form-label ps-2">Type object</label>
-                    <select class="form-select" aria-label="Default select example" id="objectTypes" name="userObjectTypeInput">
+                    <select class="form-select" aria-label="Default select example" id="objectTypes"
+                            name="userObjectTypeInput">
                         {% for object_type in object_types %}
                         <option>{{ object_type }}</option>
                         {% endfor %}
@@ -91,7 +92,7 @@
                         <option class="text-end" value="20000000">€ 2.000.000</option>
                     </select>
                 </div>
-                <div class="col-sm-2 align-self-end">
+                <div class="col-sm-2 align-self-end mb-3">
                     <label for="filterSubmitButton" class="form-label"></label>
                     <button type="submit" class="btn btn-primary" id="filterSubmitButton" name="filterSubmitButton">
                         Submit
@@ -113,7 +114,8 @@
                         <div class="col-sm-6 pt-1">
                             <div class="p-1">
                                 {% if property.thumbnail_photo.url != '' %}
-                                <img class="img-responsive rounded" src="{{ property.thumbnail_photo.url }}" width="350" height="240"/>
+                                <img class="img-responsive rounded" src="{{ property.thumbnail_photo.url }}" width="350"
+                                     height="240"/>
                                 {% endif %}
                             </div>
                         </div>

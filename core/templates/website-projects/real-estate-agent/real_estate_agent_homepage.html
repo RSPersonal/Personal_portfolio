@@ -3,41 +3,38 @@
 
 {% block page_content %}
 <body>
-<div class="container-fluid">
-    <div class="d-block-sm h-50">
-        <img class="h-75 w-100" src="{% static  'img/desk-placeholder.jpg' %}" />
+<div class="container-fluid px-0">
+    <div class="" id="realEstateHomePageImg">
+        <img class="img-fluid w-100" src="{% static  'img/desk-placeholder.jpg' %}" alt="Picture of city skyline"/>
     </div>
 </div>
 <div class="container">
-    <p class="img-text rounded p-2 text-white bg-transparent">
-        Your local real estate agent
-        <br><br>Lorum ipsum lorum ipsum lorum ipsum lorum ipsum lorum ipsum lorum ipsum lorum ipsumlorum ipsum lorum
-        ipsum lorum ipsum
-        <br><br>lorum ipsum lorum ipsum lorum ipsum lorum ipsum lorum ipsum lorum ipsum lorum ipsum lorum ipsum lorum
-        ipsum
-        <br><br>lorum ipsum lorum ipsum lorum ipsum lorum ipsum lorum ipsum lorum ipsum lorum ipsum lorum ipsum lorum
-        ipsum
-    </p>
+<!--    <h5 class="img-text rounded p-2 text-white bg-transparent">-->
+<!--        Your local real estate agent-->
+<!--    <h5/>-->
 </div>
 
 <div class="container-fluid bg-light">
     <div class="container">
         <div class="row">
             <div class="col-sm-3">
-                <div class="card border-0 bg-light">
+                <div class="card border-0 bg-light m-2" id="realEstateCard">
                     <div class="card-body text-center">
                         <i class="bi bi-house-heart" style="font-size: 3rem"></i>
                         <h5>
                             Woning kopen
                         </h5>
-                        <p class="card-text pt-2">
-                            Vanaf het zoeken, tot aan de sleuteloverdracht, wij begeleiden het hele proces.
-                        </p>
+                        <a href="{% url 'real_estate_sale_service'%}" class="stretched-link"></a>
+                        <div class="d-none d-md-block">
+                            <p class="card-text pt-2">
+                                Vanaf het zoeken, tot aan de sleuteloverdracht, wij begeleiden het hele proces.
+                            </p>
+                        </div>
                     </div>
                 </div>
             </div>
             <div class="col-sm-3">
-                <div class="card border-0 bg-light">
+                <div class="card border-0 bg-light m-2" id="realEstateCard">
                     <div class="card-body text-center">
                         <i class="bi bi-house-door" style="font-size: 3rem"></i>
                         <h5>
@@ -51,7 +48,7 @@
                 </div>
             </div>
             <div class="col-sm-3">
-                <div class="card border-0 bg-light">
+                <div class="card border-0 bg-light m-2" id="realEstateCard">
                     <div class="card-body text-center">
                         <i class="bi bi-file-text" style="font-size: 3rem"></i>
                         <h5 class="">
@@ -64,7 +61,7 @@
                 </div>
             </div>
             <div class="col-sm-3">
-                <div class="card border-0 bg-light ">
+                <div class="card border-0 bg-light m-2" id="realEstateCard">
                     <div class="card-body text-center">
                         <i class="bi bi-calculator" style="font-size: 3rem"></i>
                         <h5>
@@ -116,7 +113,7 @@
     <div class="row">
         <div class="col-sm-6 text-left p-5">
             <h4>Benieuwd naar de waarde van je huis?</h4>
-            <a class="btn btn-light" href="#">Ga naar gratis waardebepaling</a>
+            <a class="btn btn-light" href="{% url 'real_estate_valuation' %}">Ga naar gratis waardebepaling</a>
         </div>
         <div class="col-sm-6">
             <div id="homepageCarousel" class="carousel slide" data-bs-ride="carousel">

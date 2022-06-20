@@ -3,7 +3,7 @@
 
 {% block page_content %}
 <div class="container-fluid bg-light">
-    <div class="container">
+    <div class="container mt-2 ">
         <form name="" method="post" id="cityFilter">
             {% csrf_token %}
             <div class="row">
@@ -17,7 +17,8 @@
                 </div>
                 <div class="col-sm-3">
                     <label for="objectTypes" class="form-label ps-2">Type object</label>
-                    <select class="form-select" aria-label="Default select example" id="objectTypes" name="userObjectTypeInput">
+                    <select class="form-select" aria-label="Default select example" id="objectTypes"
+                            name="userObjectTypeInput">
                         {% for object_type in object_types %}
                         <option>{{ object_type }}</option>
                         {% endfor %}
@@ -104,15 +105,17 @@
 <div class="container">
     {% if active_properties %}
     {% for property in active_properties %}
-    <div class="row pt-2 bg-2">
+    <div class="row  bg-2">
         <div class="col-sm-12">
-            <div class="card">
+            <div class="card mt-2 mb-2">
                 <div class="card-horizontal">
                     <div class="row">
                         <a href="{% url 'property_detail' property.pk%}" class="stretched-link"></a>
                         <div class="col-sm-6 pt-1">
                             <div class="p-1">
+                                {% if property.thumbnail_photo.url != '' %}
                                 <img class="" src="{{ property.thumbnail_photo.url }}" width="30%" height="25%"/>
+                                {% endif %}
                             </div>
                         </div>
                         <div class="col-6 col-sm-3 pt-1">

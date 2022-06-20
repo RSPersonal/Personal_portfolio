@@ -27,7 +27,7 @@ def sale_properties(request):
     context = {}
     active_cities = PropertyModel.objects.all().values_list('city', flat=True).distinct()
     active_property_types = PropertyModel.objects.all().values_list('building_type', flat=True).distinct()
-    active_sale_properties = PropertyModel.objects.filter(type_of_property='SL').order_by('added_on')
+    active_sale_properties = PropertyModel.objects.filter(type_of_property='Koop').order_by('added_on')
 
     # response = requests.request("GET", "http://127.0.0.1:8000/api/v1/properties/sale/Zwolle").json()
 
@@ -62,7 +62,7 @@ def rental_properties(request):
     context = {}
     # Here comes the form
     active_cities = PropertyModel.objects.all().values_list('city', flat=True).distinct()
-    active_rental_properties = PropertyModel.objects.filter(type_of_property='RT')
+    active_rental_properties = PropertyModel.objects.filter(type_of_property='Huur').order_by('added_on')
 
     # response = requests.request("GET", "http://127.0.0.1:8000/api/v1/properties/sale/Zwolle").json()
     context['city_filters'] = active_cities
@@ -78,5 +78,9 @@ def real_estate_services(request):
 
 def real_estate_valuation(request):
     context = {}
-
     return render(request, 'website-projects/real-estate-agent/real_estate_valuation.html', context=context)
+
+
+def real_estate_sale_service(request):
+    context = {}
+    return render(request, 'website-projects/real-estate-agent/real_estate_sale_service.html', context=context)
