@@ -5,48 +5,32 @@ from core.storage_backends import PublicMediaStorage
 
 # Create your models here.
 class PropertyModel(models.Model):
-    SALE = 'SL'
-    RENTAL = 'RT'
     TYPE_OF_PROPERTY_CHOICES = [
-        (SALE, 'Sale'),
-        (RENTAL, 'Rental')
+        ('Koop', 'Koop'),
+        ('Huur', 'Huur')
     ]
-
-    TWO_UNDER_ONE = 'TOO'
-    END_HOME = 'EH'
-    TERRACES_HOUSE = 'TH'
-    CORNER_HOUSE = 'COH'
-    IN_BETWEEN_HOUSE = 'IBH'
-    DETACHED_HOUSE = 'DH'
-    APARTMENT = 'AP'
-    NONE = 'NONE'
 
     BUILDING_TYPE_CHOICES = [
-        (TWO_UNDER_ONE, '2-onder-1-kapwoning'),
-        (END_HOME, 'Eindwoning'),
-        (TERRACES_HOUSE, 'Geschakelde woning'),
-        (CORNER_HOUSE, 'Hoekwoning'),
-        (IN_BETWEEN_HOUSE, 'Tussenwoning'),
-        (DETACHED_HOUSE, 'Vrijstaande woning'),
-        (APARTMENT, 'Appartement'),
-        (NONE, 'Onbekend'),
+        ('2-onder-1-kapwoning', '2-onder-1-kapwoning'),
+        ('Eindwoning', 'Eindwoning'),
+        ('Geschakelde woning', 'Geschakelde woning'),
+        ('Hoekwoning', 'Hoekwoning'),
+        ('Tussenwoning', 'Tussenwoning'),
+        ('Vrijstaande woning', 'Vrijstaande woning'),
+        ('Appartement', 'Appartement'),
+        ('Onbekend', 'Onbekend'),
     ]
 
-    SOLD = 'SD'
-    UNDER_OFFER = 'UO'
-    SOLD_WITH_RESERVATION = 'SWR'
-    AVAILABLE = 'AV'
-
     STATUS_CHOICES = [
-        (SOLD, 'Verkocht'),
-        (UNDER_OFFER, 'Onder bod'),
-        (SOLD_WITH_RESERVATION, 'Verkocht onder voorbehoud'),
-        (AVAILABLE, 'Beschikbaar'),
-        (NONE, 'Onbekend')
+        ('Verkocht', 'Verkocht'),
+        ('Onder bod', 'Onder bod'),
+        ('Verkocht onder voorbehoud', 'Verkocht onder voorbehoud'),
+        ('Beschikbaar', 'Beschikbaar'),
+        ('Onbekend', 'Onbekend')
     ]
 
     property_id = models.UUIDField(default=uuid.uuid4)
-    status = models.CharField(max_length=40, choices=STATUS_CHOICES, default=NONE, blank=True)
+    status = models.CharField(max_length=40, choices=STATUS_CHOICES, default='Onbekend', blank=True)
     street = models.CharField(max_length=50, blank=True, default="")
     housenumber = models.IntegerField(blank=True, null=True)
     housenumber_add = models.CharField(max_length=15, blank=True, default="")
@@ -55,9 +39,9 @@ class PropertyModel(models.Model):
     municipality = models.CharField(max_length=60, blank=True, default="")
     province = models.CharField(max_length=60, blank=True, default="")
     type_of_property = models.CharField(blank=True, max_length=5, choices=TYPE_OF_PROPERTY_CHOICES,
-                                        default=SALE)
+                                        default='Koop')
     building_type = models.CharField(blank=True, max_length=20, choices=BUILDING_TYPE_CHOICES,
-                                     default=NONE)
+                                     default='Onbekend')
     woon_oppervlak = models.IntegerField(default=0, blank=True, null=True)
     perceel_oppervlak = models.IntegerField(default=0, blank=True, null=True)
     amount_rooms = models.IntegerField(default=0, null=True)
