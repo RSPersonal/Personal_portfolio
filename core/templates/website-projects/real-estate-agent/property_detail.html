@@ -5,12 +5,17 @@
 <div class="container-fluid bg-light">
     <div class="container">
         <div class="row pt-3 pb-3">
-            <div class="col-sm-6">
+            <div class="col-sm-4 text-center">
                 <h5>{{ property.city }} - {{ property.street }} {{property.housenumber}}</h5>
             </div>
-            <div class="col-sm-6 text-end">
+            <div class="col-sm-4 text-center">
                 <h5>
-                    € {{ property.ask_price }},- {{ property.ask_price_suffix }}
+                    Vraagprijs: € {{ property.ask_price }},- {{ property.ask_price_suffix }}
+                </h5>
+            </div>
+            <div class="col-sm-4 text-center">
+                <h5>
+                    Status: {{ property.status }}
                 </h5>
             </div>
         </div>
@@ -25,37 +30,38 @@
 </div>
 <div class="container-fluid bg-light">
     <div class="container">
+
         <nav>
             <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                <button class="nav-link active text-dark" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home"
+                <button class="nav-link active text-dark" id="nav-home-tab" data-bs-toggle="tab"
+                        data-bs-target="#nav-home"
                         type="button" role="tab" aria-controls="nav-home" aria-selected="true">Omschrijving
                 </button>
-                <button class="nav-link text-dark" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile"
+                <button class="nav-link text-dark" id="nav-profile-tab" data-bs-toggle="tab"
+                        data-bs-target="#nav-profile"
                         type="button" role="tab" aria-controls="nav-profile" aria-selected="false">Kenmerken
                 </button>
-                <button class="nav-link text-dark" id="nav-contact-tab" data-bs-toggle="tab" data-bs-target="#nav-contact"
+                <button class="nav-link text-dark" id="nav-contact-tab" data-bs-toggle="tab"
+                        data-bs-target="#nav-contact"
                         type="button" role="tab" aria-controls="nav-contact" aria-selected="false">Foto's
                 </button>
             </div>
         </nav>
         <div class="tab-content" id="nav-tabContent">
-            <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
-                <h5></h5>
-                <p>
-                    {{ property.description }}
-                </p>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+                        <h5></h5>
+                        <p>
+                            {{ property.description }}
+                        </p>
+                    </div>
+                </div>
             </div>
             <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">...</div>
             <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">...</div>
         </div>
     </div>
 </div>
-<script>
-    var b = "{{ property.description }}";
-    var c = "{{ property.
-    console.log(b);
-
-
-</script>
 </body>
 {% endblock %}

@@ -54,7 +54,6 @@ def sale_properties(request):
     context['city_filters'] = active_cities
     context['active_properties'] = active_sale_properties
     context['object_types'] = active_property_types
-    print(active_property_types)
     return render(request, 'website-projects/real-estate-agent/sale_properties.html', context=context)
 
 
