@@ -35,7 +35,15 @@
                     <a class="dropdown-item" href="{% url  'rental_properties' %}">Huis huren</a>
                 </div>
             </div>
-            <a class="text-dark" href="{% url 'real_estate_services' %}">Diensten</a>
+            <div class="nav-item dropdown">
+                <div class="dropdown-toggle" href="#" id="woningAanbod-1" role="button" data-bs-toggle="dropdown">
+                    Diensten
+                </div>
+                <div class="dropdown-menu" aria-labelledby="woningAanbod1">
+                    <a class="dropdown-item" href="{% url 'sale_properties'%}">Aankoopmakelaar</a>
+                    <a class="dropdown-item" href="{% url  'rental_properties' %}">Verkoopmakelaar</a>
+                </div>
+            </div>
             <div class="nav-item dropdown">
                 <div class="dropdown-toggle" href="#" id="woningAanbod-1" role="button" data-bs-toggle="dropdown">
                     Over ons
