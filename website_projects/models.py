@@ -48,11 +48,12 @@ class PropertyModel(models.Model):
     energy_label = models.CharField(default="", blank=True, max_length=10)
     type_of_heating = models.CharField(default="", blank=True, max_length=20)
     construction_year = models.IntegerField(blank=True, null=True)
+    rental_price = models.IntegerField(blank=True, null=True)
     ask_price = models.IntegerField(default=0)
     ask_price_suffix = models.CharField(max_length=10, blank=True, default="")
     description = models.TextField(blank=True, null=True)
-    thumbnail_photo = models.FileField(blank=True, storage=PublicMediaStorage)
-    other_photos = models.FileField(blank=True, storage=PublicMediaStorage)
+    thumbnail_photo = models.FileField(null=True, blank=True, storage=PublicMediaStorage)
+    other_photos = models.FileField(null=True, blank=True, storage=PublicMediaStorage)
     added_on = models.DateTimeField(auto_now=True)
 
     def __str__(self):

@@ -9,16 +9,16 @@
     </div>
 </div>
 <div class="container">
-<!--    <h5 class="img-text rounded p-2 text-white bg-transparent">-->
-<!--        Your local real estate agent-->
-<!--    <h5/>-->
+    <!--    <h5 class="img-text rounded p-2 text-white bg-transparent">-->
+    <!--        Your local real estate agent-->
+    <!--    <h5/>-->
 </div>
 
 <div class="container-fluid bg-light">
     <div class="container">
         <div class="row">
             <div class="col-sm-3">
-                <div class="card border-0 bg-light m-2" id="realEstateCard">
+                <div class="card border-0 bg-light m-2 " id="realEstateCard">
                     <div class="card-body text-center">
                         <i class="bi bi-house-heart" style="font-size: 3rem"></i>
                         <h5>
@@ -26,7 +26,7 @@
                         </h5>
                         <a href="{% url 'real_estate_sale_service'%}" class="stretched-link"></a>
                         <div class="d-none d-md-block">
-                            <p class="card-text pt-2">
+                            <p class="card-text mt-2">
                                 Vanaf het zoeken, tot aan de sleuteloverdracht, wij begeleiden het hele proces.
                             </p>
                         </div>
@@ -41,7 +41,7 @@
                             Woning verkopen
                         </h5>
 
-                        <p class="card-text pt-2">
+                        <p class="card-text mt-2">
                             Uw woning verkopen op originele wijze, met echte aandacht voor u en uw woning.
                         </p>
                     </div>
@@ -54,7 +54,7 @@
                         <h5 class="">
                             Taxaties
                         </h5>
-                        <p class="card-text pt-2">
+                        <p class="card-text mt-2">
                             Snel en kwalitatief hoogwaardige taxaties
                         </p>
                     </div>
@@ -67,7 +67,7 @@
                         <h5>
                             Hypotheken
                         </h5>
-                        <p class="card-text pt-2">
+                        <p class="card-text mt-2">
                             Vraag vrijblijvend één advies gesprek aan met een van onze hypotheek adviseurs
                         </p>
                     </div>
@@ -76,7 +76,7 @@
         </div>
     </div>
 </div>
-<div class="container pt-3">
+<div class="container mt-3">
     <h3>
         Recent aanbod
     </h3>
@@ -84,13 +84,13 @@
 <div class="container">
     <div class="row">
         {% for property in properties %}
-        <div class="col-sm-4 pt-2 pb-2">
+        <div class="col-sm-4 mt-2 pb-2">
             <div class="card">
                 <div class="card-body">
                     {% if property.thumbnail_photo.url != '' %}
                     <img src="{{ property.thumbnail_photo.url }}" class="card-img-top"/>
                     {% endif %}
-                    <h5 class="card-title pt-2">
+                    <h5 class="card-title mt-2">
                         {{ property.street }} {{ property.housenumber }}
                     </h5>
                     <a href="{% url 'property_detail' property.pk%}" class="stretched-link"></a>
@@ -98,7 +98,7 @@
                         {{ property.zipcode}}, {{ property.city }}
                     </p>
                     <p class="card-text">
-                        € {{ property.ask_price }}
+                        Vraagprijs: € {{ property.ask_price }} {{ property.ask_price_suffix }}
                     </p>
                     <p>
                         {{ property.woon_oppervlak }} m² / {{ property.perceel_oppervlak }} m² / {{ property.amount_rooms }} kamers
@@ -109,38 +109,47 @@
         {% endfor %}
     </div>
 </div>
-<div class="container">
-    <div class="row">
-        <div class="col-sm-6 text-left p-5">
-            <h4>Benieuwd naar de waarde van je huis?</h4>
-            <a class="btn btn-light" href="{% url 'real_estate_valuation' %}">Ga naar gratis waardebepaling</a>
-        </div>
-        <div class="col-sm-6">
-            <div id="homepageCarousel" class="carousel slide" data-bs-ride="carousel">
-                <div class="carousel-inner p-5">
-                    <div class="carousel-item active" data-bs-interval="7000">
-                        <p>
-                            "Lorum ipsum Lorum ipsumLorum ipsumLorum ipsumLorum ipsumLorum ipsumLorum ipsum"
-                            <br><br><b>Klant 1 via PlaceholderPlatform</b>
-                        </p>
+<div class="container-fluid bg-light">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-6 text-left p-5">
+                <h4>Benieuwd naar de waarde van je huis?</h4>
+                <a class="btn btn-light" href="{% url 'real_estate_valuation' %}">Ga naar gratis waardebepaling</a>
+            </div>
+            <div class="col-sm-6">
+                <div id="homepageCarousel" class="carousel slide" data-bs-ride="carousel">
+                    <div class="carousel-inner p-5">
+                        <div class="carousel-item active" data-bs-interval="7000">
+                            <p>
+                                "Lorum ipsum Lorum ipsumLorum ipsumLorum ipsumLorum ipsumLorum ipsumLorum ipsum"
+                                <br><br><b>Klant 1 via PlaceholderPlatform</b>
+                            </p>
+                        </div>
+                        <div class="carousel-item" data-bs-interval="7000">
+                            <p>
+                                "Lorum ipsum Lorum ipsumLorum ipsumLorum ipsumLorum ipsumLorum ipsumLorum ipsum"
+                                <br><br><b>Klant 2 via PlaceholderPlatform</b>
+                            </p>
+                        </div>
+                        <button class="carousel-control-prev" type="button" data-bs-target="homepageCarousel">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Previous</span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleInterval"
+                                data-bs-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Next</span>
+                        </button>
                     </div>
-                    <div class="carousel-item" data-bs-interval="7000">
-                        <p>
-                            "Lorum ipsum Lorum ipsumLorum ipsumLorum ipsumLorum ipsumLorum ipsumLorum ipsum"
-                            <br><br><b>Klant 2 via PlaceholderPlatform</b>
-                        </p>
-                    </div>
-                    <button class="carousel-control-prev" type="button" data-bs-target="homepageCarousel">
-                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                        <span class="visually-hidden">Previous</span>
-                    </button>
-                    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleInterval"
-                            data-bs-slide="next">
-                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                        <span class="visually-hidden">Next</span>
-                    </button>
                 </div>
             </div>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="row">
+        <div class="col-sm-">
+
         </div>
     </div>
 </div>

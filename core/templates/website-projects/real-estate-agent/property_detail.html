@@ -24,7 +24,7 @@
 <div class="container">
     <div class="pt-2 pb-2">
         {% if property.thumbnail_photo.url != '' %}
-        <img src="{{ property.thumbnail_photo.url }}" width="50%" height="50%">
+        <img src="{{ property.thumbnail_photo.url }}" alt="Photo of the property" width="50%" height="50%"/>
         {% endif %}
     </div>
 </div>
@@ -51,7 +51,6 @@
             <div class="row">
                 <div class="col-sm-6">
                     <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
-                        <h5></h5>
                         <p>
                             {{ property.description }}
                         </p>
