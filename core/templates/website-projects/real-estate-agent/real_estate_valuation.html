@@ -4,17 +4,26 @@
 <div class="container-fluid px-0">
     <div class="container">
         <div class="row">
-            <div class="col-sm-12">
+            <div class="col-sm-10">
+                {% csrf_token %}
                 <div class="d-flex align-items-center justify-content-center" id="searchBarValuation">
-                    <label for="addressSearchBar">Enter your address</label>
-                    <input type="text" class="form-control" id="addressSearchBar">
+                    <input type="text" class="form-control" id="addressSearchBar" name="searchAddressInput">
+                </div>
+            </div>
+            <div class="col-sm-2">
+                <div class="d-flex align-items-center justify-content-center" id="searchBarValuation">
+                    <label for="filterSubmitButton" class="form-label"></label>
+                    <form>
+                        <button type="submit" class="btn btn-primary" id="filterSubmitButton"
+                                name="searchAddressSubmitButton">
+                            Submit
+                        </button>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
 </div>
-<script src="https://maps.googleapis.com/maps/api/js?key={{google_places_key}}&libraries=places&callback=initAutocomplete" async defer>
-</script>
 <script>
     let autocomplete;
 
@@ -29,5 +38,23 @@
     }
 
     window.initAutocomplete = initAutocomplete;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</script>
+<script src="https://maps.googleapis.com/maps/api/js?key={{google_places_key}}&libraries=places&callback=initAutocomplete"
+        async defer>
 </script>
 {% endblock %}
