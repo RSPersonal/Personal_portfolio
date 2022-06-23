@@ -1,8 +1,11 @@
+import os
+
 import requests
 from django.shortcuts import render
 from .models import PropertyModel
 from django.shortcuts import get_object_or_404
 from django.db.models import Max
+from decouple import config
 
 
 def projects_overview(request):
@@ -76,7 +79,7 @@ def real_estate_services(request):
 
 
 def real_estate_valuation(request):
-    context = {}
+    context = {'google_places_key': os.getenv('GOOGLE_PLACES_API', config('GOOGLE_PLACES_API'))}
     return render(request, 'website-projects/real-estate-agent/real_estate_valuation.html', context=context)
 
 

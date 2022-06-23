@@ -2,16 +2,32 @@
 {% load static %}
 {% block page_content %}
 <div class="container-fluid px-0">
-    <div class="" id="realEstateHomePageImg">
-        <img class="img-fluid w-100" src="{% static  'img/desk-placeholder.jpg' %}" alt="Picture of city skyline"/>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="d-flex align-items-center justify-content-center" id="searchBarValuation">
+                    <label for="addressSearchBar">Enter your address</label>
+                    <input type="text" class="form-control" id="addressSearchBar">
+                </div>
+            </div>
+        </div>
     </div>
 </div>
-<div class="container">
-    <div class="">
-
-    </div>
-</div>
+<script src="https://maps.googleapis.com/maps/api/js?key={{google_places_key}}&libraries=places&callback=initAutocomplete" async defer>
+</script>
 <script>
-    console.log("test");
+    let autocomplete;
+
+    function initAutocomplete () {
+        autocomplete = new google.maps.places.Autocomplete(
+            document.getElementById('addressSearchBar'),
+            {
+                types: ['address'],
+                componentRestrictions: {'country': ['NL']},
+                fields: ['formatted_address'],
+            });
+    }
+
+    window.initAutocomplete = initAutocomplete;
 </script>
 {% endblock %}
