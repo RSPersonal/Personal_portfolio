@@ -82,7 +82,7 @@ def real_estate_valuation(request):
     context = {'google_places_key': os.getenv('GOOGLE_PLACES_API', config('GOOGLE_PLACES_API'))}
     if request.method == 'POST' and 'searchAddressSubmitButton' in request.POST:
         user_address_input = request.POST.get('searchAddressInput')
-        print(user_address_input)
+        print(user_address_input.split(','))
 
     return render(request, 'website-projects/real-estate-agent/real_estate_valuation.html', context=context)
 

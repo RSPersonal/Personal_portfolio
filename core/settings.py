@@ -161,7 +161,7 @@ if USE_S3_STORAGE == 'True':
     MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{PUBLIC_MEDIA_LOCATION}/'
     DEFAULT_FILE_STORAGE = 'core.storage_backends.PublicMediaStorage'
 else:
-    STATIC_URL = '/core/static/'
+    STATIC_URL = 'core/static/'
     STATIC_ROOT = os.path.join(BASE_DIR, 'core/static')
 
     MEDIA_URL = 'media/'
