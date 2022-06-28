@@ -58,3 +58,17 @@ class PropertyModel(models.Model):
 
     def __str__(self):
         return '{} {} {} {} {}'.format(self.street, self.zipcode, self.city, self.province, self.description)
+
+
+class ScrapyPropertyModel(models.Model):
+    street = models.CharField(max_length=40)
+    housenumber = models.IntegerField(blank=True, null=True)
+    housenumber_add = models.CharField(max_length=15, blank=True, default="")
+    zipcode = models.CharField(max_length=10, blank=True, default="")
+    city = models.CharField(max_length=100, blank=True, default="")
+    municipality = models.CharField(max_length=60, blank=True, default="")
+    type_of_property = models.CharField(blank=True, max_length=30)
+    ask_price = models.IntegerField(default=0)
+    amount_rooms = models.IntegerField(default=0, null=True)
+    woon_oppervlak = models.IntegerField(default=0, blank=True, null=True)
+    perceel_oppervlak = models.IntegerField(default=0, blank=True, null=True)
