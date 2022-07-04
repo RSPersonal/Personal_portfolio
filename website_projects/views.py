@@ -81,6 +81,7 @@ def real_estate_services(request):
 def real_estate_valuation(request):
     context = {'google_places_key': os.getenv('GOOGLE_PLACES_API', config('GOOGLE_PLACES_API'))}
     if request.method == 'POST' and 'searchAddressSubmitButton' in request.POST:
+        postal_code_range = requests.get(f"http://postcode.vanvulpen.nl/afstand/{postcode-nummers}/{meters}/")
         user_address_input = request.POST.get('searchAddressInput')
         print(user_address_input.split(','))
 
