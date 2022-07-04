@@ -48,7 +48,9 @@ Check requirements.txt for dependencies.
 2. Learn to build an REST API and connect this REST API to the current website
 3. Learn Postgresql
 5. Learn to connect an external API which makes an external call and retreives data
-6. Build a simple CRUD application (Stocktracker)  
+6. Build a simple CRUD application (Stocktracker)
+7. Build a webscraper to get real estate data
+8. Build real estate valuation tool based on scraped data and user input
 
 <b>Future goals</b>  
 1. Dockerize project and host in docker image    
