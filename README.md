@@ -1,9 +1,44 @@
 # Personal_portfolio  
 <b>!WIP!</b>  
 
-Main language = Python 3.9  
-Framework = Django 4.0.3  
-Logger = SentrySDK 1.5.9  
+STACK:
+<h6><b>BACKEND</b></h6>
+<p align="left">
+   <a href="https://www.python.org" target="_blank" rel="noreferrer"> <img
+      src="https://raw.githubusercontent.com/devicons/devicon/master/icons/python/python-original.svg"
+      alt="python" width="40" height="40"/> </a>
+   <a href="https://www.postgresql.org" target="_blank" rel="noreferrer"> <img
+      src="https://raw.githubusercontent.com/devicons/devicon/master/icons/postgresql/postgresql-original-wordmark.svg"
+      alt="postgresql" width="40" height="40"/> </a>
+   <a href="https://www.djangoproject.com/" target="_blank" rel="noreferrer"> <img
+      src="https://cdn.worldvectorlogo.com/logos/django.svg" alt="django" width="40"
+      height="40"/> </a>
+</p>
+<h6><b>FRONTEND</b></h6>
+<p>
+   <a href="https://www.w3.org/html/" target="_blank" rel="noreferrer"> <img
+      src="https://raw.githubusercontent.com/devicons/devicon/master/icons/html5/html5-original-wordmark.svg"
+      alt="html5" width="40" height="40"/> </a>
+   <a href="https://getbootstrap.com" target="_blank" rel="noreferrer"> <img
+      src="https://raw.githubusercontent.com/devicons/devicon/master/icons/bootstrap/bootstrap-plain-wordmark.svg"
+      alt="bootstrap" width="40" height="40"/> </a>
+   <a href="https://www.w3schools.com/css/" target="_blank" rel="noreferrer"> <img
+      src="https://raw.githubusercontent.com/devicons/devicon/master/icons/css3/css3-original-wordmark.svg"
+      alt="css3" width="40" height="40"/> </a>
+   <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript" target="_blank"
+      rel="noreferrer"> <img
+      src="https://raw.githubusercontent.com/devicons/devicon/master/icons/javascript/javascript-original.svg"
+      alt="javascript" width="40" height="40"/></a>
+   <a href="https://www.chartjs.org" target="_blank" rel="noreferrer"><img
+      src="https://www.chartjs.org/media/logo-title.svg" alt="chartjs" width="40"
+      height="40"/> </a>
+</p>
+<h6><b>VERSION</b></h6>
+<p>
+   <a href="https://www.git.com" target="_blank" rel="noreferrer"> <img
+      src="https://raw.githubusercontent.com/devicons/devicon/master/icons/git/git-original-wordmark.svg"
+      alt="html5" width="40" height="40"/> </a>
+</p>
 
 Dependencies:
 Check requirements.txt for dependencies.  
