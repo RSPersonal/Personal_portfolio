@@ -1,7 +1,7 @@
 # Personal_portfolio  
 <b>!WIP!</b>  
 
-STACK:
+Technogoly stack used:
 <h6><b>BACKEND</b></h6>
 <p align="left">
    <a href="https://www.python.org" target="_blank" rel="noreferrer"> <img
