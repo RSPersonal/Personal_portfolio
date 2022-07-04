@@ -2,6 +2,14 @@ import uuid
 from django.db import models
 from core.storage_backends import PublicMediaStorage
 
+STATUS_CHOICES = [
+    ('Verkocht', 'Verkocht'),
+    ('Onder bod', 'Onder bod'),
+    ('Verkocht onder voorbehoud', 'Verkocht onder voorbehoud'),
+    ('Beschikbaar', 'Beschikbaar'),
+    ('Te koop', 'Te koop'),
+    ('Onbekend', 'Onbekend')
+]
 
 # Create your models here.
 class PropertyModel(models.Model):
@@ -19,14 +27,6 @@ class PropertyModel(models.Model):
         ('Vrijstaande woning', 'Vrijstaande woning'),
         ('Appartement', 'Appartement'),
         ('Onbekend', 'Onbekend'),
-    ]
-
-    STATUS_CHOICES = [
-        ('Verkocht', 'Verkocht'),
-        ('Onder bod', 'Onder bod'),
-        ('Verkocht onder voorbehoud', 'Verkocht onder voorbehoud'),
-        ('Beschikbaar', 'Beschikbaar'),
-        ('Onbekend', 'Onbekend')
     ]
 
     property_id = models.UUIDField(default=uuid.uuid4)
@@ -72,3 +72,5 @@ class ScrapyPropertyModel(models.Model):
     amount_rooms = models.IntegerField(default=0, null=True)
     woon_oppervlak = models.IntegerField(default=0, blank=True, null=True)
     perceel_oppervlak = models.IntegerField(default=0, blank=True, null=True)
+    status = models.CharField(max_length=25, choices=STATUS_CHOICES)
+    date_sold = models.DateField(blank=True, null=True)
