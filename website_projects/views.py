@@ -1,8 +1,11 @@
+import os
+
 import requests
 from django.shortcuts import render
 from .models import PropertyModel
 from django.shortcuts import get_object_or_404
 from django.db.models import Max
+from decouple import config
 
 
 def projects_overview(request):
@@ -54,7 +57,6 @@ def sale_properties(request):
     context['city_filters'] = active_cities
     context['active_properties'] = active_sale_properties
     context['object_types'] = active_property_types
-    print(active_property_types)
     return render(request, 'website-projects/real-estate-agent/sale_properties.html', context=context)
 
 
@@ -77,7 +79,11 @@ def real_estate_services(request):
 
 
 def real_estate_valuation(request):
-    context = {}
+    context = {'google_places_key': os.getenv('GOOGLE_PLACES_API', config('GOOGLE_PLACES_API'))}
+    if request.method == 'POST' and 'searchAddressSubmitButton' in request.POST:
+        user_address_input = request.POST.get('searchAddressInput')
+        print(user_address_input.split(','))
+
     return render(request, 'website-projects/real-estate-agent/real_estate_valuation.html', context=context)
 
 

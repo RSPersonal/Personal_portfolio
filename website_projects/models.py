@@ -2,6 +2,14 @@ import uuid
 from django.db import models
 from core.storage_backends import PublicMediaStorage
 
+STATUS_CHOICES = [
+    ('Verkocht', 'Verkocht'),
+    ('Onder bod', 'Onder bod'),
+    ('Verkocht onder voorbehoud', 'Verkocht onder voorbehoud'),
+    ('Beschikbaar', 'Beschikbaar'),
+    ('Te koop', 'Te koop'),
+    ('Onbekend', 'Onbekend')
+]
 
 # Create your models here.
 class PropertyModel(models.Model):
@@ -19,14 +27,6 @@ class PropertyModel(models.Model):
         ('Vrijstaande woning', 'Vrijstaande woning'),
         ('Appartement', 'Appartement'),
         ('Onbekend', 'Onbekend'),
-    ]
-
-    STATUS_CHOICES = [
-        ('Verkocht', 'Verkocht'),
-        ('Onder bod', 'Onder bod'),
-        ('Verkocht onder voorbehoud', 'Verkocht onder voorbehoud'),
-        ('Beschikbaar', 'Beschikbaar'),
-        ('Onbekend', 'Onbekend')
     ]
 
     property_id = models.UUIDField(default=uuid.uuid4)
@@ -48,12 +48,29 @@ class PropertyModel(models.Model):
     energy_label = models.CharField(default="", blank=True, max_length=10)
     type_of_heating = models.CharField(default="", blank=True, max_length=20)
     construction_year = models.IntegerField(blank=True, null=True)
+    rental_price = models.IntegerField(blank=True, null=True)
     ask_price = models.IntegerField(default=0)
     ask_price_suffix = models.CharField(max_length=10, blank=True, default="")
     description = models.TextField(blank=True, null=True)
-    thumbnail_photo = models.FileField(blank=True, storage=PublicMediaStorage)
-    other_photos = models.FileField(blank=True, storage=PublicMediaStorage)
+    thumbnail_photo = models.FileField(null=True, blank=True, storage=PublicMediaStorage)
+    other_photos = models.FileField(null=True, blank=True, storage=PublicMediaStorage)
     added_on = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return '{} {} {} {} {}'.format(self.street, self.zipcode, self.city, self.province, self.description)
+
+
+class ScrapyPropertyModel(models.Model):
+    street = models.CharField(max_length=40)
+    housenumber = models.IntegerField(blank=True, null=True)
+    housenumber_add = models.CharField(max_length=15, blank=True, default="")
+    zipcode = models.CharField(max_length=10, blank=True, default="")
+    city = models.CharField(max_length=100, blank=True, default="")
+    municipality = models.CharField(max_length=60, blank=True, default="")
+    type_of_property = models.CharField(blank=True, max_length=30)
+    ask_price = models.IntegerField(default=0)
+    amount_rooms = models.IntegerField(default=0, null=True)
+    woon_oppervlak = models.IntegerField(default=0, blank=True, null=True)
+    perceel_oppervlak = models.IntegerField(default=0, blank=True, null=True)
+    status = models.CharField(max_length=25, choices=STATUS_CHOICES)
+    date_sold = models.DateField(blank=True, null=True)

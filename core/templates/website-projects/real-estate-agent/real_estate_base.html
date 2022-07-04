@@ -35,9 +35,17 @@
                     <a class="dropdown-item" href="{% url  'rental_properties' %}">Huis huren</a>
                 </div>
             </div>
-            <a class="text-dark" href="{% url 'real_estate_services' %}">Diensten</a>
             <div class="nav-item dropdown">
-                <div class="dropdown-toggle" href="#" id="woningAanbod-1" role="button" data-bs-toggle="dropdown">
+                <div class="dropdown-toggle" href="#" id="services1" role="button" data-bs-toggle="dropdown">
+                    Diensten
+                </div>
+                <div class="dropdown-menu" aria-labelledby="woningAanbod1">
+                    <a class="dropdown-item" href="{% url 'real_estate_sale_service'%}">Aankoopmakelaar</a>
+                    <a class="dropdown-item" href="#">Verkoopmakelaar</a>
+                </div>
+            </div>
+            <div class="nav-item dropdown">
+                <div class="dropdown-toggle" href="#" id="aboutUs" role="button" data-bs-toggle="dropdown">
                     Over ons
                 </div>
                 <div class="dropdown-menu" aria-labelledby="woningAanbod1">
@@ -60,11 +68,11 @@
 <footer class="footer bg-light">
     <div class="container">
         <div class="row">
-            <div class="col-sm-4 pt-5">
+            <div class="col-sm-4 mt-5">
                 <h4>
                     Contact
                 </h4>
-                <p class="pt-4">
+                <p class="mt-4">
                     Lorum ipsum makelaars
                 </p>
                 <p>
@@ -73,22 +81,41 @@
                 <p>
                     8021JZ Lorum ipsum
                 </p>
-                <p class="pt-4">
+                <p class="mt-5">
                     T: 038 - 00 00 00 00
                 </p>
                 <p>
                     E: lorum@ipsum.nl
                 </p>
             </div>
-            <div class="col-sm-4 pt-5">
+            <div class="col-sm-4 mt-5">
                 <h4>
                     Social media
                 </h4>
             </div>
-            <div class="col-sm-4 pt-5">
+            <div class="col-sm-4 mt-5">
                 <h4>
                     Navigatie
                 </h4>
+                <p class="mt-4">
+                    <a class="text-dark" href="{% url 'real_estate_homepage' %}">Home</a>
+                </p>
+                <p>
+                    <a class="text-dark" href="{% url 'sale_properties' %}">Huis kopen</a>
+                </p>
+                <p>
+                    <a class="text-dark" href="{% url 'rental_properties' %}">Huis huren</a>
+                </p>
+                <p class="mt-5">
+                    <a class="text-dark" href="{% url 'real_estate_services' %}">Diensten</a>
+                </p>
+                <p>
+                    <a class="text-dark" href="#">Over ons</a>
+                </p>
+                <p>
+                    <a class="text-dark" href="#">Vacatures</a>
+                </p>
+
             </div>
         </div>
     </div>

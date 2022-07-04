@@ -17,3 +17,4 @@ django-storages==1.12.3
 boto3==1.23.1
 django-cleanup==6.0.0
 pre-commit==2.19.0
+scrapy==2.6.1
