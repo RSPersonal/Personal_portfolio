@@ -56,64 +56,6 @@
                 <br/>Strong work ethic
                 <br/>Agile and scrum
             </p>
-            <h5><b>TECHNICAL</b></h5>
-            <div class="container">
-                <div class="row ">
-                    <div class="col-sm-4 text-center">
-                        <h6><b>BACKEND</b></h6>
-                        <p>
-                            <a href="https://www.php.net/" target="_blank" rel="noreferrer"> <img
-                                src="https://raw.githubusercontent.com/devicons/devicon/master/icons/php/php-original.svg"
-                                alt="php" width="40" height="40"/> </a>
-                            <br/><a href="https://www.python.org" target="_blank" rel="noreferrer"> <img
-                                src="https://raw.githubusercontent.com/devicons/devicon/master/icons/python/python-original.svg"
-                                alt="python" width="40" height="40"/> </a>
-
-                            <br/><a href="https://www.postgresql.org" target="_blank" rel="noreferrer"> <img
-                                src="https://raw.githubusercontent.com/devicons/devicon/master/icons/postgresql/postgresql-original-wordmark.svg"
-                                alt="postgresql" width="40" height="40"/> </a>
-                            <br/><a href="https://www.mysql.com/" target="_blank" rel="noreferrer"> <img
-                                src="https://raw.githubusercontent.com/devicons/devicon/master/icons/mysql/mysql-original-wordmark.svg"
-                                alt="mysql" width="40" height="40"/> </a>
-                            <br/><a href="https://www.djangoproject.com/" target="_blank" rel="noreferrer"> <img
-                                    src="https://cdn.worldvectorlogo.com/logos/django.svg" alt="django" width="40"
-                                    height="40"/> </a>
-                        </p>
-                    </div>
-                    <div class="col-sm-4 text-center">
-                        <h6><b>FRONTEND</b></h6>
-                        <p>
-                            <a href="https://www.w3.org/html/" target="_blank" rel="noreferrer"> <img
-                                    src="https://raw.githubusercontent.com/devicons/devicon/master/icons/html5/html5-original-wordmark.svg"
-                                    alt="html5" width="40" height="40"/> </a>
-                            <br/><a href="https://getbootstrap.com" target="_blank" rel="noreferrer"> <img
-                                src="https://raw.githubusercontent.com/devicons/devicon/master/icons/bootstrap/bootstrap-plain-wordmark.svg"
-                                alt="bootstrap" width="40" height="40"/> </a>
-                            <br/> <a href="https://www.w3schools.com/css/" target="_blank" rel="noreferrer"> <img
-                                src="https://raw.githubusercontent.com/devicons/devicon/master/icons/css3/css3-original-wordmark.svg"
-                                alt="css3" width="40" height="40"/> </a>
-                            <br/><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript" target="_blank"
-                                    rel="noreferrer"> <img
-                                src="https://raw.githubusercontent.com/devicons/devicon/master/icons/javascript/javascript-original.svg"
-                                alt="javascript" width="40" height="40"/></a>
-                            <br/><a href="https://www.chartjs.org" target="_blank" rel="noreferrer"><img
-                                    src="https://www.chartjs.org/media/logo-title.svg" alt="chartjs" width="40"
-                                    height="40"/> </a>
-                        </p>
-                    </div>
-                    <div class="col-sm-4 text-center">
-                        <h6><b>VERSION</b></h6>
-                        <p>
-                            <a href="https://www.git.com" target="_blank" rel="noreferrer"> <img
-                                    src="https://raw.githubusercontent.com/devicons/devicon/master/icons/git/git-original-wordmark.svg"
-                                    alt="html5" width="40" height="40"/> </a>
-                            <br/><a href="https://bitbucket.org/" target="_blank" rel="noreferrer"> <img
-                                src="https://raw.githubusercontent.com/devicons/devicon/master/icons/bitbucket/bitbucket-original-wordmark.svg"
-                                alt="bitbucket" width="40" height="40"/> </a>
-                        </p>
-                    </div>
-                </div>
-            </div>
             <h5><b>HOBBY'S</b></h5>
             <p>
                 Music
@@ -132,7 +74,7 @@
         </div>
         <!-- Middle column -->
         <!-- Right column -->
-        <div class="col-sm text-left">
+        <div class="col-sm-8 text-left">
             <h5><b>PROFILE</b></h5>
             {% for profile_post in profile_posts %}
             <p>{{ profile_post.post }}</p>
@@ -165,33 +107,90 @@
                 derivatives. Also performed object analyzes for both the German real estate branch and the Dutch real
                 estate branch of RdB Real Estate. Based on these analyses, advice was given to the management.
             </p>
-            <h5><b>EDUCATION</b></h5>
-            <p>
-                <b>Crash course PHP, KATE Innovations, Utrecht</b>
-                <br/>december 2020 — march 2021
-            </p>
-            <p>
-                Crash course in PHP 7/8.
-                <br/>Topics:
-            <ul>
-                <li>OOP (Object oriented programming)</li>
-                <li>PHP Basics (Syntax)</li>
-                <li>SQL</li>
-                <li>GIT version control</li>
-            </ul>
-            </p>
-            <p>
-                <b>Basic Theory Real Estate Expert (Evening course), Windesheim , Zwolle</b>
-                <br/>january 2019 — october 2020
-            </p>
-            <p>
-                <b>Social Worker, Deltion College, Zwolle</b>
-                <br/>september 2012 — january 2015
-            </p>
-            <p>
-                <b>VeVa Grondoptreden, Training Center Marine Corps, Rotterdam</b>
-                <br/>september 2009 — july 2011
-            </p>
+            <div class="row">
+                <div class="col-sm-8 text-left">
+                    <h5><b>EDUCATION & TECHNICAL</b></h5>
+                    <p>
+                        <b>Crash course PHP, KATE Innovations, Utrecht</b>
+                        <br/>december 2020 — march 2021
+                    </p>
+                    <p>
+                        Crash course in PHP 7/8.
+                        <br/>Topics:
+                    <ul>
+                        <li>OOP (Object oriented programming)</li>
+                        <li>PHP Basics (Syntax)</li>
+                        <li>SQL</li>
+                        <li>GIT version control</li>
+                    </ul>
+                    </p>
+                    <p>
+                        <b>Basic Theory Real Estate Expert (Evening course), Windesheim , Zwolle</b>
+                        <br/>january 2019 — october 2020
+                    </p>
+                    <p>
+                        <b>Social Worker, Deltion College, Zwolle</b>
+                        <br/>september 2012 — january 2015
+                    </p>
+                    <p>
+                        <b>VeVa Grondoptreden, Training Center Marine Corps, Rotterdam</b>
+                        <br/>september 2009 — july 2011
+                    </p>
+                </div>
+                <div class="col-sm-1 text-center">
+                    <h6><b>BACKEND</b></h6>
+                    <p>
+                        <a href="https://www.php.net/" target="_blank" rel="noreferrer"> <img
+                                src="https://raw.githubusercontent.com/devicons/devicon/master/icons/php/php-original.svg"
+                                alt="php" width="40" height="40"/> </a>
+                        <br/><a href="https://www.python.org" target="_blank" rel="noreferrer"> <img
+                            src="https://raw.githubusercontent.com/devicons/devicon/master/icons/python/python-original.svg"
+                            alt="python" width="40" height="40"/> </a>
+
+                        <br/><a href="https://www.postgresql.org" target="_blank" rel="noreferrer"> <img
+                            src="https://raw.githubusercontent.com/devicons/devicon/master/icons/postgresql/postgresql-original-wordmark.svg"
+                            alt="postgresql" width="40" height="40"/> </a>
+                        <br/><a href="https://www.mysql.com/" target="_blank" rel="noreferrer"> <img
+                            src="https://raw.githubusercontent.com/devicons/devicon/master/icons/mysql/mysql-original-wordmark.svg"
+                            alt="mysql" width="40" height="40"/> </a>
+                        <br/><a href="https://www.djangoproject.com/" target="_blank" rel="noreferrer"> <img
+                            src="https://cdn.worldvectorlogo.com/logos/django.svg" alt="django" width="40"
+                            height="40"/> </a>
+                    </p>
+                </div>
+                <div class="col-sm-1 text-center">
+                    <h6><b>FRONTEND</b></h6>
+                    <p>
+                        <a href="https://www.w3.org/html/" target="_blank" rel="noreferrer"> <img
+                                src="https://raw.githubusercontent.com/devicons/devicon/master/icons/html5/html5-original-wordmark.svg"
+                                alt="html5" width="40" height="40"/> </a>
+                        <br/><a href="https://getbootstrap.com" target="_blank" rel="noreferrer"> <img
+                            src="https://raw.githubusercontent.com/devicons/devicon/master/icons/bootstrap/bootstrap-plain-wordmark.svg"
+                            alt="bootstrap" width="40" height="40"/> </a>
+                        <br/> <a href="https://www.w3schools.com/css/" target="_blank" rel="noreferrer"> <img
+                            src="https://raw.githubusercontent.com/devicons/devicon/master/icons/css3/css3-original-wordmark.svg"
+                            alt="css3" width="40" height="40"/> </a>
+                        <br/><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript" target="_blank"
+                                rel="noreferrer"> <img
+                            src="https://raw.githubusercontent.com/devicons/devicon/master/icons/javascript/javascript-original.svg"
+                            alt="javascript" width="40" height="40"/></a>
+                        <br/><a href="https://www.chartjs.org" target="_blank" rel="noreferrer"><img
+                            src="https://www.chartjs.org/media/logo-title.svg" alt="chartjs" width="40"
+                            height="40"/> </a>
+                    </p>
+                </div>
+                <div class="col-sm-1 text-center">
+                    <h6><b>VERSION</b></h6>
+                    <p>
+                        <a href="https://www.git.com" target="_blank" rel="noreferrer"> <img
+                                src="https://raw.githubusercontent.com/devicons/devicon/master/icons/git/git-original-wordmark.svg"
+                                alt="html5" width="40" height="40"/> </a>
+                        <br/><a href="https://bitbucket.org/" target="_blank" rel="noreferrer"> <img
+                            src="https://raw.githubusercontent.com/devicons/devicon/master/icons/bitbucket/bitbucket-original-wordmark.svg"
+                            alt="bitbucket" width="40" height="40"/> </a>
+                    </p>
+                </div>
+            </div>
             <h5><b>COURSES</b></h5>
             <p>
                 <b>Crash course PHP, KATE Innovations, Utrecht</b>
