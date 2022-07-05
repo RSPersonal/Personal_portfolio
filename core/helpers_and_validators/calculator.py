@@ -40,3 +40,11 @@ def calculate_portfolio_profit_in_percentage(amount_invested: float, profit: flo
     """
 
     return round(np.divide(profit, amount_invested) * 100, 2)
+
+
+def calculate_mean_price(prices: list):
+    """
+    @param prices: list
+    @return: mean price from list
+    """
+    return np.mean(prices)

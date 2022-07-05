@@ -6,6 +6,8 @@ from .models import PropertyModel
 from django.shortcuts import get_object_or_404
 from django.db.models import Max
 from decouple import config
+from core.helpers_and_validators.extraction_helper import extract_postal_code
+from core.helpers_and_validators.valuation_service import get_properties_within_postal_code_range_and_nla_range, get_mean_property_price
 
 
 def projects_overview(request):
@@ -81,9 +83,11 @@ def real_estate_services(request):
 def real_estate_valuation(request):
     context = {'google_places_key': os.getenv('GOOGLE_PLACES_API', config('GOOGLE_PLACES_API'))}
     if request.method == 'POST' and 'searchAddressSubmitButton' in request.POST:
-        postal_code_range = requests.get(f"http://postcode.vanvulpen.nl/afstand/{postcode-nummers}/{meters}/")
-        user_address_input = request.POST.get('searchAddressInput')
-        print(user_address_input.split(','))
+        clean_postal_code = extract_postal_code(request.POST.get('postcode'))
+        postal_code_range = requests.get(f"http://postcode.vanvulpen.nl/afstand/{clean_postal_code}/{2000}/").json()
+        queried_properties = get_properties_within_postal_code_range_and_nla_range(postal_code_range, [])
+        calculated_mean_property_price = get_mean_property_price(queried_properties)
+        print(postal_code_range, queried_properties, calculated_mean_property_price)
 
     return render(request, 'website-projects/real-estate-agent/real_estate_valuation.html', context=context)
 
