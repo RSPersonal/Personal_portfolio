@@ -85,8 +85,8 @@ def real_estate_valuation(request):
     if request.method == 'POST' and 'searchAddressSubmitButton' in request.POST:
         clean_postal_code = extract_postal_code(request.POST.get('postcode'))
         postal_code_range = requests.get(f"http://postcode.vanvulpen.nl/afstand/{clean_postal_code}/{2000}/").json()
-        nla = request.POST.get('postcode')
-        queried_properties = get_properties_within_postal_code_range_and_nla_range(postal_code_range, )
+        nla = request.POST.get('nla')
+        queried_properties = get_properties_within_postal_code_range_and_nla_range(postal_code_range, nla)
         calculated_mean_property_price = get_mean_property_price(queried_properties)
         print(postal_code_range, queried_properties, calculated_mean_property_price)
 
