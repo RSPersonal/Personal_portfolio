@@ -10,13 +10,23 @@
                 </h5>
             </div>
         </div>
-        <div class="col-sm-12">
+        <div class="col-sm-8">
             <p>
                 This idea came from the fact that most real estate agents offer a so-called "free" valuation for
-                your house.
+                your house. In the end it always came down to that you still needed to send a request for a valuation to
+                them, and then they would come by and valuate your house.
+            </p>
+            <p>
+                To me this felt like a chance for them to sale
+                additionally services like a proposal to sale your house. I just want to know roughly what my house is worth,
+                so that was the start of this whole idea.
+            </p>
+            <p>
+                Features:
+                <br/>
             </p>
         </div>
-        <div>
+        <div class="row">
             <form method="post" id="searchAddressForm">
                 {% csrf_token %}
                 <div class="" id="searchBarValuation">
@@ -26,28 +36,28 @@
                 </div>
                 <div class="row mt-3">
                     <div class="col-sm-3">
-                        <label for="street" class="form-label ps-2">Straat</label>
+                        <label for="street" class="form-label">Straat</label>
                     </div>
                     <div class="col-sm-1">
-                        <label for="houseNumber" class="form-label ps-2">Huisnummer</label>
+                        <label for="houseNumber" class="form-label">Huisnummer</label>
                     </div>
                     <div class="col-sm-2">
-                        <label for="postcode" class="form-label ps-2">Postcode</label>
+                        <label for="postcode" class="form-label">Postcode</label>
                     </div>
                     <div class="col-sm-3">
-                        <label for="locality" class="form-label ps-2">Stad</label>
+                        <label for="locality" class="form-label">Stad</label>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-sm-3">
-                        <input type="text" id="street" name="street" size="30">
+                        <input type="text" id="street" name="street" size="30" />
                     </div>
                     <div class="col-sm-1">
-                        <input type="text" id="houseNumber" name="houseNumber" size="9">
+                        <input type="text" id="houseNumber" name="houseNumber" size="9" required />
 
                     </div>
                     <div class="col-sm-2">
-                        <input type="text" id="postcode" name="postcode">
+                        <input type="text" id="postcode" name="postcode" required />
 
                     </div>
                     <div class="col-sm-3">
@@ -55,12 +65,17 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-sm-3">
-
+                    <div class="col-sm-3 mt-3">
+                        <label for="nla" class="form-label">Woonoppervlakte m²</label>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-sm-2 mt-4">
+                    <div class="col-sm-3">
+                        <input type="text" id="nla" name="nla" size="10" required/>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-2 mt-3">
                         <label for="filterSubmitButton" class="form-label"></label>
                         <button type="submit" class="btn btn-primary" id="filterSubmitButton"
                                 name="searchAddressSubmitButton">
