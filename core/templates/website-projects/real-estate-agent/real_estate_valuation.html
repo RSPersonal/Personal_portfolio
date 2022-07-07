@@ -10,7 +10,7 @@
                 </h5>
             </div>
         </div>
-        <div class="col-sm-8">
+        <div class="col-sm-12">
             <p>
                 This idea came from the fact that most real estate agents offer a so-called "free" valuation for
                 your house. In the end it always came down to that you still needed to send a request for a valuation to
@@ -87,13 +87,25 @@
             </form>
             {% if final_calculated_mean_price > 0 %}
             <div class="col-sm-12 text-center">
-                <p>Geschatte marktwaarde op basis van objecten in de straal van 2000m van postcode {{ user_postal_code }}</p>
-                <p>
-                     € {{ final_calculated_mean_price }}
-                </p>
-                {% for found_property in found_properties %}
-                <p>{{ found_property.street }} {{ found_property.housenumber }}</p>
-                {% endfor %}
+                <h5>
+                    € {{ final_calculated_mean_price }}
+                </h5>
+                <p>Geschatte marktwaarde op basis van {{ found_objects }} gevonden objecten in de straal van 2000m van
+                    postcode {{ user_postal_code }}</p>
+            </div>
+            <div class="col-sm-6">
+                <a class="btn btn-light mb-2" data-bs-toggle="collapse" href="#showFoundObjects" role="button"
+                   aria-expanded="false" aria-controls="showFoundObjects">Show found objects</a>
+                <div class="collapse mt-3" id="showFoundObjects">
+                    {% for found_property in found_properties %}
+                    <div class="card card-body mt-2">
+                        <p><i class="bi bi-house-door"></i> Adres: {{ found_property.street }} {{ found_property.housenumber }} {{ found_property.city }} </p>
+                        <p>
+                            <i class="bi bi-clipboard-data"></i> Prijs aangeboden: € {{ found_property.ask_price }}
+                        </p>
+                    </div>
+                    {% endfor %}
+                </div>
             </div>
             {% endif %}
         </div>

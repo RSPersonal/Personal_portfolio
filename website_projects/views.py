@@ -87,8 +87,10 @@ def real_estate_valuation(request):
         # TODO test should contain following cases: no input, no found properties, mean price calculation, empty calcualtio call
         clean_postal_code = extract_postal_code(request.POST.get('postcode'))
         postal_code_range = requests.get(f"http://postcode.vanvulpen.nl/afstand/{clean_postal_code}/{2000}/").json()
+
         user_input_nla = int(request.POST.get('nla'))
-        queried_properties = get_properties_within_postal_code_range_and_nla_range(postal_code_range, user_input_nla)
+        user_input_city = request.POST.get('locality')
+        queried_properties = get_properties_within_postal_code_range_and_nla_range(postal_code_range, user_input_nla, user_input_city)
         calculated_mean_property_price = get_mean_property_price(queried_properties)
 
         if len(queried_properties) > 0:
