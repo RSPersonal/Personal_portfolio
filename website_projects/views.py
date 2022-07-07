@@ -83,6 +83,8 @@ def real_estate_services(request):
 def real_estate_valuation(request):
     context = {'google_places_key': os.getenv('GOOGLE_PLACES_API', config('GOOGLE_PLACES_API'))}
     if request.method == 'POST' and 'searchAddressSubmitButton' in request.POST:
+        # TODO expand test for input of user
+        # TODO test should contain following cases: no input, no found properties, mean price calculation, empty calcualtio call
         clean_postal_code = extract_postal_code(request.POST.get('postcode'))
         postal_code_range = requests.get(f"http://postcode.vanvulpen.nl/afstand/{clean_postal_code}/{2000}/").json()
         user_input_nla = int(request.POST.get('nla'))
