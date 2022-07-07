@@ -18,7 +18,8 @@
             </p>
             <p>
                 To me this felt like a chance for them to sale
-                additionally services like a proposal to sale your house. I just want to know roughly what my house is worth,
+                additionally services like a proposal to sale your house. I just want to know roughly what my house is
+                worth,
                 so that was the start of this whole idea.
             </p>
             <p>
@@ -50,14 +51,14 @@
                 </div>
                 <div class="row">
                     <div class="col-sm-3">
-                        <input type="text" id="street" name="street" size="30" />
+                        <input type="text" id="street" name="street" size="30"/>
                     </div>
                     <div class="col-sm-1">
-                        <input type="text" id="houseNumber" name="houseNumber" size="9" required />
+                        <input type="text" id="houseNumber" name="houseNumber" size="9" required/>
 
                     </div>
                     <div class="col-sm-2">
-                        <input type="text" id="postcode" name="postcode" required />
+                        <input type="text" id="postcode" name="postcode" required/>
 
                     </div>
                     <div class="col-sm-3">
@@ -84,6 +85,17 @@
                     </div>
                 </div>
             </form>
+            {% if final_calculated_mean_price > 0 %}
+            <div class="col-sm-12 text-center">
+                <p>Geschatte marktwaarde op basis van objecten in de straal van 2000m van postcode {{ user_postal_code }}</p>
+                <p>
+                     € {{ final_calculated_mean_price }}
+                </p>
+                {% for found_property in found_properties %}
+                <p>{{ found_property.street }} {{ found_property.housenumber }}</p>
+                {% endfor %}
+            </div>
+            {% endif %}
         </div>
     </div>
 </div>

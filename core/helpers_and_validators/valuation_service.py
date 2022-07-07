@@ -11,7 +11,7 @@ def get_properties_within_postal_code_range_and_nla_range(postal_code_range: lis
     nla_lower_range = nla_range - (float(nla_range) * 0.10)
     nla_higher_range = nla_range + (float(nla_range) * 0.10)
     print(nla_lower_range, nla_higher_range)
-    properties = ScrapyPropertyModel.objects.filter(zipcode__range=(postal_code_range[0], postal_code_range[-1]))
+    properties = ScrapyPropertyModel.objects.filter(zipcode__range=(postal_code_range[0], postal_code_range[-1]), woon_oppervlak__range=(nla_lower_range, nla_higher_range))
     return properties
 
 
