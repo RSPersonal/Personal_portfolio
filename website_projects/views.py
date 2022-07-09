@@ -109,3 +109,7 @@ def real_estate_valuation(request):
 def real_estate_sale_service(request):
     context = {}
     return render(request, 'website-projects/real-estate-agent/real_estate_sale_service.html', context=context)
+
+
+def rudolphie_design(request):
+    return render(request, 'website-projects/rudolphie-design/rudolphie_design_homepage.html')
