@@ -4,7 +4,7 @@
 <body>
 <div class="container">
     <div class="row">
-        <div class="col-sm-7 ms-5">
+        <div class="col-sm-7">
             <div class="mt-5">
                 <p id="homepageRobbieFirstText">
                     Mijn naam is Robbie Rudolphie en ik wil je graag
@@ -28,69 +28,78 @@
                 <button class="btn btn-light" id="homepageRobbieButton">Plan een belafspraak</button>
             </div>
         </div>
-        <div class="col-sm-2 mt-2 mb-2">
-            <img class="rounded" src="{% static 'img/rd-robbie-placeholder.png' %}" alt="Potrait owner Robbie" />
+        <div class="col-sm-5 mt-2 mb-2">
+            <img class="img-fluid rounded" src="{% static 'img/rd-robbie-placeholder.png' %}" alt="Potrait owner Robbie" />
         </div>
     </div>
 </div>
-<div class="container">
+<div class="container-fluid mt-2">
     <div class="row">
-        <div class="col-sm-4">
+        <div class="col-sm-12 text-center bg-dark text-light">
+            <h5 class="mt-2">
+                Diensten
+            </h5>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-3">
             <div class="card mt-2 mb-2">
-                <div class="card-body">
+                <div class="card-body" id="rdDesignHomepageCard">
                     <h1 class="card-title text-center">
                         <i class="bi bi-file-earmark-text"></i>
                     </h1>
                     <p class="card-text text-center">
                         Vergunningstekeningen
                     </p>
-                    <p class="card-text text-center">
-                        Samen zoeken wij uit welke benodigde vergunningen moeten worden aangevraagd. Vervolgens worden de vereisde vergunningstekeningen gerealiseerd.
+                    <p class="card-text text-center d-none d-lg-block">
+                        Samen zoeken wij uit welke benodigde vergunningen moeten worden aangevraagd. Vervolgens worden
+                        de vereisde vergunningstekeningen gerealiseerd.
                     </p>
                 </div>
             </div>
-            <div class="card mt-2 mb-2">
-                <div class="card-body">
-                    <h1 class="card-title text-center">
-                        <i class="bi bi-badge-3d"></i>
-                    </h1>
-                    <p class="card-text text-center">
-                        3D Visualisatie
-                    </p>
-                    <p class="card-text text-center">
-                        Om jou een zo goed mogelijk beeld te geven van het uiteindelijke ontwerp, wordt er een 3D visualisatie gemaakt. Dit kan in de vorm zijn van foto's of filmmateriaal.
-                    </p>
+            </div>
+            <div class="col-sm-3">
+                <div class="card mt-2 mb-2">
+                    <div class="card-body" id="rdDesignHomepageCard">
+                        <h1 class="card-title text-center">
+                            <i class="bi bi-badge-3d"></i>
+                        </h1>
+                        <p class="card-text text-center">
+                            3D Visualisatie
+                        </p>
+                        <p class="card-text text-center d-none d-lg-block">
+                            Om jou een zo goed mogelijk beeld te geven van het uiteindelijke ontwerp, wordt er een 3D
+                            visualisatie gemaakt. Dit kan in de vorm zijn van foto's of filmmateriaal.
+                        </p>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="col-sm-4 text-center">
-            <h2 class="mt-2">
-                Diensten
-            </h2>
-        </div>
-        <div class="col-sm-4 text-center">
+        <div class="col-sm-3 text-center">
             <div class="card mt-2 mb-2">
-                <div class="card-body">
+                <div class="card-body" id="rdDesignHomepageCard">
                     <h1 class="card-title text-center">
                         <i class="bi bi-crop"></i>
                     </h1>
                     <p class="card-text text-center">
                         Splitsingstekening
                     </p>
-                    <p class="card-text text-center">
+                    <p class="card-text text-center d-none d-lg-block">
                         Bent u van plan een gedeelte van uw vastgoedobject te splitsen, dan zijn hier speciale splitsingstekeningen voor nodig. Deze tekeningen moeten voldoen aan de standaarden van het kadaster, waarin ik mij heb gespecialiseerd.
                     </p>
                 </div>
             </div>
+        </div>
+                <div class="col-sm-3 text-center">
+
             <div class="card mt-2 mb-2">
-                <div class="card-body">
+                <div class="card-body" id="rdDesignHomepageCard">
                     <h1 class="card-title text-center">
                         <i class="bi bi-badge-3d"></i>
                     </h1>
                     <p class="card-text text-center">
                         Placeholder
                     </p>
-                    <p class="card-text text-center">
+                    <p class="card-text text-center d-none d-lg-block">
                         lorum ipsum lorum ipsumlorum ipsumlorum ipsumlorum ipsumlorum ipsumlorum ipsumlorum ipsum
                         ipsumlorum psumipsumlorum ipsum
                     </p>
@@ -100,11 +109,6 @@
     </div>
 </div>
 <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
-    <ol class="carousel-indicators">
-        <li data-bs-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
-        <li data-bs-target="#carouselExampleIndicators" data-slide-to="1"></li>
-        <li data-bs-target="#carouselExampleIndicators" data-slide-to="2"></li>
-    </ol>
     <div class="carousel-inner">
         <div class="carousel-item active" id="sliderHomepage" data-bs-interval="3000">
             <img class="d-block w-100" src="{% static 'img/rd-design-placeholder-1.jpg' %}" alt="First slide" />
@@ -117,7 +121,26 @@
         </div>
     </div>
 </div>
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-sm-6">
+            <h1 class="card-title text-center">
+                <i class="bi bi-file-earmark-text"></i>
+            </h1>
+            <p class="card-text text-center">
+                Vergunningstekeningen
+            </p>
+            <p>
+                Bent u van plan een gedeelte van uw vastgoedobject te splitsen, dan zijn hier speciale splitsingstekeningen voor nodig. Deze tekeningen moeten voldoen aan de standaarden van het kadaster, waarin ik mij heb gespecialiseerd.
+            </p>
+        </div>
+        <div class="col-sm-6">
 
+            <img class="d-block w-100" src="{% static 'img/rd-splits-placeholder1.png' %}" alt="Third slide">
+
+        </div>
+    </div>
+</div>
 </body>
 
 {% endblock %}

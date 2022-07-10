@@ -25,8 +25,8 @@
                 <a class="navbar-brand" href="#">
                 <img src="{% static 'img/rd-logo-transparant.png' %}" />
                 </a>
-                <a class="text-light" href="{% url 'rudolphie_design' %}">Home</a>
-                <div class="nav-item dropdown">
+                <a class="text-light d-none d-lg-block" href="{% url 'rudolphie_design' %}">Home</a>
+                <div class="nav-item dropdown d-none d-lg-block">
                     <div class="dropdown-toggle text-light" id="" role="button"
                          data-bs-toggle="dropdown">
                         Diensten
@@ -36,7 +36,7 @@
                         <a class="dropdown-item" href="#">Bouwadvies</a>
                     </div>
                 </div>
-                <div class="nav-item dropdown text-light">
+                <div class="nav-item dropdown d-none d-lg-block text-light">
                     <div class="dropdown-toggle" href="#" id="services1" role="button" data-bs-toggle="dropdown">
                         Portfolio
                     </div>
@@ -44,7 +44,7 @@
                         <a class="dropdown-item" href="#">3D Renders</a>
                     </div>
                 </div>
-                <div class="nav-item dropdown bg-dark text-light">
+                <div class="nav-item dropdown d-none d-lg-block bg-dark text-light">
                     <div class="dropdown-toggle" href="#" id="aboutUs" role="button" data-bs-toggle="dropdown">
                         Contact
                     </div>
@@ -62,57 +62,36 @@
 {% endblock %}
 
 <!-- footer -->
-<footer class="footer bg-light">
+<footer class="footer bg-dark">
     <div class="container">
         <div class="row">
             <div class="col-sm-4 mt-5">
-                <h4>
-                    Contact
-                </h4>
-                <p class="mt-4">
-                    Lorum ipsum makelaars
-                </p>
-                <p>
-                    Van lipsumstraat 100
-                </p>
-                <p>
-                    8021JZ Lorum ipsum
-                </p>
-                <p class="mt-5">
-                    T: 038 - 00 00 00 00
-                </p>
-                <p>
-                    E: lorum@ipsum.nl
-                </p>
-            </div>
-            <div class="col-sm-4 mt-5">
-                <h4>
+                <h5 class="text-light">
                     Social media
-                </h4>
+                </h5>
             </div>
             <div class="col-sm-4 mt-5">
-                <h4>
+                <h5 class="text-light">
                     Navigatie
-                </h4>
+                </h5>
                 <p class="mt-4">
-                    <a class="text-dark" href="{% url 'real_estate_homepage' %}">Home</a>
+                    <a class="text-light" href="">Home</a>
                 </p>
                 <p>
-                    <a class="text-dark" href="{% url 'sale_properties' %}">Huis kopen</a>
+                    <a class="text-light" href="">Huis kopen</a>
                 </p>
                 <p>
-                    <a class="text-dark" href="{% url 'rental_properties' %}">Huis huren</a>
+                    <a class="text-light" href="">Huis huren</a>
                 </p>
                 <p class="mt-5">
-                    <a class="text-dark" href="{% url 'real_estate_services' %}">Diensten</a>
+                    <a class="text-light" href="">Diensten</a>
                 </p>
                 <p>
-                    <a class="text-dark" href="#">Over ons</a>
+                    <a class="text-light" href="#">Over ons</a>
                 </p>
                 <p>
                     <a class="text-dark" href="#">Vacatures</a>
                 </p>
-
             </div>
         </div>
     </div>
