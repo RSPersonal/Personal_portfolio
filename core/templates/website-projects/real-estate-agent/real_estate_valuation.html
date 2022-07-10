@@ -70,10 +70,15 @@
                         <label for="nla" class="form-label">Woonoppervlakte m²</label>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-sm-3">
-                        <input type="text" id="nla" name="nla" size="10" required/>
-                    </div>
+                <div class="col-sm-3">
+                    <input type="text" id="nla" name="nla" size="10" required/>
+                </div>
+                <div class="col-sm-3">
+                    <input type="text" name="typeOfObject" list="typeOfObject">
+                    <datalist id="typeOfObject">
+                        <option value="apartment">
+                        <option value="house">
+                    </datalist>
                 </div>
                 <div class="row">
                     <div class="col-sm-2 mt-3">
@@ -102,6 +107,9 @@
                         <p><i class="bi bi-house-door"></i> Adres: {{ found_property.street }} {{ found_property.housenumber }} {{ found_property.city }} </p>
                         <p>
                             <i class="bi bi-clipboard-data"></i> Prijs aangeboden: € {{ found_property.ask_price }}
+                        </p>
+                        <p>
+                            {{ found_property.type_of_property }}
                         </p>
                     </div>
                     {% endfor %}

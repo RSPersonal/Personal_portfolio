@@ -2,16 +2,20 @@ from website_projects.models import ScrapyPropertyModel
 from core.helpers_and_validators.calculator import calculate_mean_price
 
 
-def get_properties_within_postal_code_range_and_nla_range(postal_code_range: list, nla_range: int, user_input_city: str):
+def get_properties_within_postal_code_range_and_nla_range(postal_code_range: list, user_input_type_object: str, nla_range: int, user_input_city: str):
     """
+    @param user_input_type_object:
     @param user_input_city:  str
     @param nla_range: int
     @param postal_code_range: list
     @return: list of queried properties
     """
+    if not user_input_type_object:
+        user_input_type_object = 'house'
+
     nla_lower_range = nla_range - (float(nla_range) * 0.10)
     nla_higher_range = nla_range + (float(nla_range) * 0.10)
-    properties = ScrapyPropertyModel.objects.filter(city=user_input_city, zipcode__range=(postal_code_range[0], postal_code_range[-1]), woon_oppervlak__range=(nla_lower_range, nla_higher_range))
+    properties = ScrapyPropertyModel.objects.filter(type_of_property=user_input_type_object, city=user_input_city, zipcode__range=(postal_code_range[0], postal_code_range[-1]), woon_oppervlak__range=(nla_lower_range, nla_higher_range))
     return properties
 
 
