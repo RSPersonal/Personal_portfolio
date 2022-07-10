@@ -8,8 +8,7 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/4.2.0/mdb.min.css" rel="stylesheet"/>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300&family=Roboto&display=swap"
-          rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300&family=Roboto&display=swap" rel="stylesheet">
     <!-- Stylesheets -->
     {% load static %}
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css"/>
@@ -25,15 +24,15 @@
                 <a class="navbar-brand" href="#" id="navBarBrand">
                 <img src="{% static 'img/rd-logo-transparant.png' %}" />
                 </a>
-                <a class="text-light d-none d-lg-block" href="{% url 'rudolphie_design' %}">Home</a>
+                <a class="text-light d-none d-lg-block" href="/">Home</a>
                 <div class="nav-item dropdown d-none d-lg-block">
                     <div class="dropdown-toggle text-light" id="" role="button"
                          data-bs-toggle="dropdown">
                         Diensten
                     </div>
                     <div class="dropdown-menu" aria-labelledby="">
-                        <a class="dropdown-item" href="#">Bouwvergunning</a>
-                        <a class="dropdown-item" href="#">Bouwadvies</a>
+                        <a class="dropdown-item" href="#dienstenDiv">Bouwvergunning</a>
+                        <a class="dropdown-item" href="#dienstenDiv">Bouwadvies</a>
                     </div>
                 </div>
                 <div class="nav-item dropdown d-none d-lg-block text-light">
@@ -75,22 +74,13 @@
                     Navigatie
                 </h5>
                 <p class="mt-4">
-                    <a class="text-light" href="">Home</a>
+                    <a class="text-light" href="/">Home</a>
                 </p>
                 <p>
-                    <a class="text-light" href="">Huis kopen</a>
+                    <a class="text-light" href="#dienstenDiv">Diensten</a>
                 </p>
                 <p>
-                    <a class="text-light" href="">Huis huren</a>
-                </p>
-                <p class="mt-5">
-                    <a class="text-light" href="">Diensten</a>
-                </p>
-                <p>
-                    <a class="text-light" href="#">Over ons</a>
-                </p>
-                <p>
-                    <a class="text-dark" href="#">Vacatures</a>
+                    <a class="text-light" href="">Contact</a>
                 </p>
             </div>
         </div>

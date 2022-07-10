@@ -36,11 +36,13 @@
 <div class="container-fluid mt-2">
     <div class="row">
         <div class="col-sm-12 text-center bg-dark text-light">
-            <h5 class="mt-2">
+            <h5 class="mt-2" id="dienstenDiv">
                 Diensten
             </h5>
         </div>
     </div>
+</div>
+<div class="container mt-2">
     <div class="row">
         <div class="col-sm-3">
             <div class="card mt-2 mb-2">
@@ -57,23 +59,23 @@
                     </p>
                 </div>
             </div>
-            </div>
-            <div class="col-sm-3">
-                <div class="card mt-2 mb-2">
-                    <div class="card-body" id="rdDesignHomepageCard">
-                        <h1 class="card-title text-center">
-                            <i class="bi bi-badge-3d"></i>
-                        </h1>
-                        <p class="card-text text-center">
-                            3D Visualisatie
-                        </p>
-                        <p class="card-text text-center d-none d-lg-block">
-                            Om jou een zo goed mogelijk beeld te geven van het uiteindelijke ontwerp, wordt er een 3D
-                            visualisatie gemaakt. Dit kan in de vorm zijn van foto's of filmmateriaal.
-                        </p>
-                    </div>
+        </div>
+        <div class="col-sm-3">
+            <div class="card mt-2 mb-2">
+                <div class="card-body" id="rdDesignHomepageCard">
+                    <h1 class="card-title text-center">
+                        <i class="bi bi-badge-3d"></i>
+                    </h1>
+                    <p class="card-text text-center">
+                        3D Visualisatie
+                    </p>
+                    <p class="card-text text-center d-none d-lg-block">
+                        Om jou een zo goed mogelijk beeld te geven van het uiteindelijke ontwerp, wordt er een 3D
+                        visualisatie gemaakt. Dit kan in de vorm zijn van foto's of filmmateriaal.
+                    </p>
                 </div>
             </div>
+        </div>
         <div class="col-sm-3 text-center">
             <div class="card mt-2 mb-2">
                 <div class="card-body" id="rdDesignHomepageCard">
@@ -84,12 +86,14 @@
                         Splitsingstekening
                     </p>
                     <p class="card-text text-center d-none d-lg-block">
-                        Bent u van plan een gedeelte van uw vastgoedobject te splitsen, dan zijn hier speciale splitsingstekeningen voor nodig. Deze tekeningen moeten voldoen aan de standaarden van het kadaster, waarin ik mij heb gespecialiseerd.
+                        Bent u van plan een gedeelte van uw vastgoedobject te splitsen, dan zijn hier speciale
+                        splitsingstekeningen voor nodig. Deze tekeningen moeten voldoen aan de standaarden van het
+                        kadaster, waarin ik mij heb gespecialiseerd.
                     </p>
                 </div>
             </div>
         </div>
-                <div class="col-sm-3 text-center">
+        <div class="col-sm-3 text-center">
 
             <div class="card mt-2 mb-2">
                 <div class="card-body" id="rdDesignHomepageCard">
@@ -97,7 +101,7 @@
                         <i class="bi bi-badge-3d"></i>
                     </h1>
                     <p class="card-text text-center">
-                        Placeholder
+                        Bouwvergunning
                     </p>
                     <p class="card-text text-center d-none d-lg-block">
                         lorum ipsum lorum ipsumlorum ipsumlorum ipsumlorum ipsumlorum ipsumlorum ipsumlorum ipsum
@@ -119,20 +123,20 @@
     <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
         <div class="carousel-inner">
             <div class="carousel-item active" id="sliderHomepage" data-bs-interval="3000">
-                <img class="d-block w-100" src="{% static 'img/rd-design-placeholder-1.jpg' %}" alt="First slide"/>
+                <img class="d-block w-100" src="{% static 'img/portfolio-placeholder.png' %}" alt="First slide"/>
             </div>
             <div class="carousel-item" id="sliderHomepage">
-                <img class="d-block w-100" src="{% static 'img/rd-placeholder-2.png'%}" alt="Second slide">
+                <img class="d-block w-100" src="{% static 'img/portfolio-placeholder2.png'%}" alt="Second slide">
             </div>
             <div class="carousel-item" id="sliderHomepage">
-                <img class="d-block w-100" src="{% static 'img/rd-placeholder-3.png' %}" alt="Third slide">
+                <img class="d-block w-100" src="{% static 'img/rd-placeholder-4.png' %}" alt="Third slide">
             </div>
         </div>
     </div>
 </div>
-<div class="container mt-5">
+<div class="container">
     <div class="row">
-        <div class="col-sm-6">
+        <div class="col-sm-6" id="vergunningsTekeningen">
             <h1 class="card-title text-center">
                 <i class="bi bi-file-earmark-text"></i>
             </h1>
@@ -144,9 +148,7 @@
             </p>
         </div>
         <div class="col-sm-6">
-
-            <img class="d-block w-100" src="{% static 'img/rd-splits-placeholder1.png' %}" alt="Third slide">
-
+            <img class="d-block w-100" src="{% static 'img/rd-placeholder-3.png' %}" alt="Third slide">
         </div>
     </div>
 </div>
