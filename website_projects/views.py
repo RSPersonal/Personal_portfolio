@@ -6,6 +6,8 @@ from .models import PropertyModel
 from django.shortcuts import get_object_or_404
 from django.db.models import Max
 from decouple import config
+from core.helpers_and_validators.extraction_helper import extract_postal_code
+from core.helpers_and_validators.valuation_service import get_properties_within_postal_code_range_and_nla_range, get_mean_property_price
 
 
 def projects_overview(request):
@@ -81,8 +83,25 @@ def real_estate_services(request):
 def real_estate_valuation(request):
     context = {'google_places_key': os.getenv('GOOGLE_PLACES_API', config('GOOGLE_PLACES_API'))}
     if request.method == 'POST' and 'searchAddressSubmitButton' in request.POST:
-        user_address_input = request.POST.get('searchAddressInput')
-        print(user_address_input.split(','))
+        # TODO expand test for input of user
+        # TODO test should contain following cases: no input, no found properties, mean price calculation, empty calcualtio call
+        clean_postal_code = extract_postal_code(request.POST.get('postcode'))
+        postal_code_range = requests.get(f"http://postcode.vanvulpen.nl/afstand/{clean_postal_code}/{2000}/").json()
+
+        user_input_nla = int(request.POST.get('nla'))
+        user_input_city = request.POST.get('locality')
+        user_input_type_of_object = request.POST.get('typeOfObject')
+        queried_properties = get_properties_within_postal_code_range_and_nla_range(postal_code_range, user_input_type_of_object, user_input_nla, user_input_city)
+        calculated_mean_property_price = get_mean_property_price(queried_properties)
+
+        if len(queried_properties) > 0:
+            context['found_objects'] = len(queried_properties)
+        if calculated_mean_property_price:
+            context['final_calculated_mean_price'] = calculated_mean_property_price
+        else:
+            context['final_calculated_mean_price'] = 0
+        context['found_properties'] = queried_properties
+        context['user_input_postal_code'] = clean_postal_code
 
     return render(request, 'website-projects/real-estate-agent/real_estate_valuation.html', context=context)
 
@@ -90,3 +109,7 @@ def real_estate_valuation(request):
 def real_estate_sale_service(request):
     context = {}
     return render(request, 'website-projects/real-estate-agent/real_estate_sale_service.html', context=context)
+
+
+def rudolphie_design(request):
+    return render(request, 'website-projects/rudolphie-design/rudolphie_design_homepage.html')

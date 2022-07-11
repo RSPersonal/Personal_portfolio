@@ -6,7 +6,7 @@ def calculate_stock_profit(price_bought: float, current_market_price: float, qua
     @param price_bought: float
     @param current_market_price: float
     @param quantity: float
-    @return:
+    @return: calculated profit
     """
     return np.subtract((current_market_price * quantity), (price_bought * quantity))
 
@@ -40,3 +40,11 @@ def calculate_portfolio_profit_in_percentage(amount_invested: float, profit: flo
     """
 
     return round(np.divide(profit, amount_invested) * 100, 2)
+
+
+def calculate_mean_price(prices: list):
+    """
+    @param prices: list
+    @return: mean price from list
+    """
+    return np.mean(prices)
