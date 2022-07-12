@@ -5,118 +5,134 @@
 <div class="container">
     <div class="row">
         <div class="col-sm-7">
-            <div>
-                <p id="homepageRobbieFirstText">
-                    Mijn naam is Robbie Rudolphie en ik wil je graag
-                    meenemen in mijn passie voor de bouw en ontwerpen.
+            <div id="mainTextHomepage">
+                <h1><b>Haal het maximale uit je gebouw. <br/> Ontdek de mogelijkheden met Rudolphie Design.</b></h1>
+                <h4>
+                    Wij zijn een bouwkundig teken- en adviesbureau dat vastgoedondernemers ondersteund bij het uitwerken
+                    van hun vastgoedprojecten van ontwerp tot vergunning.
+                </h4>
+                <div class="row">
+                    <div class="col-sm-4">
+                        <button class="btn btn-light" id="homepageRobbieButton">Plan een belafspraak</button>
 
-                </p>
-                <p id="homepageRobbieText">
-                    Op jonge leeftijd werd ik al bij de bouw betrokken, door de vele zelfstandige ondernemers in mijn
-                    familie. Door de diverse specialismes kreeg ik van iedereen wat mee en was het een logische keuze om
-                    bouwkunde te gaan studeren. Op jonge leeftijd was ik al graag creatief bezig, zo tekende ik
-                    dagelijks en
-                    was ik graag bezig met bouwen. Hierbij kwam mijn precisie en perfectionisme naar boven.
-                </p>
-                <p id="homepageRobbieText">
-                    Na het behalen van de Bachelor bouwkunde, ben ik de echte arbeidsmarkt gaan betreden. Na het opdoen
-                    van meerdere
-                    werkervaringen, heb ik de stap gezet om als ondernemer aan de slag te gaan.
-
-                    Benieuwd naar wat wij voor elkaar kunnen betekenen? Plan dan vooral een afspraak met mij in!
-                </p>
-                <button class="btn btn-light" id="homepageRobbieButton">Plan een belafspraak</button>
+                    </div>
+                    <div class="col-sm-4">
+                        <a class="btn btn-light" href="#dienstenDiv">Bekijk diensten </a>
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="col-sm-5 mt-2 mb-2">
-            <img class="img-fluid rounded" id="logoHomepageRd" src="{% static 'img/rd-robbie-placeholder.png' %}" alt="Potrait owner Robbie" />
+        <div class="col-sm-5 mt-2 mb-2" id="">
+            <img class="img-fluid" id="logoHomepageRd" src="{% static 'img/rd-robbie-placeholder.png' %}"
+                 alt="Potrait owner Robbie"/>
         </div>
     </div>
 </div>
-<div class="container-fluid mt-2">
+<div class="container-fluid bg-light">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12 text-center text-dark" id="serviceHomepageRd">
+                <h2 class="mt-2" id="dienstenDiv">
+                    <b>Diensten</b>
+                </h2>
+                <p class="text-center" id="serviceTextHomepageRd">
+                    Om het maximale uit je gebouw te halen bieden wij verschillende diensten aan om de mogelijkheden van
+                    jouw gebouw in kaart te brengen.
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="container mt-2">
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="card mt-2 mb-2">
+                    <div class="card-body" id="rdDesignHomepageCard">
+                        <h1 class="card-title text-center">
+                            <i class="bi bi-file-earmark-text"></i>
+                        </h1>
+                        <p class="card-text text-center">
+                            Vergunningstekeningen
+                        </p>
+                        <p class="card-text text-center d-none d-lg-block">
+                            Samen zoeken wij uit welke benodigde vergunningen moeten worden aangevraagd. Vervolgens
+                            worden
+                            de vereisde vergunningstekeningen gerealiseerd.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="card mt-2 mb-2">
+                    <div class="card-body" id="rdDesignHomepageCard">
+                        <h1 class="card-title text-center">
+                            <i class="bi bi-badge-3d"></i>
+                        </h1>
+                        <p class="card-text text-center">
+                            3D Visualisatie
+                        </p>
+                        <p class="card-text text-center d-none d-lg-block">
+                            Om jou een zo goed mogelijk beeld te geven van het uiteindelijke ontwerp, wordt er een 3D
+                            visualisatie gemaakt. Dit kan in de vorm zijn van foto's of filmmateriaal.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 text-center">
+                <div class="card mt-2 mb-2">
+                    <div class="card-body" id="rdDesignHomepageCard">
+                        <h1 class="card-title text-center">
+                            <i class="bi bi-crop"></i>
+                        </h1>
+                        <p class="card-text text-center">
+                            Splitsingstekening
+                        </p>
+                        <p class="card-text text-center d-none d-lg-block">
+                            Bent u van plan een gedeelte van uw vastgoedobject te splitsen, dan zijn hier speciale
+                            splitsingstekeningen voor nodig. Deze tekeningen moeten voldoen aan de standaarden van het
+                            kadaster, waarin ik mij heb gespecialiseerd.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 text-center">
+                <div class="card mt-2 mb-2">
+                    <div class="card-body" id="rdDesignHomepageCard">
+                        <h1 class="card-title text-center">
+                            <i class="bi bi-badge-3d"></i>
+                        </h1>
+                        <p class="card-text text-center">
+                            Bouwvergunning
+                        </p>
+                        <p class="card-text text-center d-none d-lg-block">
+                            lorum ipsum lorum ipsumlorum ipsumlorum ipsumlorum ipsumlorum ipsumlorum ipsumlorum ipsum
+                            ipsumlorum psumipsumlorum ipsum
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div id="serviceSpanHidden">
+                <span hidden ></span>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container">
     <div class="row">
-        <div class="col-sm-12 text-center bg-dark text-light">
-            <h5 class="mt-2" id="dienstenDiv">
-                Diensten
-            </h5>
+        <div class="col-sm-7">
+            <img class="img-fluid" id="aboutUsImage" src="{% static 'img/stockphoto-2.png' %}"
+                 alt="Photo of keychain in hand"/>
         </div>
-    </div>
-</div>
-<div class="container mt-2">
-    <div class="row">
-        <div class="col-sm-3">
-            <div class="card mt-2 mb-2">
-                <div class="card-body" id="rdDesignHomepageCard">
-                    <h1 class="card-title text-center">
-                        <i class="bi bi-file-earmark-text"></i>
-                    </h1>
-                    <p class="card-text text-center">
-                        Vergunningstekeningen
-                    </p>
-                    <p class="card-text text-center d-none d-lg-block">
-                        Samen zoeken wij uit welke benodigde vergunningen moeten worden aangevraagd. Vervolgens worden
-                        de vereisde vergunningstekeningen gerealiseerd.
-                    </p>
-                </div>
+        <div class="col-sm-5" id="aboutRdDesign">
+                <h3><b>Over Rudolphie Design.</b></h3>
+                <p>
+                    Wij zijn er om de mogelijkheden van jouw gebouw in kaart te brengen, zodat we samen de beste keuzes kunnen maken om het maximale uit je gebouw te halen.
+                </p>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <a class="btn btn-light" href="#">Meer over mij</a>
+                    </div>
             </div>
         </div>
-        <div class="col-sm-3">
-            <div class="card mt-2 mb-2">
-                <div class="card-body" id="rdDesignHomepageCard">
-                    <h1 class="card-title text-center">
-                        <i class="bi bi-badge-3d"></i>
-                    </h1>
-                    <p class="card-text text-center">
-                        3D Visualisatie
-                    </p>
-                    <p class="card-text text-center d-none d-lg-block">
-                        Om jou een zo goed mogelijk beeld te geven van het uiteindelijke ontwerp, wordt er een 3D
-                        visualisatie gemaakt. Dit kan in de vorm zijn van foto's of filmmateriaal.
-                    </p>
-                </div>
-            </div>
-        </div>
-        <div class="col-sm-3 text-center">
-            <div class="card mt-2 mb-2">
-                <div class="card-body" id="rdDesignHomepageCard">
-                    <h1 class="card-title text-center">
-                        <i class="bi bi-crop"></i>
-                    </h1>
-                    <p class="card-text text-center">
-                        Splitsingstekening
-                    </p>
-                    <p class="card-text text-center d-none d-lg-block">
-                        Bent u van plan een gedeelte van uw vastgoedobject te splitsen, dan zijn hier speciale
-                        splitsingstekeningen voor nodig. Deze tekeningen moeten voldoen aan de standaarden van het
-                        kadaster, waarin ik mij heb gespecialiseerd.
-                    </p>
-                </div>
-            </div>
-        </div>
-        <div class="col-sm-3 text-center">
-
-            <div class="card mt-2 mb-2">
-                <div class="card-body" id="rdDesignHomepageCard">
-                    <h1 class="card-title text-center">
-                        <i class="bi bi-badge-3d"></i>
-                    </h1>
-                    <p class="card-text text-center">
-                        Bouwvergunning
-                    </p>
-                    <p class="card-text text-center d-none d-lg-block">
-                        lorum ipsum lorum ipsumlorum ipsumlorum ipsumlorum ipsumlorum ipsumlorum ipsumlorum ipsum
-                        ipsumlorum psumipsumlorum ipsum
-                    </p>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="row">
-    <div class="col-sm-12 text-center bg-dark text-light">
-        <h5 class="mt-2">
-            Portfolio
-        </h5>
     </div>
 </div>
 <div class="">
