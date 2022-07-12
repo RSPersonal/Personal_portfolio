@@ -81,7 +81,7 @@
                     <div class="col-sm-3 mt-3">
                         <label for="biddingPercentage" class="form-label">Bied percentage %</label>
                         <br>
-                        <input type="number" id="biddingPercentage" name="biddingPercentage" size="5"/>
+                        <input type="number" id="biddingPercentage" name="biddingPercentage" size="5" onclick=""/>
                     </div>
                 </div>
                 <div class="row">
@@ -95,12 +95,17 @@
                 </div>
             </form>
             {% if final_calculated_mean_price > 0 %}
-            <div class="col-sm-12 text-center">
+            <div class="col-sm-10 text-center">
                 <h5 id="meanPrice">
                     € {{ final_calculated_mean_price }}
                 </h5>
                 <p>Geschatte marktwaarde op basis van {{ found_objects }} gevonden objecten in de straal van 2000m van
                     postcode {{ user_input_postal_code }}</p>
+            </div>
+            <div class="col-sm-2">
+                <label for="bidPercentageButton" class="form-label"></label>
+                <br>
+                <button class="btn " id="bidPercentageButton" name="percentageButton">Click me</button>
             </div>
             <div class="col-sm-6">
                 <a class="btn btn-light mb-2" data-bs-toggle="collapse" href="#showFoundObjects" role="button"
