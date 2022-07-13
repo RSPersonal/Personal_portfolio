@@ -8,7 +8,8 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/4.2.0/mdb.min.css" rel="stylesheet"/>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300&family=Roboto&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300&family=Roboto&display=swap"
+          rel="stylesheet">
     <!-- Stylesheets -->
     {% load static %}
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css"/>
@@ -20,38 +21,38 @@
 <body>
 <header>
     <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top" id="rdNav">
-            <div class="container">
-                <a class="navbar-brand" href="#" id="navBarBrand">
+        <div class="container">
+            <a class="navbar-brand" href="#" id="navBarBrand">
                 <img src="{% static 'img/rd-logo-transparant.png' %}" height="50px"/>
-                </a>
-                <a class="text-dark d-none d-lg-block" href="/">Home</a>
-                <div class="nav-item dropdown d-none d-lg-block">
-                    <div class="dropdown-toggle text-dark" id="" role="button"
-                         data-bs-toggle="dropdown">
-                        Diensten
-                    </div>
-                    <div class="dropdown-menu" aria-labelledby="">
-                        <a class="dropdown-item" href="#dienstenDiv">Bouwvergunning</a>
-                        <a class="dropdown-item" href="#dienstenDiv">Bouwadvies</a>
-                    </div>
+            </a>
+            <a class="text-dark d-none d-lg-block" href="/">Home</a>
+            <div class="nav-item dropdown d-none d-lg-block">
+                <div class="dropdown-toggle text-dark" id="" role="button"
+                     data-bs-toggle="dropdown">
+                    Diensten
                 </div>
-                <div class="nav-item dropdown d-none d-lg-block text-dark">
-                    <div class="dropdown-toggle" href="#" id="services1" role="button" data-bs-toggle="dropdown">
-                        Portfolio
-                    </div>
-                    <div class="dropdown-menu text-dark" aria-labelledby="woningAanbod1">
-                        <a class="dropdown-item" href="#">3D Renders</a>
-                    </div>
-                </div>
-                <div class="nav-item dropdown d-none d-lg-block text-dark">
-                    <div class="dropdown-toggle" href="#" id="aboutUs" role="button" data-bs-toggle="dropdown">
-                        Contact
-                    </div>
-                    <div class="dropdown-menu" aria-labelledby="woningAanbod1">
-                        <a class="dropdown-item" href="#">Plan een bel afspraak</a>
-                    </div>
+                <div class="dropdown-menu" aria-labelledby="">
+                    <a class="dropdown-item" href="#dienstenDiv">Bouwvergunning</a>
+                    <a class="dropdown-item" href="#dienstenDiv">Bouwadvies</a>
                 </div>
             </div>
+            <div class="nav-item dropdown d-none d-lg-block text-dark">
+                <div class="dropdown-toggle" href="#" id="services1" role="button" data-bs-toggle="dropdown">
+                    Portfolio
+                </div>
+                <div class="dropdown-menu text-dark" aria-labelledby="woningAanbod1">
+                    <a class="dropdown-item" href="#">3D Renders</a>
+                </div>
+            </div>
+            <div class="nav-item dropdown d-none d-lg-block text-dark">
+                <div class="dropdown-toggle" href="#" id="aboutUs" role="button" data-bs-toggle="dropdown">
+                    Contact
+                </div>
+                <div class="dropdown-menu" aria-labelledby="woningAanbod1">
+                    <a class="dropdown-item" href="#">Plan een bel afspraak</a>
+                </div>
+            </div>
+        </div>
     </nav>
 </header>
 
@@ -64,13 +65,15 @@
 <footer class="footer bg-dark">
     <div class="container">
         <div class="row">
-            <div class="col-sm-5 contactAllFooter">
-                <img src="{% static 'img/rd-logo-transparant.png' %}" height="80px"/>
-                <p class="text-light mt-2 contactFooter">
+            <div class="col-sm-4 contactAllFooter">
+                <h4 class="text-light">
+                    <b>Contact</b>
+                </h4>
+                <p class="text-light">
                     Gravure 4
                     <br/>7942 NL, Meppel
                 </p>
-                <p  class="text-light mt-2 contactFooter">
+                <p class="text-light mt-2 contactFooter">
                     Tel: 06 - 40683438
                     <br/>E-mail:
                     <br/>KvK:
@@ -79,7 +82,7 @@
                     Socials placeholder
                 </p>
             </div>
-            <div class="col-sm-3 navigationFooter">
+            <div class="col-sm-4 navigationFooter">
                 <h4 class="text-light">
                     <b>Navigatie</b>
                 </h4>
@@ -93,9 +96,14 @@
                     <a class="text-light" href="">Contact</a>
                 </p>
             </div>
-                    <div class="serviceSpanHidden">
-            <span hidden></span>
-        </div>
+            <div class="col-sm-4 navigationFooter">
+                <h4 class="text-light">
+                    <b>Downloads</b>
+                </h4>
+            </div>
+            <div class="serviceSpanHidden">
+                <span hidden></span>
+            </div>
         </div>
     </div>
 </footer>
