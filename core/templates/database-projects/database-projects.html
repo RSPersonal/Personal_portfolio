@@ -46,11 +46,28 @@
         <div class="col-sm-6">
             <div class="card mb-2">
                 <div class="card-body">
-                    <h2 class="card-title">Company car mileage registration</h2>
-                    <p>Placeholder</p>
-                    <a class="btn btn-primary" href="#">Go to second project</a>
+                    <h2 class="card-title">Real estate valuation tool<i class="bi bi-bar-chart-line-fill " width="32"></i></h2>
+                    <div class="row">
+                        <div class="col-12">
+                            <p>This idea came from the fact that most real estate agents offer a so-called "free" valuation for your house. In the end it always came down to that you still needed to send a request for a valuation to them, and then they would come by and valuate your house.
+
+                            <br/><br/>To me this felt like a chance for them to sale additionally services like a proposal to sale your house. I just want to know roughly what my house is worth, so that was the start of this whole idea.
+
+                                <br/><br/>Current features are:
+                            <ol>
+                                <li>Scrape data from funda.nl for sold houses</li>
+                                <li>Save scraped data to database via pipeline</li>
+                                <li>Get postal code range from external API tool called http://postcode.vanvulpen.nl/</li>
+                                <li>Search for properties in postal code range based on radius (wip)</li>
+                                <li>Calculate mean price of found properties</li>
+                                <li>Ability to change the price based on user input bid percentage (wip)</li>
+                            </ol>
+                            </p>
+                        </div>
+                    </div>
+                    <p class="card-text"></p>
+                    <a class="btn btn-primary" href="{% url 'real_estate_valuation' %}">Go to valuation tool</a>
                 </div>
-            </div>
         </div>
     </div>
 </div>

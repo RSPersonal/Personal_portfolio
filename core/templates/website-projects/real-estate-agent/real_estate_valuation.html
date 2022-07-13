@@ -81,7 +81,7 @@
                     <div class="col-sm-3 mt-3">
                         <label for="biddingPercentage" class="form-label">Bied percentage %</label>
                         <br>
-                        <input type="number" id="biddingPercentage" name="biddingPercentage" size="5"/>
+                        <input type="number" id="biddingPercentage" name="biddingPercentage" size="5" onclick=""/>
                     </div>
                 </div>
                 <div class="row">
@@ -95,12 +95,17 @@
                 </div>
             </form>
             {% if final_calculated_mean_price > 0 %}
-            <div class="col-sm-12 text-center">
+            <div class="col-sm-10 text-center">
                 <h5 id="meanPrice">
                     € {{ final_calculated_mean_price }}
                 </h5>
                 <p>Geschatte marktwaarde op basis van {{ found_objects }} gevonden objecten in de straal van 2000m van
                     postcode {{ user_input_postal_code }}</p>
+            </div>
+            <div class="col-sm-2">
+                <label for="bidPercentageButton" class="form-label"></label>
+                <br>
+                <button class="btn " id="bidPercentageButton" name="percentageButton">Click me</button>
             </div>
             <div class="col-sm-6">
                 <a class="btn btn-light mb-2" data-bs-toggle="collapse" href="#showFoundObjects" role="button"
@@ -123,6 +128,7 @@
         </div>
     </div>
 </div>
+<span hidden id="meanPriceJson"> {{ final_calculated_mean_price|json_script:"final_calculated_mean_price" }}</span>
 <script type="text/javascript" src="{% static 'js/website_projects/searchAddress.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/website_projects/priceChanger.js' %}"></script>
 <script src="https://maps.googleapis.com/maps/api/js?key={{google_places_key}}&libraries=places&callback=initAutocomplete"
