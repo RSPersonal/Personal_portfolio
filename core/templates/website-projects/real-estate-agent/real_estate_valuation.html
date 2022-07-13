@@ -129,10 +129,6 @@
     </div>
 </div>
 <span hidden id="meanPriceJson"> {{ final_calculated_mean_price|json_script:"final_calculated_mean_price" }}</span>
-<script>
-      const mydata = JSON.parse(document.getElementById('meanPriceJson').textContent);
-      console.log(mydata);
-</script>
 <script type="text/javascript" src="{% static 'js/website_projects/searchAddress.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/website_projects/priceChanger.js' %}"></script>
 <script src="https://maps.googleapis.com/maps/api/js?key={{google_places_key}}&libraries=places&callback=initAutocomplete"
