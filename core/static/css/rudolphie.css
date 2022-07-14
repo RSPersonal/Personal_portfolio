@@ -105,10 +105,57 @@
 
 
 @media only screen and (max-width: 992px) {
+    .mainTextHomepage {
+        margin-top: 40px;
+    }
+
+    .logoHomeScreenRd {
+        margin: auto;
+    }
+
+    .mainTextHomePageMobileH1 {
+        font-size: 24px;
+    }
+
+    .mainTextHomePageMobileH4 {
+        font-size: 18px;
+    }
+
     .rdDesignHomepageCard {
         height: 130px;
     }
 
+    .buttonsRowHomepage {
+        margin-bottom: 10px;
+    }
+
+    .aboutRdDesign {
+        margin-top: 40px;
+        margin-bottom: 10px;
+    }
+    .homepageRdH3 {
+        font-size: 24px;
+    }
+
+    .contactFooterMain {
+        text-align: center;
+    }
+
+    .contactMeDiv {
+        margin-top: 40px;
+        margin-bottom: 10px;
+    }
+
+    .contactAllFooter {
+        margin-top: 40px;
+    }
+
+    .dienstenDiv {
+        margin-top: 40px;
+    }
+    .serviceHomepageRd {
+        margin-top: 30px;
+    }
     .homepageRobbieFirstText {
         margin-top: 30px;
     }
