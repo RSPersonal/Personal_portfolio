@@ -1,15 +1,19 @@
-let priceField;
+let meanPriceField;
 let percentageField;
 let timesClicked = 0;
 
-percentageButton = document.getElementById("bidPercentageButton")
+const percentageButton = document.getElementById("bidPercentageButton");
 percentageField = document.getElementById("biddingPercentage");
+meanPrice = JSON.parse(document.getElementById("meanPriceJson").textContent);
 
-percentageButton.addEventListener("click", () => {
-    changePriceBasedOnPercentage();
-})
-
+if (percentageButton) {
+    percentageButton.addEventListener("click", () => {
+        changePriceBasedOnPercentage();
+    })
+}
 
 function changePriceBasedOnPercentage() {
-    priceField = document.getElementById("meanPrice").innerHTML = percentageField.value;
+    const convertedInputToPercentage = percentageField.value / 100
+    const newPriceFromCalculation = Math.floor(meanPrice * convertedInputToPercentage) + meanPrice;
+    document.getElementById("meanPrice").innerHTML = "€ " + newPriceFromCalculation.toLocaleString();
 }

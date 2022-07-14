@@ -29,7 +29,7 @@ if (scriptOn) {
         const place = autocomplete.getPlace();
         // returns Meestersweg 4, 7951 BS Staphorst, Netherlands
         let address1 = "";
-        let postcode = "";        
+        let postcode = "";
         for (const component of place.address_components) {
             const componentType = component.types[0];
             switch (componentType) {
