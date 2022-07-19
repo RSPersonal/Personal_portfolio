@@ -101,6 +101,14 @@
                     </div>
                 </div>
             </form>
+            {% if no_objects_found == True %}
+            <div class="col-sm-12 text-center">
+                <h5>
+                    No properties with given parameters found in {{ user_input_city }}
+                </h5>
+                <p></p>
+            </div>
+            {% endif %}
             {% if final_calculated_mean_price > 0 %}
             <div class="col-sm-12 text-center">
                 <h5 id="meanPrice">

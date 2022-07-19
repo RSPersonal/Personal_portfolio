@@ -107,10 +107,11 @@ def real_estate_valuation(request):
             if calculated_mean_property_price:
                 context['final_calculated_mean_price'] = calculated_mean_property_price
             else:
-                context['final_calculated_mean_price'] = 0
+                context['final_calculated_mean_price'] = 0.0
             context['found_properties'] = queried_properties
 
         context['user_input_postal_code'] = clean_postal_code
+        context['user_input_city'] = user_input_city
 
     return render(request, 'website-projects/real-estate-agent/real_estate_valuation.html', context=context)
 
