@@ -4,20 +4,21 @@
 {% block page_content %}
 <div class="container mt-2">
     <div class="row">
-        <div class="col-1 text-left">
+        <div class="col-1 text-left" id="visitorCount">
             <p>Visitor count</p>
             {{ num_visits.visitor_count }}
         </div>
-        <div class="col-sm text-center">
+        <div class="col-sm-10 text-center">
             <h3 class="mt-4">
                 <p>Raphael Sparenberg</p>
             </h3>
             <p>
-                <br/>REAL ESTATE ADVISOR | INTERNATIONAL BUSINESS IT-CONSULTANT ZWOLLE, NEDERLAND +31 (0)6 41237152
+                <br/>SENIOR INTERNATIONAL BUSINESS IT-CONSULTANT ZWOLLE, NEDERLAND +31 (0)6 *
             </p>
         </div>
         <div class="col-sm-1 text-right">
-            <a class="btn btn-primary" href="/nl">NL</a>
+            <a class="btn btn-primary" href="/nl" id="nLButton">NL</a>
+            <button class="btn btn-secondary" href="#" id="hideButton">Hide</button>
         </div>
     </div>
 </div>
@@ -75,19 +76,19 @@
         <!-- Middle column -->
         <!-- Right column -->
         <div class="col-sm-8 text-left">
-            <h5><b>PROFILE</b></h5>
+            <h5><b><i class="bi bi-file-person pe-1"></i>PROFILE</b></h5>
             {% for profile_post in profile_posts %}
             <p>{{ profile_post.post }}</p>
             {% endfor %}
-            <h5><b>WORK EXPERIENCE</b></h5>
+            <h5><b><i class="bi bi-pencil-square pe-1"></i>WORK EXPERIENCE</b></h5>
             <p>
-                <b>International Business IT-Consultant | Real Estate Advisor, KATE Innovations B.V., Utrecht</b>
+                <b>Senior International Business IT-Consultant, KATE Innovations B.V., Utrecht</b>
                 <br/>november 2020- until now
             <ul>
-                <li>International project management</li>
-                <li>Facilitate training in software packages</li>
+                <li>International IT project management</li>
                 <li>Implementing and managing complex software solutions</li>
-                <li>Translating business cases into technical features/solutions</li>
+                <li>Translating business requirements into technical features/solutions</li>
+                <li>Enterprise consultant</li>
             </ul>
             </p>
             <p>
@@ -109,7 +110,7 @@
             </p>
             <div class="row">
                 <div class="col-sm-8 text-left">
-                    <h5><b>EDUCATION & TECHNICAL</b></h5>
+                    <h5><b><i class="bi bi-book-half pe-1"></i>EDUCATION & TECHNICAL</b></h5>
                     <p>
                         <b>Crash course PHP, KATE Innovations, Utrecht</b>
                         <br/>december 2020 — march 2021
@@ -207,4 +208,5 @@
         </div>
     </div>
 </div>
+<script type="text/javascript" src="{% static 'js/homepage/hideForResume.js' %}"></script>
 {% endblock %}

@@ -16,7 +16,7 @@
 <!-- Navigation -->
 <body class="d-flex flex-column h-100">
 <header>
-    <nav class="navbar navbar-expand-md navbar-light bg-light sticky-top">
+    <nav class="navbar navbar-expand-md navbar-light bg-light sticky-top" id="navBarHomepageRs">
         <div class="container-fluid justify-content-between">
             <a class="text-dark" href="{% url 'homepage_en' %}">Curriculum</a>
             <a class="text-dark" href="{% url 'api_overview' %}">API Projects/Scripts</a>
@@ -48,7 +48,7 @@
 {% block page_content %}
 {% endblock page_content %}
 <!-- footer -->
-<footer class="footer fixed-bottom">
+<footer class="footer">
     <div class="row text-center">
         <div class="col-12">
             <h6 class="pt-10">© Copyright owned by Raphael Sparenberg 2022</h6>
