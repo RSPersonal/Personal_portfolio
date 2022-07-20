@@ -98,7 +98,7 @@ if DEVELOPMENT_MODE is True:
             'NAME': os.getenv("DB_DATABASE", config("DB_DATABASE")),
             'USER': os.getenv("DB_USERNAME", config("DB_USERNAME")),
             'PASSWORD': os.getenv("DB_PASSWORD", config("DB_PASSWORD")),
-            'HOST': os.getenv("DB_HOST", config("DB_HOST")),
+            'HOST': os.getenv("DB_DOCKER_HOST", config("DB_DOCKER_HOST")),
             'PORT': os.getenv("DB_PORT", config("DB_PORT")),
         }
     }
