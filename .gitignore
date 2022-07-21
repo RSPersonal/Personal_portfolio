@@ -11,6 +11,8 @@ env/
 localenv/
 staticfiles/
 funda-scraper/
+app/
+data/
 
 # Created by https://www.toptal.com/developers/gitignore/api/pycharm
 # Edit at https://www.toptal.com/developers/gitignore?templates=pycharm
