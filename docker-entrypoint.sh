@@ -1,15 +1,16 @@
 #!/bin/sh
-set -e
+if [ "$DATABASE" = "postgres" ]
+then
+    echo "Waiting for postgres..."
 
-until psql "$DATABASE_URL" -c '\l,'; do
-  >&2 echo "Postgres is unavailable - sleeping"
-  sleep 1
-done
+    while ! nc -z $SQL_HOST $SQL_PORT; do
+      sleep 0.1
+    done
 
->&2 echo "Postgres is up - continuing"
-
-if [ "x$DJANGO_MANAGEPY_MIGRATE" = 'xon' ]; then
-    python manage.py migrate --noinput
+    echo "PostgreSQL started"
 fi
+
+python manage.py flush --no-input
+python manage.py migrate
 
 exec "$@"

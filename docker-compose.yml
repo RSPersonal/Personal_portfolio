@@ -27,3 +27,5 @@ services:
       - POSTGRES_PASSWORD='postgres'
     depends_on:
       - db
+    env_file:
+      - ./.env.dev

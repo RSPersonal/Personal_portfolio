@@ -1,4 +1,4 @@
-.env
+.env.prod
 info.txt
 *.pyc
 *.pyo
