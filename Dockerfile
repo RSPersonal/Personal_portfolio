@@ -61,4 +61,4 @@ USER ${APP_USER}:${APP_USER}
 #ENTRYPOINT ["/code/docker-entrypoint.sh"]
 
 # Start uWSGI
-CMD ["gunicorn", "--bind", ":8000", "--workers", "3", "mysite.wsgi:application"]
+CMD ["gunicorn", "--bind", ":8000", "--workers", "3", "core.wsgi:application"]
