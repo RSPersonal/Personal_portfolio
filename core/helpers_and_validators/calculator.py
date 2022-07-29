@@ -28,7 +28,6 @@ def calculate_profit_in_percentage(buy_price: float, quantity: float, profit: fl
     @return: profit / (buy_price * quantity)
     """
     calculated_total_amount_invested = calculate_total_amount_invested(buy_price, quantity)
-
     return round(np.divide(profit, calculated_total_amount_invested) * 100, 2)
 
 

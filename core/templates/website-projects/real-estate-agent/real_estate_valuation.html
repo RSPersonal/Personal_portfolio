@@ -78,7 +78,9 @@
                     <div class="col-sm-3 mt-3">
                         <label for="radius" class="form-label">Radius</label>
                         <br>
-                        <input type="range" class="form-range" id="radius" name="radius" min="0" max="15000" required/>
+                        <input type="range" class="form-range" id="radius" name="radius" min="0" max="10000" step="500"
+                               onChange="document.getElementById('postalCodeRangeDiv').innerText = document.getElementById('radius').value + ' m'" required/>
+                        <span id="postalCodeRangeDiv">5000 m</span>
                     </div>
                     <div class="col-sm-2 mt-3">
                         <label for="nla" class="form-label">Woonoppervlakte m²</label>
@@ -92,7 +94,7 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-sm-2 mt-3">
+                    <div class="col-sm-2 mt-3 mb-3">
                         <label for="filterSubmitButton" class="form-label"></label>
                         <button type="submit" class="btn btn-primary" id="filterSubmitButton"
                                 name="searchAddressSubmitButton">
