@@ -1,3 +1,5 @@
+v1.5.1--2022-07-31--Changed yahoo connection to marketstack api
+----------------
 v1.5--2022-07-29--Valuation tool, homepage font, file cleanup
 ----------------
 v1.4.10--2022-06-06--Added filter bar on property listing pages

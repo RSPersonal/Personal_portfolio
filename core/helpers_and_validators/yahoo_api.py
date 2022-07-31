@@ -41,7 +41,8 @@ def test_yahoo_api_limit_exceeded():
         test_response_for_connection = requests.request("GET", YAHOO_API_URL, headers=YAHOO_API_HEADERS,
                                                         params=query_string)
         test_response_for_connection_json = test_response_for_connection.json()
-        if 'message' in test_response_for_connection_json and test_response_for_connection_json['message'] == 'Limit Exceeded':
+        if 'message' in test_response_for_connection_json and test_response_for_connection_json['message']\
+                == 'Limit Exceeded':
             return True
         else:
             return False
