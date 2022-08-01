@@ -9,7 +9,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from .models import Portfolio, Positions
 from .forms import PortfolioForm, PositionForm
-from core.helpers_and_validators import calculator, input_validator, yahoo_api
+from core.helpers_and_validators import calculator, input_validator
 from core.core_pdf_generator import core_pdf_generator
 from datetime import datetime
 from core.helpers_and_validators import stock_api
@@ -118,12 +118,12 @@ def portfolio_detail(request, pk):
         data_for_portfolio_chart = []
 
         if not active_connection or limit_exceeded:
-            if yahoo_api.test_yahoo_api_limit_exceeded():
-                limit_exceeded = True
-                messages.add_message(request, messages.INFO,
-                                     'API call limit exceeded. Profit calculation is not correct due to market price is\
-                                     set to 0 in case of api call limit is exceeded.')
-            elif not active_connection:
+            # if yahoo_api.test_yahoo_api_limit_exceeded():
+            #     limit_exceeded = True
+            #     messages.add_message(request, messages.INFO,
+            #                          'API call limit exceeded. Profit calculation is not correct due to market price is\
+            #                          set to 0 in case of api call limit is exceeded.')
+            if not active_connection:
                 messages.add_message(request, messages.INFO, 'No active connection, check if API key is valid.')
 
         if active_connection:
@@ -141,11 +141,9 @@ def portfolio_detail(request, pk):
                     messages.add_message(request, messages.INFO, 'error')
                     break
                 elif input_validator.value(price_from_stock_api) and limit_exceeded is False:
-                    print(price_from_stock_api)
                     position.current_market_price = price_from_stock_api
                     current_market_price_from_api_call = price_from_stock_api
                 else:
-                    print(input_validator.value(price_from_stock_api), limit_exceeded)
                     position.current_market_price = 0
                     current_market_price_from_api_call = 0
 
