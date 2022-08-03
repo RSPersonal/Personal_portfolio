@@ -310,3 +310,42 @@ def download_portfolio_csv(request, request_id: int):
              position.current_market_price, position.position_profit, position.position_profit_in_percentage])
 
     return response
+
+
+def valuation_tool(request):
+    context = {'google_places_key': os.getenv('GOOGLE_PLACES_API', config('GOOGLE_PLACES_API'))}
+    if request.method == 'POST' and 'searchAddressSubmitButton' in request.POST:
+        # TODO expand test for input of user
+        # TODO test should contain following cases: no input, mean price calculation
+        user_input_nla = int(request.POST.get('nla'))
+        user_input_city = request.POST.get('locality')
+        user_input_type_of_object = request.POST.get('typeOfObject')
+        clean_postal_code = extract_postal_code(request.POST.get('postcode'))
+        user_input_radius = int(request.POST.get('radius'))
+        try:
+            postal_code_range = requests.get(
+                f"http://postcode.vanvulpen.nl/afstand/{clean_postal_code}/{user_input_radius}/").json()
+        except ConnectionError as e:
+            sentry_sdk.capture_exception(e)
+            postal_code_range = None
+
+        # Makes no sense to search for properties if we have no postal code range
+        if postal_code_range:
+            queried_properties = get_properties_within_postal_code_range_and_nla_range(postal_code_range,
+                                                                                       user_input_type_of_object,
+                                                                                       user_input_nla, user_input_city)
+            calculated_mean_property_price = get_mean_property_price(queried_properties)
+
+            if len(queried_properties) > 0:
+                context['found_objects'] = len(queried_properties)
+            else:
+                context['no_objects_found'] = True
+            if calculated_mean_property_price:
+                context['final_calculated_mean_price'] = calculated_mean_property_price
+            else:
+                context['final_calculated_mean_price'] = 0.0
+            context['found_properties'] = queried_properties
+
+        context['user_input_postal_code'] = clean_postal_code
+        context['user_input_city'] = user_input_city
+    return render(request, 'database-projects/valuation_tool.html', context=context)
