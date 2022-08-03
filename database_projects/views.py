@@ -9,15 +9,10 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from .models import Portfolio, Positions
 from .forms import PortfolioForm, PositionForm
-from core.helpers_and_validators import calculator, input_validator, yahoo_api
+from core.helpers_and_validators import calculator, input_validator
 from core.core_pdf_generator import core_pdf_generator
 from datetime import datetime
-
-YAHOO_API_URL = "https://yfapi.net/v6/finance/quote"
-querystring = {"symbols": "ASHK"}
-YAHOO_API_HEADERS = {
-    'x-api-key': os.getenv("YAHOO_FINANCE_API", config("YAHOO_FINANCE_API"))
-}
+from core.helpers_and_validators import stock_api
 
 
 # Create your views here
@@ -97,8 +92,8 @@ def stock_tracker_landing_page(request):
 @login_required
 def portfolio_detail(request, pk):
     # General checks for yahoo api calls
-    limit_exceeded = yahoo_api.test_yahoo_api_limit_exceeded()
-    active_connection = yahoo_api.test_yahoo_api_connection()
+    limit_exceeded = False
+    active_connection = stock_api.test_api_connection()
 
     portfolio = Portfolio.objects.get(id=pk)
     position_form = PositionForm()
@@ -123,37 +118,31 @@ def portfolio_detail(request, pk):
         data_for_portfolio_chart = []
 
         if not active_connection or limit_exceeded:
-            if yahoo_api.test_yahoo_api_limit_exceeded():
-                limit_exceeded = True
-                messages.add_message(request, messages.INFO,
-                                     'API call limit exceeded. Profit calculation is not correct due to market price is set to 0 in case of api call limit is exceeded.')
-            elif not active_connection:
+            # if yahoo_api.test_yahoo_api_limit_exceeded():
+            #     limit_exceeded = True
+            #     messages.add_message(request, messages.INFO,
+            #                          'API call limit exceeded. Profit calculation is not correct due to market price is\
+            #                          set to 0 in case of api call limit is exceeded.')
+            if not active_connection:
                 messages.add_message(request, messages.INFO, 'No active connection, check if API key is valid.')
 
         if active_connection:
             for position in positions:
-                key_error = False
-
+                ticker_symbol = position.ticker_name
                 # Get stock data
                 try:
-                    requested_stock_data_json = yahoo_api.get_stock_data(f"{position.ticker_name}")
-                except KeyError as captured_error:
+                    price_from_stock_api = stock_api.get_stock_price(f"{ticker_symbol}")
+                except ConnectionError as captured_error:
                     sentry_sdk.capture_exception(captured_error)
-                    key_error = True
-
-                if limit_exceeded is False and key_error is False:
-                    stock_data_object = requested_stock_data_json["quoteResponse"]["result"][0]
-                else:
-                    stock_data_object = {}
+                    price_from_stock_api = 0
 
                 # Get current market price for profit calculation
-                if limit_exceeded is False and key_error is False and input_validator.no_value(
-                        requested_stock_data_json["quoteResponse"]["result"]):
-                    messages.add_message(request, messages.INFO, requested_stock_data_json["quoteResponse"]["error"])
+                if limit_exceeded is False and input_validator.no_value(price_from_stock_api):
+                    messages.add_message(request, messages.INFO, 'error')
                     break
-                elif input_validator.value(stock_data_object) and limit_exceeded is False and key_error is False:
-                    position.current_market_price = stock_data_object["regularMarketPrice"]
-                    current_market_price_from_api_call = stock_data_object["regularMarketPrice"]
+                elif input_validator.value(price_from_stock_api) and limit_exceeded is False:
+                    position.current_market_price = price_from_stock_api
+                    current_market_price_from_api_call = price_from_stock_api
                 else:
                     position.current_market_price = 0
                     current_market_price_from_api_call = 0
@@ -186,7 +175,7 @@ def portfolio_detail(request, pk):
 
                 # Labels for Portfolio chart
                 if limit_exceeded is False:
-                    labels_for_portfolio_chart.append(stock_data_object["symbol"])
+                    labels_for_portfolio_chart.append(ticker_symbol)
 
                 # Data for Portfolio chart
                 data_for_portfolio_chart.append(position.quantity)
@@ -225,7 +214,8 @@ def portfolio_detail(request, pk):
                 result_stock_data_json = yahoo_api.get_stock_data(f"{user_input_add_form_stock_name}")
 
                 if input_validator.value(result_stock_data_json["quoteResponse"]["result"]) and \
-                        result_stock_data_json["quoteResponse"]["result"][0]["symbol"] == user_input_add_form_stock_name:
+                        result_stock_data_json["quoteResponse"]["result"][0][
+                            "symbol"] == user_input_add_form_stock_name:
                     found_stock = True
                     current_market_price_from_api_call_or_zero = result_stock_data_json["quoteResponse"]["result"][0][
                         "regularMarketPrice"]

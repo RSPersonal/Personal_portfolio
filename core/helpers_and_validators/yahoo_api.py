@@ -3,9 +3,9 @@ import requests
 from decouple import config
 
 YAHOO_API_URL = "https://yfapi.net/v6/finance/quote"
-YAHOO_API_HEADERS = {
-    'x-api-key': os.getenv("YAHOO_FINANCE_API", config("YAHOO_FINANCE_API"))
-}
+# YAHOO_API_HEADERS = {
+#     'x-api-key': os.getenv("YAHOO_FINANCE_API", config("YAHOO_FINANCE_API"))
+# }
 
 
 def test_yahoo_api_connection():
@@ -34,17 +34,18 @@ def test_yahoo_api_limit_exceeded():
         This only test if api call limit is exceeded
         @return: Boolean True or False
         """
-    query_string = {"symbol": "AAPL"}
-    active_connection = test_yahoo_api_connection()
-
-    if active_connection:
-        test_response_for_connection = requests.request("GET", YAHOO_API_URL, headers=YAHOO_API_HEADERS,
-                                                        params=query_string)
-        test_response_for_connection_json = test_response_for_connection.json()
-        if 'message' in test_response_for_connection_json and test_response_for_connection_json['message'] == 'Limit Exceeded':
-            return True
-        else:
-            return False
+    # query_string = {"symbol": "AAPL"}
+    # active_connection = test_yahoo_api_connection()
+    return False
+    # if active_connection:
+    #     test_response_for_connection = requests.request("GET", YAHOO_API_URL, headers=YAHOO_API_HEADERS,
+    #                                                     params=query_string)
+    #     test_response_for_connection_json = test_response_for_connection.json()
+    #     if 'message' in test_response_for_connection_json and test_response_for_connection_json['message']\
+    #             == 'Limit Exceeded':
+    #         return True
+    #     else:
+    #         return False
 
 
 def get_stock_data(user_input_symbol: str):

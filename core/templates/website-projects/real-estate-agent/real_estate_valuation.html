@@ -23,8 +23,15 @@
                 so that was the start of this whole idea.
             </p>
             <p>
-                Features:
-                <br/>
+                Current features are:
+            <ol>
+                <li>Scrape data from funda.nl for sold houses</li>
+                <li>Save scraped data to database via pipeline</li>
+                <li>Get postal code range from external API tool called http://postcode.vanvulpen.nl/</li>
+                <li>Search for properties in postal code range based on radius (wip)</li>
+                <li>Calculate mean price of found properties</li>
+                <li>Ability to change the price based on user input bid percentage.</li>
+            </ol>
             </p>
         </div>
         <div class="row">
@@ -71,7 +78,9 @@
                     <div class="col-sm-3 mt-3">
                         <label for="radius" class="form-label">Radius</label>
                         <br>
-                        <input type="range" class="form-range" id="radius" name="radius" min="0" max="15000" required/>
+                        <input type="range" class="form-range" id="radius" name="radius" min="0" max="10000" step="500"
+                               onChange="document.getElementById('postalCodeRangeDiv').innerText = document.getElementById('radius').value + ' m'" required/>
+                        <span id="postalCodeRangeDiv">5000 m</span>
                     </div>
                     <div class="col-sm-2 mt-3">
                         <label for="nla" class="form-label">Woonoppervlakte m²</label>
@@ -85,7 +94,7 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-sm-2 mt-3">
+                    <div class="col-sm-2 mt-3 mb-3">
                         <label for="filterSubmitButton" class="form-label"></label>
                         <button type="submit" class="btn btn-primary" id="filterSubmitButton"
                                 name="searchAddressSubmitButton">
@@ -94,8 +103,16 @@
                     </div>
                 </div>
             </form>
+            {% if no_objects_found == True %}
+            <div class="col-sm-12 text-center">
+                <h5>
+                    No properties with given parameters found in {{ user_input_city }}
+                </h5>
+                <p></p>
+            </div>
+            {% endif %}
             {% if final_calculated_mean_price > 0 %}
-            <div class="col-sm-10 text-center">
+            <div class="col-sm-12 text-center">
                 <h5 id="meanPrice">
                     € {{ final_calculated_mean_price }}
                 </h5>
@@ -103,14 +120,17 @@
                     postcode {{ user_input_postal_code }}</p>
             </div>
             <div class="col-sm-2">
-                <label for="bidPercentageButton" class="form-label"></label>
-                <br>
-                <button class="btn " id="bidPercentageButton" name="percentageButton">Click me</button>
-            </div>
-            <div class="col-sm-6">
                 <a class="btn btn-light mb-2" data-bs-toggle="collapse" href="#showFoundObjects" role="button"
                    aria-expanded="false" aria-controls="showFoundObjects">Show found objects</a>
-                <div class="collapse mt-3" id="showFoundObjects">
+            </div>
+            <div class="col-sm-3">
+                <label for="bidPercentageButton" class="form-label"></label>
+                <button class="btn" id="bidPercentageButton" name="bidPercentageButton">Show price with bid
+                    percentage
+                </button>
+            </div>
+            <div class="row">
+                <div class="col-sm-6 collapse mt-1" id="showFoundObjects">
                     {% for found_property in found_properties %}
                     <div class="card card-body mt-2">
                         <p><i class="bi bi-house-door"></i> Adres: {{ found_property.street }} {{ found_property.housenumber }} {{ found_property.city }} </p>

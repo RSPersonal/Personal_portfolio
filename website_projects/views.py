@@ -1,13 +1,15 @@
 import os
 
 import requests
+import sentry_sdk
 from django.shortcuts import render
 from .models import PropertyModel
 from django.shortcuts import get_object_or_404
 from django.db.models import Max
 from decouple import config
 from core.helpers_and_validators.extraction_helper import extract_postal_code
-from core.helpers_and_validators.valuation_service import get_properties_within_postal_code_range_and_nla_range, get_mean_property_price
+from core.helpers_and_validators.valuation_service import get_properties_within_postal_code_range_and_nla_range, \
+    get_mean_property_price
 
 
 def projects_overview(request):
@@ -84,32 +86,40 @@ def real_estate_valuation(request):
     context = {'google_places_key': os.getenv('GOOGLE_PLACES_API', config('GOOGLE_PLACES_API'))}
     if request.method == 'POST' and 'searchAddressSubmitButton' in request.POST:
         # TODO expand test for input of user
-        # TODO test should contain following cases: no input, no found properties, mean price calculation, empty calcualtio call
-        clean_postal_code = extract_postal_code(request.POST.get('postcode'))
-        postal_code_range = requests.get(f"http://postcode.vanvulpen.nl/afstand/{clean_postal_code}/{2000}/").json()
-
+        # TODO test should contain following cases: no input, mean price calculation
         user_input_nla = int(request.POST.get('nla'))
         user_input_city = request.POST.get('locality')
         user_input_type_of_object = request.POST.get('typeOfObject')
-        queried_properties = get_properties_within_postal_code_range_and_nla_range(postal_code_range, user_input_type_of_object, user_input_nla, user_input_city)
-        calculated_mean_property_price = get_mean_property_price(queried_properties)
+        clean_postal_code = extract_postal_code(request.POST.get('postcode'))
+        user_input_radius = int(request.POST.get('radius'))
+        try:
+            postal_code_range = requests.get(f"http://postcode.vanvulpen.nl/afstand/{clean_postal_code}/{user_input_radius}/").json()
+        except ConnectionError as e:
+            sentry_sdk.capture_exception(e)
+            postal_code_range = None
 
-        if len(queried_properties) > 0:
-            context['found_objects'] = len(queried_properties)
-        if calculated_mean_property_price:
-            context['final_calculated_mean_price'] = calculated_mean_property_price
-        else:
-            context['final_calculated_mean_price'] = 0
-        context['found_properties'] = queried_properties
+        # Makes no sense to search for properties if we have no postal code range
+        if postal_code_range:
+            queried_properties = get_properties_within_postal_code_range_and_nla_range(postal_code_range,
+                                                                                       user_input_type_of_object,
+                                                                                       user_input_nla, user_input_city)
+            calculated_mean_property_price = get_mean_property_price(queried_properties)
+
+            if len(queried_properties) > 0:
+                context['found_objects'] = len(queried_properties)
+            else:
+                context['no_objects_found'] = True
+            if calculated_mean_property_price:
+                context['final_calculated_mean_price'] = calculated_mean_property_price
+            else:
+                context['final_calculated_mean_price'] = 0.0
+            context['found_properties'] = queried_properties
+
         context['user_input_postal_code'] = clean_postal_code
-
+        context['user_input_city'] = user_input_city
     return render(request, 'website-projects/real-estate-agent/real_estate_valuation.html', context=context)
 
 
 def real_estate_sale_service(request):
     context = {}
     return render(request, 'website-projects/real-estate-agent/real_estate_sale_service.html', context=context)
-
-
-def rudolphie_design(request):
-    return render(request, 'website-projects/rudolphie-design/rudolphie_design_homepage.html')
