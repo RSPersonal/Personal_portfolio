@@ -211,14 +211,13 @@ def portfolio_detail(request, pk):
             found_stock = False
 
             if active_connection and limit_exceeded is False:
-                result_stock_data_json = yahoo_api.get_stock_data(f"{user_input_add_form_stock_name}")
-
-                if input_validator.value(result_stock_data_json["quoteResponse"]["result"]) and \
-                        result_stock_data_json["quoteResponse"]["result"][0][
-                            "symbol"] == user_input_add_form_stock_name:
+                response_stock_data_json = stock_api.get_stock_ticker_symbol(user_input_add_form_stock_name)
+                if input_validator.value(response_stock_data_json) \
+                        and response_stock_data_json == user_input_add_form_stock_name:
                     found_stock = True
-                    current_market_price_from_api_call_or_zero = result_stock_data_json["quoteResponse"]["result"][0][
-                        "regularMarketPrice"]
+                    current_market_price_from_api_call_or_zero = stock_api.get_stock_price(user_input_add_form_stock_name)
+                else:
+                    current_market_price_from_api_call_or_zero = 0
             else:
                 current_market_price_from_api_call_or_zero = 0
 
