@@ -27,10 +27,24 @@ def get_stock_price(user_input_stock_ticker: str):
         response = requests.get(f"{BASE_URL}{ACCESS_KEY}&symbols={user_input_stock_ticker}").json()
         return response['data'][0]['open']
     except ConnectionError as e:
-        print(e)
         return {'connection': 'failed',
                 'error': e}
     except IndexError as e:
-        print(e)
+        return {'connection': 'success',
+                'error': e}
+
+
+def get_stock_ticker_symbol(user_input_stock_ticker: str):
+    """
+    @param user_input_stock_ticker: string
+    @return: string: Ticker name
+    """
+    try:
+        response = requests.get(f"{BASE_URL}{ACCESS_KEY}&symbols={user_input_stock_ticker}").json()
+        return response['data'][0]['symbol']
+    except ConnectionError as e:
+        return {'connection': 'failed',
+                'error': e}
+    except IndexError as e:
         return {'connection': 'success',
                 'error': e}
