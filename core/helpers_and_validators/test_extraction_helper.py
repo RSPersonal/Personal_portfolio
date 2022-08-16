@@ -1,5 +1,5 @@
 import unittest
-from extraction_helper import extract_postal_code
+from .extraction_helper import extract_postal_code
 
 
 class TestExtractionHelper(unittest.TestCase):
