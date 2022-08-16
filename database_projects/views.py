@@ -1,5 +1,6 @@
 import os
 import csv
+import requests
 from datetime import date
 import sentry_sdk
 from django.contrib import messages
@@ -10,6 +11,9 @@ from django.contrib.auth.decorators import login_required
 from .models import Portfolio, Positions
 from .forms import PortfolioForm, PositionForm
 from core.helpers_and_validators import calculator, input_validator
+from core.helpers_and_validators.extraction_helper import extract_postal_code
+from core.helpers_and_validators.valuation_service import get_properties_within_postal_code_range_and_nla_range, \
+    get_mean_property_price
 from core.core_pdf_generator import core_pdf_generator
 from datetime import datetime
 from core.helpers_and_validators import stock_api
