@@ -8,10 +8,13 @@ class TestStockApi(unittest.TestCase):
         self.assertEqual(test_api_connection(), True)
 
     def test_stock_api_get_stock_price(self):
-        self.assertIsInstance(get_stock_price('AAPL'), float)
+        if test_api_connection():
+            self.assertIsInstance(get_stock_price('AAPL'), float)
 
     def test_stock_api_get_stock_ticker_symbol(self):
-        self.assertEqual(get_stock_ticker_symbol('AAPL'), 'AAPL')
+        if test_api_connection():
+            print(test_api_connection())
+            self.assertEqual(get_stock_ticker_symbol('AAPL'), 'AAPL')
 
 
 if __name__ == '__main__':
