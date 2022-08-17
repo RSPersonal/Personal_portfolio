@@ -14,10 +14,7 @@ def test_api_connection():
     """
     try:
         response = requests.get(f"{BASE_URL}{ACCESS_KEY}&symbols=AAPL").json()
-        if check_if_limit_exceeded():
-            return False
-        else:
-            return True
+        return True
     except ConnectionError as e:
         sentry_sdk.capture_exception(e)
         return False

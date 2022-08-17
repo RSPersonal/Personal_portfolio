@@ -13,7 +13,6 @@ class TestStockApi(unittest.TestCase):
 
     def test_stock_api_get_stock_ticker_symbol(self):
         if test_api_connection():
-            print(test_api_connection())
             self.assertEqual(get_stock_ticker_symbol('AAPL'), 'AAPL')
 
 

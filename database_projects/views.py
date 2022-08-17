@@ -41,15 +41,17 @@ def stock_tracker_landing_page(request):
     #  Adding the total profit to correct month.
     current_month = datetime.now()
     current_month_for_data_array = (current_month.month - 1)
+
+    # TODO Write test for adding portfolio and adding the profit to the correct month
     for portfolio in portfolio_or_portfolios:
         try:
-            new_monthly_profit = portfolio.monthly_profit[current_month_for_data_array] = portfolio.total_profit
+            portfolio.monthly_profit[current_month_for_data_array] = portfolio.total_profit
             portfolio.save()
         except KeyError as error:
             sentry_sdk.capture_exception(error)
         except IndexError as error:
             sentry_sdk.capture_exception(error)
-            new_monthly_profit = portfolio.monthly_profit.append(0)
+            portfolio.monthly_profit.append(0)
             portfolio.save()
 
         # Reset the portfolio figures if no active positions
@@ -81,7 +83,6 @@ def stock_tracker_landing_page(request):
             for i in range(0, current_month.month):
                 monthly_profit_array_until_current_month.append(0)
 
-            print(monthly_profit_array_until_current_month)
             cleaned_user_portfolio_name = form.cleaned_data['portfolio_name']
             new_portfolio_entry = Portfolio(portfolio_name=cleaned_user_portfolio_name,
                                             user_id=request.user.id,
@@ -121,86 +122,84 @@ def portfolio_detail(request, pk):
         labels_for_portfolio_chart = []
         data_for_portfolio_chart = []
 
-        if not active_connection or limit_exceeded:
-            if limit_exceeded:
+        if active_connection:
+            if not limit_exceeded:
+                for position in positions:
+                    ticker_symbol = position.ticker_name
+                    # Get stock data
+                    try:
+                        price_from_stock_api = stock_api.get_stock_price(f"{ticker_symbol}")
+                    except KeyError as error:
+                        sentry_sdk.capture_exception(error)
+                        price_from_stock_api = 0
+
+                    # Get current market price for profit calculation
+                    if limit_exceeded is False and input_validator.no_value(price_from_stock_api):
+                        messages.add_message(request, messages.INFO, 'error')
+                        break
+                    elif input_validator.value(price_from_stock_api) and limit_exceeded is False:
+                        position.current_market_price = price_from_stock_api
+                        current_market_price_from_api_call = price_from_stock_api
+                    else:
+                        position.current_market_price = 0
+                        current_market_price_from_api_call = 0
+
+                    # Total amount invested calculation
+                    calculated_total_invested = calculator.calculate_total_amount_invested(position.buy_price,
+                                                                                           position.quantity)
+                    position.amount_invested = calculated_total_invested
+                    calculated_total_amount_invested_in_portfolio += calculated_total_invested
+
+                    # Profit calculation
+                    if position.current_market_price == 0:
+                        calculated_profit = 0
+                    else:
+                        calculated_profit = calculator.calculate_stock_profit(position.buy_price,
+                                                                              current_market_price_from_api_call,
+                                                                              position.quantity)
+                    position.position_profit = round(calculated_profit, 2)
+                    calculated_total_profit_portfolio += calculated_profit
+
+                    # Profit in percentage calculation
+                    calculated_profit_perc = calculator.calculate_profit_in_percentage(position.buy_price,
+                                                                                       position.quantity,
+                                                                                       calculated_profit)
+                    calculated_total_profit_percentage += calculated_profit_perc
+                    position.position_profit_in_percentage = calculated_profit_perc
+
+                    # Total positions
+                    calculated_total_positions += 1
+
+                    # Labels for Portfolio chart
+                    if limit_exceeded is False:
+                        labels_for_portfolio_chart.append(ticker_symbol)
+
+                    # Data for Portfolio chart
+                    data_for_portfolio_chart.append(position.quantity)
+
+                    # Save some to the position model
+                    position.amount_invested = round(calculated_total_invested, 2)
+                    position.position_profit = round(calculated_profit, 2)
+                    position.position_profit_in_percentage = round(calculated_profit_perc, 2)
+                    position.save()
+
+                # Save it to the portfolio object to show later in portfolio overview
+                portfolio.total_positions = calculated_total_positions
+                portfolio.total_amount_invested = calculated_total_amount_invested_in_portfolio
+                portfolio.total_profit = round(calculated_total_profit_portfolio, 2)
+                portfolio.total_profit_percentage = calculator.calculate_portfolio_profit_in_percentage(
+                    calculated_total_amount_invested_in_portfolio, calculated_total_profit_portfolio)
+                portfolio.labels_array = labels_for_portfolio_chart
+                portfolio.data_for_chart_array = data_for_portfolio_chart
+                portfolio.save()
+                context['positions'] = positions
+            else:
                 messages.add_message(request, messages.INFO,
                                      'API call limit exceeded. Profit calculation is not correct due to market price is\
                                      set to 0 in case of api call limit is exceeded.')
-            if not active_connection:
-                messages.add_message(request, messages.INFO, 'No active connection, check if API key is valid.')
-
-        if active_connection:
-            for position in positions:
-                ticker_symbol = position.ticker_name
-                # Get stock data
-                try:
-                    price_from_stock_api = stock_api.get_stock_price(f"{ticker_symbol}")
-                except ConnectionError as captured_error:
-                    sentry_sdk.capture_exception(captured_error)
-                    price_from_stock_api = 0
-
-                # Get current market price for profit calculation
-                if limit_exceeded is False and input_validator.no_value(price_from_stock_api):
-                    messages.add_message(request, messages.INFO, 'error')
-                    break
-                elif input_validator.value(price_from_stock_api) and limit_exceeded is False:
-                    position.current_market_price = price_from_stock_api
-                    current_market_price_from_api_call = price_from_stock_api
-                else:
-                    position.current_market_price = 0
-                    current_market_price_from_api_call = 0
-
-                # Total amount invested calculation
-                calculated_total_invested = calculator.calculate_total_amount_invested(position.buy_price,
-                                                                                       position.quantity)
-                position.amount_invested = calculated_total_invested
-                calculated_total_amount_invested_in_portfolio += calculated_total_invested
-
-                # Profit calculation
-                if position.current_market_price == 0:
-                    calculated_profit = 0
-                else:
-                    calculated_profit = calculator.calculate_stock_profit(position.buy_price,
-                                                                          current_market_price_from_api_call,
-                                                                          position.quantity)
-                position.position_profit = round(calculated_profit, 2)
-                calculated_total_profit_portfolio += calculated_profit
-
-                # Profit in percentage calculation
-                calculated_profit_perc = calculator.calculate_profit_in_percentage(position.buy_price,
-                                                                                   position.quantity,
-                                                                                   calculated_profit)
-                calculated_total_profit_percentage += calculated_profit_perc
-                position.position_profit_in_percentage = calculated_profit_perc
-
-                # Total positions
-                calculated_total_positions += 1
-
-                # Labels for Portfolio chart
-                if limit_exceeded is False:
-                    labels_for_portfolio_chart.append(ticker_symbol)
-
-                # Data for Portfolio chart
-                data_for_portfolio_chart.append(position.quantity)
-
-                # Save some to the position model
-                position.amount_invested = round(calculated_total_invested, 2)
-                position.position_profit = round(calculated_profit, 2)
-                position.position_profit_in_percentage = round(calculated_profit_perc, 2)
-                position.save()
-
-            # Save it to the portfolio object to show later in portfolio overview
-            portfolio.total_positions = calculated_total_positions
-            portfolio.total_amount_invested = calculated_total_amount_invested_in_portfolio
-            portfolio.total_profit = round(calculated_total_profit_portfolio, 2)
-            portfolio.total_profit_percentage = calculator.calculate_portfolio_profit_in_percentage(
-                calculated_total_amount_invested_in_portfolio, calculated_total_profit_portfolio)
-            portfolio.labels_array = labels_for_portfolio_chart
-            portfolio.data_for_chart_array = data_for_portfolio_chart
-            portfolio.save()
-            context['positions'] = positions
-    else:
-        context['active_positions'] = False
+        else:
+            messages.add_message(request, messages.INFO, 'No active connection, check if API key is valid.')
+        context['positions'] = positions
 
     # Adding new positions to database
     if request.method == 'POST' and 'add_position_button' in request.POST:
@@ -218,7 +217,8 @@ def portfolio_detail(request, pk):
                 if input_validator.value(response_stock_data_json) \
                         and response_stock_data_json == user_input_add_form_stock_name:
                     found_stock = True
-                    current_market_price_from_api_call_or_zero = stock_api.get_stock_price(user_input_add_form_stock_name)
+                    current_market_price_from_api_call_or_zero = stock_api.get_stock_price(
+                        user_input_add_form_stock_name)
                 else:
                     current_market_price_from_api_call_or_zero = 0
             else:
