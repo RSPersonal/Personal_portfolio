@@ -28,11 +28,15 @@ def check_if_limit_exceeded():
     Check if usage limit is reached
     @return: bool true if reached, false if not
     """
-    response = requests.get(f"{BASE_URL}{ACCESS_KEY}&symbols=AAPL").json()
-    if response['error']['code'] == 'usage_limit_reached':
+    try:
+        response = requests.get(f"{BASE_URL}{ACCESS_KEY}&symbols=AAPL").json()
+        if response['error']['code'] == 'usage_limit_reached':
+            return True
+        else:
+            return False
+    except ConnectionError as e:
+        sentry_sdk.capture_exception(e)
         return True
-    else:
-        return False
 
 
 def get_stock_price(user_input_stock_ticker: str):

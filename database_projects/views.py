@@ -97,8 +97,8 @@ def stock_tracker_landing_page(request):
 @login_required
 def portfolio_detail(request, pk):
     # General checks for yahoo api calls
-    limit_exceeded = stock_api.check_if_limit_exceeded()
-    active_connection = stock_api.test_api_connection()
+    limit_exceeded = True# stock_api.check_if_limit_exceeded()
+    active_connection = True #stock_api.test_api_connection()
 
     portfolio = Portfolio.objects.get(id=pk)
     position_form = PositionForm()
@@ -131,6 +131,9 @@ def portfolio_detail(request, pk):
                         price_from_stock_api = stock_api.get_stock_price(f"{ticker_symbol}")
                     except KeyError as error:
                         sentry_sdk.capture_exception(error)
+                        price_from_stock_api = 0
+                    except ConnectionError as e:
+                        sentry_sdk.capture_exception(e)
                         price_from_stock_api = 0
 
                     # Get current market price for profit calculation
