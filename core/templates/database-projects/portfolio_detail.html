@@ -2,38 +2,66 @@
 {% block page_content %}
 <div class="container-fluid">
     <div class="row">
-        <div class="col-sm-3">
-            <div class="card border-0 bg-light m-2" id="realEstateCard">
+        <div class="col-sm-6">
+            <div class="card border-0 bg-light m-1">
                 <div class="card-body text-center">
                     <h5>
-                        Daily
+                        {{ portfolio.portfolio_name }}
+                    </h5>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-3">
+            <div class="card border-0 bg-light m-1">
+                <div class="card-body text-center">
+                    <h5>
+                        Daily return
                     </h5>
                 </div>
             </div>
         </div>
         <div class="col-sm-3">
-            <div class="card border-0 bg-light m-2" id="realEstateCard">
+            <div class="card border-0 bg-light m-1">
+                <div class="card-body text-center">
+                    <h5>Overal return</h5>
+                    <p>
+                        € {{ portfolio.total_profit }} | {{ portfolio.total_profit_percentage }} %
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-2">
+            <div class="card border-0 bg-light">
                 <div class="card-body text-center">
                     <h5>
-                        Overal return
+                        Total costs
                     </h5>
                 </div>
             </div>
         </div>
         <div class="col-sm-2">
-            <h6>
-                Portfolio costs
-            </h6>
+            <div class="card border-0 bg-light">
+                <div class="card-body text-center">
+                    <h5>
+                        Placeholder
+                    </h5>
+                </div>
+            </div>
         </div>
         <div class="col-sm-2">
-            <h6>
-                Portfolio value
-            </h6>
-        </div>
-        <div class="col-sm-2">
-            <h6>
-                dividends
-            </h6>
+            <div class="card border-0 bg-light">
+                <div class="card-body text-center">
+                    <h5>
+                        Placeholder
+                    </h5>
+                </div>
+            </div>
         </div>
     </div>
 </div>

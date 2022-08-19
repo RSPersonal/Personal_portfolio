@@ -97,8 +97,9 @@ def stock_tracker_landing_page(request):
 @login_required
 def portfolio_detail(request, pk):
     # General checks for yahoo api calls
-    limit_exceeded = True# stock_api.check_if_limit_exceeded()
-    active_connection = True #stock_api.test_api_connection()
+    limit_exceeded = True   # stock_api.check_if_limit_exceeded()
+    active_connection = True    # stock_api.test_api_connection()
+    development_mode_active = os.getenv("DEBUG", config("DEBUG"))
 
     portfolio = Portfolio.objects.get(id=pk)
     position_form = PositionForm()
@@ -121,6 +122,8 @@ def portfolio_detail(request, pk):
         calculated_total_positions = 0
         labels_for_portfolio_chart = []
         data_for_portfolio_chart = []
+
+        # TODO temp check for development mode, this due to to many api calls and eventually getting an Connection error
 
         if active_connection:
             if not limit_exceeded:
@@ -198,8 +201,8 @@ def portfolio_detail(request, pk):
                 context['positions'] = positions
             else:
                 messages.add_message(request, messages.INFO,
-                                     'API call limit exceeded. Profit calculation is not correct due to market price is\
-                                     set to 0 in case of api call limit is exceeded.')
+                                     'API call limit exceeded. Profit calculation is up to date due to market price is\
+                                     set to last retrieved market price in case of api call limit is exceeded.')
         else:
             messages.add_message(request, messages.INFO, 'No active connection, check if API key is valid.')
         context['positions'] = positions
