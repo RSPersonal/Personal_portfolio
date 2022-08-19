@@ -1,3 +1,4 @@
+import uuid
 from django.db import models
 from django.contrib.auth.models import User
 from django.contrib.postgres.fields import ArrayField
@@ -5,6 +6,12 @@ from django.contrib.postgres.fields import ArrayField
 
 # Create your models here.
 class Portfolio(models.Model):
+    id = models.UUIDField(
+        primary_key=True,
+        default=uuid.uuid4(),
+        unique=True,
+        editable=False
+    )
     portfolio_name = models.CharField(max_length=50)
     created_on = models.DateTimeField(auto_now_add=True)
     user = models.ForeignKey(User, on_delete=models.PROTECT)
@@ -21,6 +28,12 @@ class Portfolio(models.Model):
 
 
 class Positions(models.Model):
+    id = models.UUIDField(
+        primary_key=True,
+        default=uuid.uuid4(),
+        unique=True,
+        editable=False
+    )
     ticker_name = models.CharField(max_length=40)
     buy_price = models.FloatField()
     current_market_price = models.FloatField()

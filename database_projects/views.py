@@ -97,17 +97,16 @@ def stock_tracker_landing_page(request):
 @login_required
 def portfolio_detail(request, pk):
     # General checks for yahoo api calls
-    limit_exceeded = True   # stock_api.check_if_limit_exceeded()
-    active_connection = True    # stock_api.test_api_connection()
+    limit_exceeded = stock_api.check_if_limit_exceeded()
+    active_connection = stock_api.test_api_connection()
     development_mode_active = os.getenv("DEBUG", config("DEBUG"))
 
     portfolio = Portfolio.objects.get(id=pk)
     position_form = PositionForm()
 
-    context = {
-        'position_form': position_form,
-        'portfolio': portfolio
-    }
+    context = {'position_form': position_form, 'portfolio': portfolio,
+               'labels_monthly': ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug', 'Sept', 'Oct', 'Nov',
+                                  'Dec']}
 
     # Lookup if there are any active positions
     if Positions.objects.filter(portfolio=pk).exists():

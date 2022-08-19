@@ -71,57 +71,57 @@
                             <div class="row">
                                 <div class="col-4 text-start d-none d-sm-block" style="width: 50%;">
                                     <script>
-                    var randomNum_{{ portfolio.pk }} = () => Math.floor(Math.random() * (235 - 52 + 1) + 52);
-                    function rgbToHex(r, g, b) {
-                        return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
-                    }
-                    countPositions = {{ portfolio.total_positions|safe }};
+                                        var randomNum_{{ portfolio.pk }} = () => Math.floor(Math.random() * (235 - 52 + 1) + 52);
+                                        function rgbToHex(r, g, b) {
+                                            return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
+                                        }
+                                        countPositions = {{ portfolio.total_positions|safe }};
 
-                    var barColors_{{ portfolio.pk }} = [];
-                    for (var i = 0; i < countPositions; i++) {
-                        randomGeneratedColor = rgbToHex(randomNum_{{ portfolio.pk }}(), randomNum_{{ portfolio.pk }}(), randomNum_{{ portfolio.pk }}());
-                        while (barColors_{{ portfolio.pk }}.includes(randomGeneratedColor)) {
-                            randomGeneratedColor = rgbToHex(randomNum(), randomNum(), randomNum());
-                        }
-                        barColors_{{ portfolio.pk }}.push(randomGeneratedColor);
-                    }
-                    var configPieChart_{{ portfolio.pk }} = {
-                        type: 'pie',
-                        data: {
-                            datasets: [{
-                                data: {{ portfolio.data_for_chart_array|safe }},
-                                backgroundColor: barColors_{{ portfolio.pk }},
-                                label: 'Stock ticker'
-                            }],
-                            labels: {{ portfolio.labels_array|safe }}
-                        },
-                        options: {
-                            responsive: true
-                        }
-                    };
+                                        var barColors_{{ portfolio.pk }} = [];
+                                        for (var i = 0; i < countPositions; i++) {
+                                            randomGeneratedColor = rgbToHex(randomNum_{{ portfolio.pk }}(), randomNum_{{ portfolio.pk }}(), randomNum_{{ portfolio.pk }}());
+                                            while (barColors_{{ portfolio.pk }}.includes(randomGeneratedColor)) {
+                                                randomGeneratedColor = rgbToHex(randomNum(), randomNum(), randomNum());
+                                            }
+                                            barColors_{{ portfolio.pk }}.push(randomGeneratedColor);
+                                        }
+                                        var configPieChart_{{ portfolio.pk }} = {
+                                            type: 'pie',
+                                            data: {
+                                                datasets: [{
+                                                    data: {{ portfolio.data_for_chart_array|safe }},
+                                                    backgroundColor: barColors_{{ portfolio.pk }},
+                                                    label: 'Stock ticker'
+                                                }],
+                                                labels: {{ portfolio.labels_array|safe }}
+                                            },
+                                            options: {
+                                                responsive: true
+                                            }
+                                        };
 
-                    var configBarChart_{{ portfolio.pk }} = {
-                        type: 'line',
-                        data: {
-                            datasets: [{
-                                data: {{ portfolio.monthly_profit|safe }},
-                                backgroundColor: barColors_{{ portfolio.pk }},
-                                fill: false,
-                                label: 'Profit p.m.'
-                            }],
-                            labels: {{ labels_monthly|safe }}
-                        },
-                        options: {
-                            responsive: true,
-                        },
-                    };
+                                        var configBarChart_{{ portfolio.pk }} = {
+                                            type: 'line',
+                                            data: {
+                                                datasets: [{
+                                                    data: {{ portfolio.monthly_profit|safe }},
+                                                    backgroundColor: barColors_{{ portfolio.pk }},
+                                                    fill: false,
+                                                    label: 'Profit p.m.'
+                                                }],
+                                                labels: {{ labels_monthly|safe }}
+                                            },
+                                            options: {
+                                                responsive: true,
+                                            },
+                                        };
 
-                    window.addEventListener('load',  function() {
-                        var ctx1 = document.getElementById('pie-chart{{ portfolio.pk }}').getContext('2d');
-                        window.myPie = new Chart(ctx1, configPieChart_{{ portfolio.pk }});
-                         var ctx2 = document.getElementById('barChart{{ portfolio.pk }}').getContext('2d');
-                        window.myBar = new Chart(ctx2, configBarChart_{{ portfolio.pk }});
-                    });
+                                        window.addEventListener('load',  function() {
+                                            var ctx1 = document.getElementById('pie-chart{{ portfolio.pk }}').getContext('2d');
+                                            window.myPie = new Chart(ctx1, configPieChart_{{ portfolio.pk }});
+                                            var ctx2 = document.getElementById('barChart{{ portfolio.pk }}').getContext('2d');
+                                            window.myBar = new Chart(ctx2, configBarChart_{{ portfolio.pk }});
+                                        });
 
                                     </script>
                                     <canvas id="pie-chart{{ portfolio.pk }}"></canvas>
