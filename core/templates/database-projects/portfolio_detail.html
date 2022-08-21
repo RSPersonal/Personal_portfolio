@@ -140,6 +140,8 @@
                         <div class="col-4 text-start d-none d-sm-block" style="width: 50%;">
                     <span hidden id="portfolioID"> {{ portfolio.id|json_script:"portfolio.id" }}</span>
                     <span hidden id="amountOfPositions"> {{ portfolio.total_positions|json_script:"portfolio.total_positions" }}</span>
+                    <span hidden id="portfolioDailyReturn"></span>
+                    <span hidden id="portfolioOveralReturn"> {{ portfolio.total_profit|json_script:"portfolio.total_profit" }}</span>
                     <script>
                     var portfolioId = JSON.parse(document.getElementById("portfolioID").textContent);
                     var portfolioAttributes = {};
@@ -192,7 +194,7 @@
                             responsive: true
                         }
                     };
-                    console.log(portfolioAttributes);
+
                     window.addEventListener('load',  function() {
                         var ctx1 = document.getElementById('pie-chart{{ portfolio.id }}').getContext('2d');
                         window.myPie = new Chart(ctx1, portfolioAttributes.data.configPieChart);
@@ -230,14 +232,14 @@
             </div>
         </div>
         <div class="col-sm-3">
-            <div class="card border-0 bg-light portfolioDetailsKpiCard">
-                <div class="card-body text-center">
+            <div class="card border-0 bg-success text-white portfolioDetailsKpiCard"  >
+                <div class="card-body text-center" id="overalReturnDiv">
                     <div class="row">
-                        <div class="col-sm-6">
-                            <h2>€ {{ portfolio.total_profit }}</h2>
+                        <div class="col-sm-6" id="overalReturnDivText">
+                            <h3>€ {{ portfolio.total_profit }}</h3>
                             <h6>Overal return</h6>
                         </div>
-                        <div class="col-sm-6 mt-3">
+                        <div class="col-sm-6 mt-3" id="overalReturnDivText">
                             <h2> {{ portfolio.total_profit_percentage }} %</h2>
                         </div>
                     </div>

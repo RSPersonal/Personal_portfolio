@@ -30,7 +30,6 @@ def stock_tracker_landing_page(request):
     # Getting all portfolio's from user
     current_user_id = request.user.id
     portfolio_or_portfolios = Portfolio.objects.filter(user_id=current_user_id)
-    # Getting the position data from portfolio
     context = {}
     portfolio_form = PortfolioForm()
 
@@ -44,6 +43,10 @@ def stock_tracker_landing_page(request):
 
     # TODO Write test for adding portfolio and adding the profit to the correct month
     for portfolio in portfolio_or_portfolios:
+        # Don't execute the save if the id is already stored
+        if portfolio.id_for_chart == '':
+            portfolio.id_for_chart = str(portfolio.id).replace('-', '')
+
         try:
             portfolio.monthly_profit[current_month_for_data_array] = portfolio.total_profit
             portfolio.save()
@@ -63,7 +66,6 @@ def stock_tracker_landing_page(request):
             portfolio.labels_array = []
             portfolio.total_positions = 0
             portfolio.save()
-
         # Get the monthly profits for visualisation
         # try:
         #     response = requests.request('GET', f"http://127.0.0.1:8000/api/v1/chart-data/{portfolio.id}",

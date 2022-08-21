@@ -22,6 +22,7 @@ class Portfolio(models.Model):
     labels_array = ArrayField(models.CharField(max_length=20, default=''))
     data_for_chart_array = ArrayField(models.FloatField(default=0.0))
     monthly_profit = ArrayField(models.FloatField(default=0.0))
+    id_for_chart = models.CharField(max_length=36, blank=True)
 
     def __str__(self):
         return self.portfolio_name
