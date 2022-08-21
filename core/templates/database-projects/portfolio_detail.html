@@ -140,7 +140,7 @@
                         <div class="col-4 text-start d-none d-sm-block" style="width: 50%;">
                     <span hidden id="portfolioID"> {{ portfolio.id|json_script:"portfolio.id" }}</span>
                     <span hidden id="amountOfPositions"> {{ portfolio.total_positions|json_script:"portfolio.total_positions" }}</span>
-                    <span hidden id="portfolioDailyReturn"></span>
+                    <span hidden id="portfolioDailyReturn">{{ portfolio.total_profit|json_script:"portfolio.total_profit" }}</span>
                     <span hidden id="portfolioOveralReturn"> {{ portfolio.total_profit|json_script:"portfolio.total_profit" }}</span>
                     <script>
                     var portfolioId = JSON.parse(document.getElementById("portfolioID").textContent);
@@ -217,14 +217,14 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-sm-3">
-            <div class="card border-0 bg-light portfolioDetailsKpiCard">
-                <div class="card-body text-center">
+            <div class="card border-0 bg-success text-white portfolioDetailsKpiCard">
+                <div class="card-body" id="dailyReturnDiv">
                     <div class="row">
                         <div class="col-sm-6">
                             <h3>€ {{ portfolio.total_profit }}</h3>
-                            <h6>Daily return</h6>
+                            <h6>Performance today</h6>
                         </div>
-                        <div class="col-sm-6 mt-3">
+                        <div class="col-sm-6 mt-3 text-center">
                             <h2> {{ portfolio.total_profit_percentage }} %</h2>
                         </div>
                     </div>
@@ -233,13 +233,13 @@
         </div>
         <div class="col-sm-3">
             <div class="card border-0 bg-success text-white portfolioDetailsKpiCard"  >
-                <div class="card-body text-center" id="overalReturnDiv">
+                <div class="card-body" id="overalReturnDiv">
                     <div class="row">
-                        <div class="col-sm-6" id="overalReturnDivText">
+                        <div class="col-sm-6">
                             <h3>€ {{ portfolio.total_profit }}</h3>
                             <h6>Overal return</h6>
                         </div>
-                        <div class="col-sm-6 mt-3" id="overalReturnDivText">
+                        <div class="col-sm-6 mt-3 text-center">
                             <h2> {{ portfolio.total_profit_percentage }} %</h2>
                         </div>
                     </div>
