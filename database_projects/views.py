@@ -1,5 +1,7 @@
 import os
 import csv
+import random
+
 import requests
 from datetime import date
 import sentry_sdk
@@ -17,6 +19,7 @@ from core.helpers_and_validators.valuation_service import get_properties_within_
 from core.core_pdf_generator import core_pdf_generator
 from datetime import datetime
 from core.helpers_and_validators import stock_api
+from core.helpers_and_validators.iex_api import IexCloudAPI, check_active_connection
 
 
 # Create your views here
@@ -98,9 +101,10 @@ def stock_tracker_landing_page(request):
 
 @login_required
 def portfolio_detail(request, pk):
-    # General checks for yahoo api calls
-    limit_exceeded = stock_api.check_if_limit_exceeded()
-    active_connection = stock_api.test_api_connection()
+    # General checks for api calls
+    limit_exceeded = False  # stock_api.check_if_limit_exceeded()
+    # iex_api = IexCloudAPI('aapl')
+    active_connection = check_active_connection()
     development_mode_active = os.getenv("DEBUG", config("DEBUG"))
 
     portfolio = Portfolio.objects.get(id=pk)
@@ -124,21 +128,29 @@ def portfolio_detail(request, pk):
         labels_for_portfolio_chart = []
         data_for_portfolio_chart = []
 
-        # TODO temp check for development mode, this due to to many api calls and eventually getting an Connection error
 
         if active_connection:
             if not limit_exceeded:
                 for position in positions:
                     ticker_symbol = position.ticker_name
+
                     # Get stock data
-                    try:
-                        price_from_stock_api = stock_api.get_stock_price(f"{ticker_symbol}")
-                    except KeyError as error:
-                        sentry_sdk.capture_exception(error)
-                        price_from_stock_api = 0
-                    except ConnectionError as e:
-                        sentry_sdk.capture_exception(e)
-                        price_from_stock_api = 0
+                    # TODO temp check for development mode, this due to to many api calls and eventually getting an Connection error
+                    if not development_mode_active:
+                        stock_object = IexCloudAPI(ticker_symbol)
+
+                        try:
+                            # price_from_stock_api = stock_api.get_stock_price(ticker_symbol)
+                            price_from_stock_api = stock_object.get_stock_price()
+                        except KeyError as error:
+                            sentry_sdk.capture_exception(error)
+                            price_from_stock_api = 0
+                        except ConnectionError as e:
+                            sentry_sdk.capture_exception(e)
+                            price_from_stock_api = 0
+                    else:
+                        price_from_stock_api = random.randrange(0, 200)
+                        messages.add_message(request, messages.INFO, 'Development mode on, prices are random!')
 
                     # Get current market price for profit calculation
                     if limit_exceeded is False and input_validator.no_value(price_from_stock_api):
@@ -212,6 +224,7 @@ def portfolio_detail(request, pk):
     if request.method == 'POST' and 'add_position_button' in request.POST:
         add_position_form = PositionForm(request.POST)
         if add_position_form.is_valid():
+
             # Getting all the cleaned data for the database entry
             user_input_add_form_stock_name = add_position_form.cleaned_data['ticker_name']
             user_input_add_form_buy_price = add_position_form.cleaned_data['buy_price']
@@ -219,13 +232,14 @@ def portfolio_detail(request, pk):
             user_input_add_form_market = add_position_form.cleaned_data['market']
             found_stock = False
 
+            stock_object = IexCloudAPI(user_input_add_form_stock_name)
+            active_connection = check_active_connection()
             if active_connection and limit_exceeded is False:
-                response_stock_data_json = stock_api.get_stock_ticker_symbol(user_input_add_form_stock_name)
+                response_stock_data_json = stock_object.stock_json
                 if input_validator.value(response_stock_data_json) \
-                        and response_stock_data_json == user_input_add_form_stock_name:
+                        and stock_object.stock_symbol == user_input_add_form_stock_name:
                     found_stock = True
-                    current_market_price_from_api_call_or_zero = stock_api.get_stock_price(
-                        user_input_add_form_stock_name)
+                    current_market_price_from_api_call_or_zero = stock_object.latest_stock_price
                 else:
                     current_market_price_from_api_call_or_zero = 0
             else:
