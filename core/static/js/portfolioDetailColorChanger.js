@@ -1,4 +1,6 @@
 const valuesToCheck = {};
+
+// Portfolio overal return
 valuesToCheck['mainElements'] = [];
 const portfolioOveralReturn = {};
 portfolioOveralReturn['item'] = 'portfolioOveralReturn';
@@ -6,6 +8,7 @@ portfolioOveralReturn['divID'] = 'overalReturnDiv';
 portfolioOveralReturn['value'] = JSON.parse(document.getElementById("portfolioOveralReturn").textContent);
 valuesToCheck.mainElements.push(portfolioOveralReturn);
 
+// Portfolio daily return
 const dailyReturn = {};
 dailyReturn['item'] = 'dailyReturn';
 dailyReturn['divID'] = 'dailyReturnDiv';

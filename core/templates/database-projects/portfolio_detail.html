@@ -4,121 +4,127 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-sm-6">
-            <div class="card border-0 bg-light mt-4">
-                <div class="card-body text-center">
-                    <div class="col-sm-4">
-                        <h3>{{ portfolio.portfolio_name }}</h3>
-                    </div>
-                </div>
-                <div class="col-sm-6">
-                    <!-- Button trigger modal -->
-                    <button type="button" class="btn btn-danger" data-bs-toggle="modal"
-                            data-bs-target="#portfolio_label">
-                        Delete portfolio
-                    </button>
-                    <!-- Modal for deleting the portfolio -->
-                    <div class="modal fade" id="portfolio_label" tabindex="-1" role="dialog"
-                         aria-labelledby="exampleModalLabel"
-                         aria-hidden="true">
-                        <div class="modal-dialog" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="portfolio_label_modal_label">{{ portfolio_name
-                                        }}</h5>
-                                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true"></span>
-                                    </button>
-                                </div>
-                                <div class="modal-body">
-                                    <form name="portfolio_form" method="post">
-                                        {% csrf_token %}
-                                        <p>
-                                            Are you sure you want to delete the portfolio?
-                                        </p>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                                                No
-                                            </button>
-                                            <input class="btn btn-primary" name="delete_button" type="submit"
-                                                   value="Yes"/>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-6">
-                    <div class="btn-group">
-                        <!-- Button trigger modal -->
-                        <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                                data-bs-target="#add_position_modal">
-                            Add position
-                        </button>
-                        <!-- Modal for adding position -->
-                        <div class="modal fade" id="add_position_modal" tabindex="" role="dialog"
-                             aria-labelledby="exampleModalLabel"
-                             aria-hidden="true">
-                            <div class="modal-dialog" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="add_position_modal_'label">{{ portfolio_name
-                                            }}</h5>
-                                        <button type="button" class="close" data-bs-dismiss="modal"
-                                                aria-label="Close">
-                                            <span aria-hidden="true"></span>
-                                        </button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <div class="row">
-                                            <div class="col-sm-4">
-                                                <p>
-                                                    Stock ticker:
-                                                </p>
-                                                <p class="pt-2">
-                                                    Buy price:
-                                                </p>
-                                                <p class="pt-2">
-                                                    Quantity:
-                                                </p>
-                                                <p class="pt-2">
-                                                    Market:
-                                                </p>
+            <div class="card border bg-light mt-4 leftCardPortfolioDetail">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="btn-group">
+                                <!-- Button trigger modal -->
+                                <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                        data-bs-target="#add_position_modal">
+                                    + Add position
+                                </button>
+                                <!-- Modal for adding position -->
+                                <div class="modal fade" id="add_position_modal" tabindex="" role="dialog"
+                                     aria-labelledby="exampleModalLabel"
+                                     aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="add_position_modal_'label">
+                                                    {{ portfolio_name }}</h5>
+                                                <button type="button" class="close" data-bs-dismiss="modal"
+                                                        aria-label="Close">
+                                                    <span aria-hidden="true"></span>
+                                                </button>
                                             </div>
-                                            <div class="col-sm-4">
-                                                <form name="position_form" method="post">
-                                                    {% csrf_token %}
-                                                    <p>
-                                                        {{ position_form.ticker_name }}
-                                                    </p>
-                                                    <p>
-                                                        {{ position_form.buy_price }}
-                                                    </p>
-                                                    <p>
-                                                        {{ position_form.quantity }}
-                                                    </p>
-                                                    <p>
-                                                        {{ position_form.market }}
-                                                    </p>
-                                                    <div class="modal-footer">
-                                                        {% csrf_token %}
-                                                        <button type="button" class="btn btn-secondary"
-                                                                data-bs-dismiss="modal">
-                                                            No
-                                                        </button>
-                                                        <input class="btn btn-primary" name="add_position_button"
-                                                               type="submit"
-                                                               value="Yes"/>
+                                            <div class="modal-body">
+                                                <div class="row">
+                                                    <div class="col-sm-4">
+                                                        <p>
+                                                            Stock ticker:
+                                                        </p>
+                                                        <p class="pt-2">
+                                                            Buy price:
+                                                        </p>
+                                                        <p class="pt-2">
+                                                            Quantity:
+                                                        </p>
+                                                        <p class="pt-2">
+                                                            Market:
+                                                        </p>
                                                     </div>
-                                                </form>
+                                                    <div class="col-sm-4">
+                                                        <form name="position_form" method="post">
+                                                            {% csrf_token %}
+                                                            <p>
+                                                                {{ position_form.ticker_name }}
+                                                            </p>
+                                                            <p>
+                                                                {{ position_form.buy_price }}
+                                                            </p>
+                                                            <p>
+                                                                {{ position_form.quantity }}
+                                                            </p>
+                                                            <p>
+                                                                {{ position_form.market }}
+                                                            </p>
+                                                            <div class="modal-footer">
+                                                                {% csrf_token %}
+                                                                <button type="button" class="btn btn-secondary"
+                                                                        data-bs-dismiss="modal">
+                                                                    No
+                                                                </button>
+                                                                <input class="btn btn-primary"
+                                                                       name="add_position_button"
+                                                                       type="submit"
+                                                                       value="Yes"/>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                </div>
                                             </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <a class="btn btn-info" href="/database-projects-stocktracker">
+                                    Back to Portfolio overview</a>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 text-end">
+                            <!-- Button trigger modal -->
+                            <button type="button" class="btn btn-danger" data-bs-toggle="modal"
+                                    data-bs-target="#portfolio_label">
+                                Delete portfolio
+                            </button>
+                            <!-- Modal for deleting the portfolio -->
+                            <div class="modal fade" id="portfolio_label" tabindex="-1" role="dialog"
+                                 aria-labelledby="exampleModalLabel"
+                                 aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="portfolio_label_modal_label">
+                                                {{ portfolio_name }}</h5>
+                                            <button type="button" class="close" data-bs-dismiss="modal"
+                                                    aria-label="Close">
+                                                <span aria-hidden="true"></span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form name="portfolio_form" method="post">
+                                                {% csrf_token %}
+                                                <p>
+                                                    Are you sure you want to delete the portfolio?
+                                                </p>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary"
+                                                            data-bs-dismiss="modal">
+                                                        No
+                                                    </button>
+                                                    <input class="btn btn-primary" name="delete_button" type="submit"
+                                                           value="Yes"/>
+                                                </div>
+                                            </form>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <a class="btn btn-secondary" href="/database-projects-stocktracker">Portfolio overview</a>
                     </div>
+                </div>
+                <div class="col-sm-10">
+                    <h3>Name: {{ portfolio.portfolio_name }}</h3>
                 </div>
                 <div class="pt-2">
                     {% if messages %}
@@ -134,7 +140,7 @@
             </div>
         </div>
         <div class="col-sm-6  mt-4">
-            <div class="card border-0 bg-light m-1">
+            <div class="card border-0 bg-light rightCardPortfolioDetailCharts">
                 <div class="card-body text-center">
                     <div class="row">
                         <div class="col-4 text-start d-none d-sm-block" style="width: 50%;">
@@ -332,8 +338,8 @@
                                 <div class="modal-dialog" role="document">
                                     <div class="modal-content">
                                         <div class="modal-header">
-                                            <h5 class="modal-title" id="position_label_modal_label">{{
-                                                position.ticker_name }}</h5>
+                                            <h5 class="modal-title" id="position_label_modal_label">
+                                                {{ position.ticker_name }}</h5>
                                             <button type="button" class="close" data-bs-dismiss="modal"
                                                     aria-label="Close">
                                                 <span aria-hidden="true"></span>
@@ -374,8 +380,8 @@
                                 <div class="modal-dialog" role="document">
                                     <div class="modal-content">
                                         <div class="modal-header">
-                                            <h5 class="modal-title" id="edit_position_modal_label_{{ position.pk }}">{{
-                                                position.ticker_name }}</h5>
+                                            <h5 class="modal-title" id="edit_position_modal_label_{{ position.pk }}">
+                                                {{ position.ticker_name }}</h5>
                                             <button type="button" class="close" data-bs-dismiss="modal"
                                                     aria-label="Close">
                                                 <span aria-hidden="true"></span>
