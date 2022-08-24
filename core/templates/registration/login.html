@@ -1,9 +1,5 @@
 {% extends "base.html" %}
 {% block page_content %}
-<!---->
-<!--{{ form.username }}-->
-<!--{{ form.password.label_tag }}-->
-<!---->
 
 <div class="container loginDiv">
     {% if form.errors %}
@@ -18,16 +14,17 @@
     {% endif %}
     {% endif %}
     <form method="post" action="{% url 'login' %}">
+        {% csrf_token %}
         <!-- Email input -->
-        <div class="border form-outline mb-4">
-            <input type="email" id="form2Example1" class="form-control"/>
-            <label class="form-label" for="form2Example1">{{ form.username.label_tag }}</label>
+        <div class=" form-outline mb-4">
+            {{ form.username.label_tag }}
+            {{ form.username }}
         </div>
 
         <!-- Password input -->
-        <div class="border form-outline mb-4">
-            <input type="password" id="form2Example2" class="form-control"/>
+        <div class=" form-outline mb-4">
             <label class="form-label" for="form2Example2">{{ form.password.label_tag }}</label>
+            {{ form.password }}
         </div>
 
         <!-- 2 column grid layout for inline styling -->
@@ -48,7 +45,7 @@
         </div>
 
         <!-- Submit button -->
-        <button type="button" class="btn btn-primary btn-block mb-4">Sign in</button>
+        <input type="submit" class="btn btn-primary btn-block mb-4"/>
         <input type="hidden" name="next" value="{{ next }}"/>
         <!-- Register buttons -->
         <div class="text-center">

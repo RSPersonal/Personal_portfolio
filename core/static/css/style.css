@@ -12,3 +12,48 @@
     margin-top: 20vh;
     width: 500px;
 }
+
+
+.stockTable {
+    margin-top: 40px;
+}
+
+.leftCardPortfolioDetail{
+    height: 200px;
+}
+
+
+@media only screen and (min-width: 992px) {
+    * {
+    outline-offset: -1px;
+    font-family: roboto;
+    font-size: 13px;
+    }*
+
+    .technicalHeader {
+        font-size: 8px;
+    }
+
+    .loginDiv {
+        margin-top: 20vh;
+        width: 500px;
+    }
+
+    .portfolioDetailsKpiCard {
+        margin-top: 20px;
+        height: 100px;
+    }
+
+    .stockTable {
+        margin-top: 40px;
+    }
+
+    .leftCardPortfolioDetail, .rightCardPortfolioDetailCharts{
+        height: 30vh;
+    }
+
+    .portfolioDetailsKpiCard {
+        margin-top: 20px;
+        height: 100px;
+    }
+}

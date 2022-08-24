@@ -1,5 +1,8 @@
 import os
 import csv
+import random
+import uuid
+
 import requests
 from datetime import date
 import sentry_sdk
@@ -17,6 +20,7 @@ from core.helpers_and_validators.valuation_service import get_properties_within_
 from core.core_pdf_generator import core_pdf_generator
 from datetime import datetime
 from core.helpers_and_validators import stock_api
+from core.helpers_and_validators.iex_api import IexCloudAPI, check_active_connection
 
 
 # Create your views here
@@ -30,7 +34,6 @@ def stock_tracker_landing_page(request):
     # Getting all portfolio's from user
     current_user_id = request.user.id
     portfolio_or_portfolios = Portfolio.objects.filter(user_id=current_user_id)
-    # Getting the position data from portfolio
     context = {}
     portfolio_form = PortfolioForm()
 
@@ -41,15 +44,21 @@ def stock_tracker_landing_page(request):
     #  Adding the total profit to correct month.
     current_month = datetime.now()
     current_month_for_data_array = (current_month.month - 1)
+
+    # TODO Write test for adding portfolio and adding the profit to the correct month
     for portfolio in portfolio_or_portfolios:
+        # Don't execute the save if the id is already stored
+        if portfolio.id_for_chart == '':
+            portfolio.id_for_chart = str(portfolio.id).replace('-', '')
+
         try:
-            new_monthly_profit = portfolio.monthly_profit[current_month_for_data_array] = portfolio.total_profit
+            portfolio.monthly_profit[current_month_for_data_array] = portfolio.total_profit
             portfolio.save()
         except KeyError as error:
             sentry_sdk.capture_exception(error)
         except IndexError as error:
             sentry_sdk.capture_exception(error)
-            new_monthly_profit = portfolio.monthly_profit.append(0)
+            portfolio.monthly_profit.append(0)
             portfolio.save()
 
         # Reset the portfolio figures if no active positions
@@ -61,7 +70,6 @@ def stock_tracker_landing_page(request):
             portfolio.labels_array = []
             portfolio.total_positions = 0
             portfolio.save()
-
         # Get the monthly profits for visualisation
         # try:
         #     response = requests.request('GET', f"http://127.0.0.1:8000/api/v1/chart-data/{portfolio.id}",
@@ -81,7 +89,6 @@ def stock_tracker_landing_page(request):
             for i in range(0, current_month.month):
                 monthly_profit_array_until_current_month.append(0)
 
-            print(monthly_profit_array_until_current_month)
             cleaned_user_portfolio_name = form.cleaned_data['portfolio_name']
             new_portfolio_entry = Portfolio(portfolio_name=cleaned_user_portfolio_name,
                                             user_id=request.user.id,
@@ -95,17 +102,18 @@ def stock_tracker_landing_page(request):
 
 @login_required
 def portfolio_detail(request, pk):
-    # General checks for yahoo api calls
-    limit_exceeded = stock_api.check_if_limit_exceeded()
-    active_connection = stock_api.test_api_connection()
+    # General checks for api calls
+    limit_exceeded = False  # stock_api.check_if_limit_exceeded()
+    # iex_api = IexCloudAPI('aapl')
+    active_connection = check_active_connection()
+    development_mode_active = os.getenv("DEBUG", config("DEBUG"))
 
     portfolio = Portfolio.objects.get(id=pk)
     position_form = PositionForm()
 
-    context = {
-        'position_form': position_form,
-        'portfolio': portfolio
-    }
+    context = {'position_form': position_form, 'portfolio': portfolio,
+               'labels_monthly': ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug', 'Sept', 'Oct', 'Nov',
+                                  'Dec']}
 
     # Lookup if there are any active positions
     if Positions.objects.filter(portfolio=pk).exists():
@@ -121,91 +129,102 @@ def portfolio_detail(request, pk):
         labels_for_portfolio_chart = []
         data_for_portfolio_chart = []
 
-        if not active_connection or limit_exceeded:
-            if limit_exceeded:
-                messages.add_message(request, messages.INFO,
-                                     'API call limit exceeded. Profit calculation is not correct due to market price is\
-                                     set to 0 in case of api call limit is exceeded.')
-            if not active_connection:
-                messages.add_message(request, messages.INFO, 'No active connection, check if API key is valid.')
-
         if active_connection:
-            for position in positions:
-                ticker_symbol = position.ticker_name
-                # Get stock data
-                try:
-                    price_from_stock_api = stock_api.get_stock_price(f"{ticker_symbol}")
-                except ConnectionError as captured_error:
-                    sentry_sdk.capture_exception(captured_error)
-                    price_from_stock_api = 0
+            if not limit_exceeded:
+                for position in positions:
+                    ticker_symbol = position.ticker_name
 
-                # Get current market price for profit calculation
-                if limit_exceeded is False and input_validator.no_value(price_from_stock_api):
-                    messages.add_message(request, messages.INFO, 'error')
-                    break
-                elif input_validator.value(price_from_stock_api) and limit_exceeded is False:
-                    position.current_market_price = price_from_stock_api
-                    current_market_price_from_api_call = price_from_stock_api
-                else:
-                    position.current_market_price = 0
-                    current_market_price_from_api_call = 0
+                    # Get stock data
+                    # TODO temp check for development mode, this due to to many api calls and eventually getting an Connection error
+                    if not development_mode_active:
+                        stock_object = IexCloudAPI(ticker_symbol)
 
-                # Total amount invested calculation
-                calculated_total_invested = calculator.calculate_total_amount_invested(position.buy_price,
-                                                                                       position.quantity)
-                position.amount_invested = calculated_total_invested
-                calculated_total_amount_invested_in_portfolio += calculated_total_invested
+                        try:
+                            # price_from_stock_api = stock_api.get_stock_price(ticker_symbol)
+                            price_from_stock_api = stock_object.get_stock_price()
+                        except KeyError as error:
+                            sentry_sdk.capture_exception(error)
+                            price_from_stock_api = 0
+                        except ConnectionError as e:
+                            sentry_sdk.capture_exception(e)
+                            price_from_stock_api = 0
+                    else:
+                        price_from_stock_api = random.randrange(0, 200)
+                        messages.add_message(request, messages.INFO, 'Development mode on, prices are random!')
 
-                # Profit calculation
-                if position.current_market_price == 0:
-                    calculated_profit = 0
-                else:
-                    calculated_profit = calculator.calculate_stock_profit(position.buy_price,
-                                                                          current_market_price_from_api_call,
-                                                                          position.quantity)
-                position.position_profit = round(calculated_profit, 2)
-                calculated_total_profit_portfolio += calculated_profit
+                    # Get current market price for profit calculation
+                    if limit_exceeded is False and input_validator.no_value(price_from_stock_api):
+                        messages.add_message(request, messages.INFO, 'error')
+                        break
+                    elif input_validator.value(price_from_stock_api) and limit_exceeded is False:
+                        position.current_market_price = price_from_stock_api
+                        current_market_price_from_api_call = price_from_stock_api
+                    else:
+                        position.current_market_price = 0
+                        current_market_price_from_api_call = 0
 
-                # Profit in percentage calculation
-                calculated_profit_perc = calculator.calculate_profit_in_percentage(position.buy_price,
-                                                                                   position.quantity,
-                                                                                   calculated_profit)
-                calculated_total_profit_percentage += calculated_profit_perc
-                position.position_profit_in_percentage = calculated_profit_perc
+                    # Total amount invested calculation
+                    calculated_total_invested = calculator.calculate_total_amount_invested(position.buy_price,
+                                                                                           position.quantity)
+                    position.amount_invested = calculated_total_invested
+                    calculated_total_amount_invested_in_portfolio += calculated_total_invested
 
-                # Total positions
-                calculated_total_positions += 1
+                    # Profit calculation
+                    if position.current_market_price == 0:
+                        calculated_profit = 0
+                    else:
+                        calculated_profit = calculator.calculate_stock_profit(position.buy_price,
+                                                                              current_market_price_from_api_call,
+                                                                              position.quantity)
+                    position.position_profit = round(calculated_profit, 2)
+                    calculated_total_profit_portfolio += calculated_profit
 
-                # Labels for Portfolio chart
-                if limit_exceeded is False:
-                    labels_for_portfolio_chart.append(ticker_symbol)
+                    # Profit in percentage calculation
+                    calculated_profit_perc = calculator.calculate_profit_in_percentage(position.buy_price,
+                                                                                       position.quantity,
+                                                                                       calculated_profit)
+                    calculated_total_profit_percentage += calculated_profit_perc
+                    position.position_profit_in_percentage = calculated_profit_perc
 
-                # Data for Portfolio chart
-                data_for_portfolio_chart.append(position.quantity)
+                    # Total positions
+                    calculated_total_positions += 1
 
-                # Save some to the position model
-                position.amount_invested = round(calculated_total_invested, 2)
-                position.position_profit = round(calculated_profit, 2)
-                position.position_profit_in_percentage = round(calculated_profit_perc, 2)
-                position.save()
+                    # Labels for Portfolio chart
+                    if limit_exceeded is False:
+                        labels_for_portfolio_chart.append(ticker_symbol)
 
-            # Save it to the portfolio object to show later in portfolio overview
-            portfolio.total_positions = calculated_total_positions
-            portfolio.total_amount_invested = calculated_total_amount_invested_in_portfolio
-            portfolio.total_profit = round(calculated_total_profit_portfolio, 2)
-            portfolio.total_profit_percentage = calculator.calculate_portfolio_profit_in_percentage(
-                calculated_total_amount_invested_in_portfolio, calculated_total_profit_portfolio)
-            portfolio.labels_array = labels_for_portfolio_chart
-            portfolio.data_for_chart_array = data_for_portfolio_chart
-            portfolio.save()
-            context['positions'] = positions
-    else:
-        context['active_positions'] = False
+                    # Data for Portfolio chart
+                    data_for_portfolio_chart.append(position.quantity)
+
+                    # Save some to the position model
+                    position.amount_invested = round(calculated_total_invested, 2)
+                    position.position_profit = round(calculated_profit, 2)
+                    position.position_profit_in_percentage = round(calculated_profit_perc, 2)
+                    position.save()
+
+                # Save it to the portfolio object to show later in portfolio overview
+                portfolio.total_positions = calculated_total_positions
+                portfolio.total_amount_invested = calculated_total_amount_invested_in_portfolio
+                portfolio.total_profit = round(calculated_total_profit_portfolio, 2)
+                portfolio.total_profit_percentage = calculator.calculate_portfolio_profit_in_percentage(
+                    calculated_total_amount_invested_in_portfolio, calculated_total_profit_portfolio)
+                portfolio.labels_array = labels_for_portfolio_chart
+                portfolio.data_for_chart_array = data_for_portfolio_chart
+                portfolio.save()
+                context['positions'] = positions
+            else:
+                messages.add_message(request, messages.INFO,
+                                     'API call limit exceeded. Profit calculation is up to date due to market price is\
+                                     set to last retrieved market price in case of api call limit is exceeded.')
+        else:
+            messages.add_message(request, messages.INFO, 'No active connection, check if API key is valid.')
+        context['positions'] = positions
 
     # Adding new positions to database
     if request.method == 'POST' and 'add_position_button' in request.POST:
         add_position_form = PositionForm(request.POST)
         if add_position_form.is_valid():
+
             # Getting all the cleaned data for the database entry
             user_input_add_form_stock_name = add_position_form.cleaned_data['ticker_name']
             user_input_add_form_buy_price = add_position_form.cleaned_data['buy_price']
@@ -213,12 +232,14 @@ def portfolio_detail(request, pk):
             user_input_add_form_market = add_position_form.cleaned_data['market']
             found_stock = False
 
+            stock_object = IexCloudAPI(user_input_add_form_stock_name)
+            active_connection = check_active_connection()
             if active_connection and limit_exceeded is False:
-                response_stock_data_json = stock_api.get_stock_ticker_symbol(user_input_add_form_stock_name)
+                response_stock_data_json = stock_object.stock_json
                 if input_validator.value(response_stock_data_json) \
-                        and response_stock_data_json == user_input_add_form_stock_name:
+                        and stock_object.stock_symbol == user_input_add_form_stock_name:
                     found_stock = True
-                    current_market_price_from_api_call_or_zero = stock_api.get_stock_price(user_input_add_form_stock_name)
+                    current_market_price_from_api_call_or_zero = stock_object.latest_stock_price
                 else:
                     current_market_price_from_api_call_or_zero = 0
             else:
@@ -230,7 +251,7 @@ def portfolio_detail(request, pk):
                 messages.add_message(request, messages.INFO, "Could not find Stock, make sure you spelled it correct")
 
             # Adding new entry to Database
-            new_stock_entry = Positions(portfolio=portfolio, ticker_name=user_input_add_form_stock_name,
+            new_stock_entry = Positions(pk=uuid.uuid4(), portfolio=portfolio, ticker_name=user_input_add_form_stock_name,
                                         buy_price=user_input_add_form_buy_price,
                                         current_market_price=current_market_price_from_api_call_or_zero,
                                         quantity=user_input_add_form_quantity,
