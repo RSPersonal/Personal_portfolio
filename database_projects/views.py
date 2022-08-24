@@ -1,6 +1,7 @@
 import os
 import csv
 import random
+import uuid
 
 import requests
 from datetime import date
@@ -128,7 +129,6 @@ def portfolio_detail(request, pk):
         labels_for_portfolio_chart = []
         data_for_portfolio_chart = []
 
-
         if active_connection:
             if not limit_exceeded:
                 for position in positions:
@@ -251,7 +251,7 @@ def portfolio_detail(request, pk):
                 messages.add_message(request, messages.INFO, "Could not find Stock, make sure you spelled it correct")
 
             # Adding new entry to Database
-            new_stock_entry = Positions(portfolio=portfolio, ticker_name=user_input_add_form_stock_name,
+            new_stock_entry = Positions(pk=uuid.uuid4(), portfolio=portfolio, ticker_name=user_input_add_form_stock_name,
                                         buy_price=user_input_add_form_buy_price,
                                         current_market_price=current_market_price_from_api_call_or_zero,
                                         quantity=user_input_add_form_quantity,
