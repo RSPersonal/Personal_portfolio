@@ -22,6 +22,14 @@
     height: 200px;
 }
 
+.portfolioDetailsKpiCard{
+    height: 100px;
+    margin-top: 10px;
+}
+
+.dailyReturnPercentage {
+    text-align: right;
+}
 
 @media only screen and (min-width: 992px) {
     * {
@@ -49,7 +57,17 @@
     }
 
     .leftCardPortfolioDetail, .rightCardPortfolioDetailCharts{
-        height: 30vh;
+        height: 25vh;
+    }
+
+    .portfolioMainCards {
+        margin-top: 20px;
+    }
+
+    .dailyReturnPercentage {
+        text-align: center;
+        align-items: center;
+        margin: auto;
     }
 
     .portfolioDetailsKpiCard {

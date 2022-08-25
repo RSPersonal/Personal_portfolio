@@ -21,5 +21,6 @@ valuesToCheck.mainElements.forEach(item => {
     if (itemValue < 0) {
         const element = document.getElementById(item.divID);
         element.style.backgroundColor='red';
+        element.style.borderRadius= "5px";
     }
 })

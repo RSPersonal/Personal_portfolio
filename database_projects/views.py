@@ -150,7 +150,6 @@ def portfolio_detail(request, pk):
                             price_from_stock_api = 0
                     else:
                         price_from_stock_api = random.randrange(0, 200)
-                        messages.add_message(request, messages.INFO, 'Development mode on, prices are random!')
 
                     # Get current market price for profit calculation
                     if limit_exceeded is False and input_validator.no_value(price_from_stock_api):
@@ -213,6 +212,7 @@ def portfolio_detail(request, pk):
                 portfolio.save()
                 context['positions'] = positions
             else:
+                messages.add_message(request, messages.INFO, 'Development mode on, prices are random!')
                 messages.add_message(request, messages.INFO,
                                      'API call limit exceeded. Profit calculation is up to date due to market price is\
                                      set to last retrieved market price in case of api call limit is exceeded.')
