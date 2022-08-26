@@ -13,7 +13,6 @@
     width: 500px;
 }
 
-
 .stockTable {
     margin-top: 40px;
 }
@@ -50,6 +49,7 @@
     .portfolioDetailsKpiCard {
         margin-top: 20px;
         height: 100px;
+        align-items: left;
     }
 
     .stockTable {
@@ -57,7 +57,6 @@
     }
 
     .leftCardPortfolioDetail, .rightCardPortfolioDetailCharts{
-        height: 25vh;
     }
 
     .portfolioMainCards {
@@ -68,10 +67,5 @@
         text-align: center;
         align-items: center;
         margin: auto;
-    }
-
-    .portfolioDetailsKpiCard {
-        margin-top: 20px;
-        height: 100px;
     }
 }
