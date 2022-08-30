@@ -1,5 +1,5 @@
 from website_projects.models import ScrapyPropertyModel
-from core.helpers_and_validators.calculator import calculate_mean_price
+from core.helpers_and_validators.stock_calculator import calculate_mean_price
 
 
 def get_properties_within_postal_code_range_and_nla_range(postal_code_range: list, user_input_type_object: str, nla_range: int, user_input_city: str):
