@@ -2,7 +2,8 @@ from website_projects.models import ScrapyPropertyModel
 from core.helpers_and_validators.stock_calculator import calculate_mean_price
 
 
-def get_properties_within_postal_code_range_and_nla_range(postal_code_range: list, user_input_type_object: str, nla_range: int, user_input_city: str):
+def get_properties_within_postal_code_range_and_nla_range(postal_code_range: list, user_input_type_object: str,
+                                                          nla_range: int, user_input_city: str):
     """
     @param user_input_type_object:
     @param user_input_city:  str
@@ -15,17 +16,19 @@ def get_properties_within_postal_code_range_and_nla_range(postal_code_range: lis
 
     nla_lower_range = nla_range - (float(nla_range) * 0.10)
     nla_higher_range = nla_range + (float(nla_range) * 0.10)
-    properties = ScrapyPropertyModel.objects.filter(type_of_property=user_input_type_object, city=user_input_city, zipcode__range=(postal_code_range[0], postal_code_range[-1]), woon_oppervlak__range=(nla_lower_range, nla_higher_range))
+    properties = ScrapyPropertyModel.objects.filter(type_of_property=user_input_type_object, city=user_input_city,
+                                                    zipcode__range=(postal_code_range[0], postal_code_range[-1]),
+                                                    woon_oppervlak__range=(nla_lower_range, nla_higher_range))
     return properties
 
 
-def get_mean_property_price(properties: list):
+def get_mean_property_price(properties: list) -> int:
     """
-    @param properties:
+    @param properties: List of queried properties
     @return: Mean price of queried objects
     """
     if not properties:
-        return 'Missing input properties'
+        return 0
 
     price_list = []
     count_properties = 0

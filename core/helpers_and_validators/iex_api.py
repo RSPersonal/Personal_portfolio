@@ -25,10 +25,10 @@ class IexCloudAPI:
     """
     IEX Cloud class to get stock data
     """
+    base_url = BASE_URL
 
     def __init__(self, stock_symbol):
         self.user_input_symbol = stock_symbol
-        self.base_url = BASE_URL
         self.api_key = API_KEY
         self.active_connection = check_active_connection()
         self.stock_json = self.get_stock_package(stock_symbol)
@@ -68,3 +68,5 @@ class IexCloudAPI:
             return self.stock_json['latestPrice']
         else:
             return self.stock_json['latestPrice']
+
+
