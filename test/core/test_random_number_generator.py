@@ -1,5 +1,5 @@
 import unittest
-from .random_generator import generate_random_number
+from core.helpers_and_validators.random_generator import generate_random_number
 
 
 class TestRandomNumberGenerator(unittest.TestCase):

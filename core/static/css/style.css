@@ -13,7 +13,6 @@
     width: 500px;
 }
 
-
 .stockTable {
     margin-top: 40px;
 }
@@ -22,6 +21,14 @@
     height: 200px;
 }
 
+.portfolioDetailsKpiCard{
+    height: 100px;
+    margin-top: 10px;
+}
+
+.dailyReturnPercentage {
+    text-align: right;
+}
 
 @media only screen and (min-width: 992px) {
     * {
@@ -42,6 +49,7 @@
     .portfolioDetailsKpiCard {
         margin-top: 20px;
         height: 100px;
+        align-items: left;
     }
 
     .stockTable {
@@ -49,11 +57,15 @@
     }
 
     .leftCardPortfolioDetail, .rightCardPortfolioDetailCharts{
-        height: 30vh;
     }
 
-    .portfolioDetailsKpiCard {
+    .portfolioMainCards {
         margin-top: 20px;
-        height: 100px;
+    }
+
+    .dailyReturnPercentage {
+        text-align: center;
+        align-items: center;
+        margin: auto;
     }
 }
