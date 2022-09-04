@@ -1,5 +1,5 @@
 import unittest
-from .calculator import calculate_mean_price, calculate_stock_profit, calculate_portfolio_profit_in_percentage, \
+from core.helpers_and_validators.stock_calculator import calculate_mean_price, calculate_stock_profit, calculate_portfolio_profit_in_percentage, \
     calculate_profit_in_percentage, calculate_total_amount_invested
 
 

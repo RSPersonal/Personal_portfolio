@@ -1,5 +1,5 @@
 import unittest
-from .stock_api import test_api_connection, get_stock_price, get_stock_ticker_symbol
+from core.helpers_and_validators.stock_api import test_api_connection, get_stock_price, get_stock_ticker_symbol
 
 
 class TestStockApi(unittest.TestCase):

@@ -3,11 +3,11 @@
 {% load static %}
 <div class="container-fluid">
     <div class="row">
-        <div class="col-sm-6">
-            <div class="card border bg-light mt-4 leftCardPortfolioDetail">
+        <div class="col-sm-6 portfolioMainCards">
+            <div class="card border bg-light leftCardPortfolioDetail">
                 <div class="card-body">
                     <div class="row">
-                        <div class="col-sm-6">
+                        <div class="col-sm-8">
                             <div class="btn-group">
                                 <!-- Button trigger modal -->
                                 <button type="button" class="btn btn-primary" data-bs-toggle="modal"
@@ -81,7 +81,7 @@
                                     Back to Portfolio overview</a>
                             </div>
                         </div>
-                        <div class="col-sm-6 text-end">
+                        <div class="col-sm-4 text-end">
                             <!-- Button trigger modal -->
                             <button type="button" class="btn btn-danger" data-bs-toggle="modal"
                                     data-bs-target="#portfolio_label">
@@ -122,28 +122,39 @@
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-sm-10">
-                    <h3>Name: {{ portfolio.portfolio_name }}</h3>
-                </div>
-                <div class="pt-2">
-                    {% if messages %}
-                    <ul class="messages">
-                        {% for message in messages %}
-                        <li {% if message.tags %} class="{{ message.tags }}" {% endif %}>
-                            {{ message }}
-                        </li>
-                        {% endfor %}
-                    </ul>
-                    {% endif %}
+                    <div class="col-sm-6">
+                        <table class="table" data-filter-control="true">
+                            <tbody>
+                                <tr>
+                                    <th>Name:</th>
+                                    <td>{{portfolio.portfolio_name}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Total positions</th>
+                                    <td>{{portfolio.total_positions}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="pt-2">
+                        {% if messages %}
+                        <ul class="messages">
+                            {% for message in messages %}
+                            <li {% if message.tags %} class="{{ message.tags }}" {% endif %}>
+                                {{ message }}
+                            </li>
+                            {% endfor %}
+                        </ul>
+                        {% endif %}
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="col-sm-6  mt-4">
-            <div class="card border-0 bg-light rightCardPortfolioDetailCharts">
+        <div class="col-sm-6 portfolioMainCards d-none d-sm-block">
+            <div class="card border bg-light rightCardPortfolioDetailCharts">
                 <div class="card-body text-center">
                     <div class="row">
-                        <div class="col-4 text-start d-none d-sm-block" style="width: 50%;">
+                        <div class="col-4 text-start" style="width: 50%;">
                     <span hidden id="portfolioID"> {{ portfolio.id|json_script:"portfolio.id" }}</span>
                     <span hidden id="amountOfPositions"> {{ portfolio.total_positions|json_script:"portfolio.total_positions" }}</span>
                     <span hidden id="portfolioDailyReturn">{{ portfolio.total_profit|json_script:"portfolio.total_profit" }}</span>
@@ -223,14 +234,14 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-sm-3">
-            <div class="card border-0 bg-success text-white portfolioDetailsKpiCard">
+            <div class="card border bg-success border text-white portfolioDetailsKpiCard">
                 <div class="card-body" id="dailyReturnDiv">
                     <div class="row">
-                        <div class="col-sm-6">
+                        <div class="col-6">
                             <h3>€ {{ portfolio.total_profit }}</h3>
                             <h6>Performance today</h6>
                         </div>
-                        <div class="col-sm-6 mt-3 text-center">
+                        <div class="col-6 dailyReturnPercentage">
                             <h2> {{ portfolio.total_profit_percentage }} %</h2>
                         </div>
                     </div>
@@ -238,14 +249,14 @@
             </div>
         </div>
         <div class="col-sm-3">
-            <div class="card border-0 bg-success text-white portfolioDetailsKpiCard"  >
+            <div class="card border bg-success text-white portfolioDetailsKpiCard"  >
                 <div class="card-body" id="overalReturnDiv">
                     <div class="row">
-                        <div class="col-sm-6">
+                        <div class="col-6">
                             <h3>€ {{ portfolio.total_profit }}</h3>
                             <h6>Overal return</h6>
                         </div>
-                        <div class="col-sm-6 mt-3 text-center">
+                        <div class="col-6 dailyReturnPercentage">
                             <h2> {{ portfolio.total_profit_percentage }} %</h2>
                         </div>
                     </div>
@@ -253,7 +264,7 @@
             </div>
         </div>
         <div class="col-sm-2">
-            <div class="card border-0 bg-light portfolioDetailsKpiCard">
+            <div class="card border bg-light portfolioDetailsKpiCard">
                 <div class="card-body">
                     <h3>
                         € {{ portfolio.total_amount_invested }}
@@ -265,7 +276,7 @@
             </div>
         </div>
         <div class="col-sm-2">
-            <div class="card border-0 bg-light portfolioDetailsKpiCard">
+            <div class="card border bg-light portfolioDetailsKpiCard">
                 <div class="card-body">
                     <h3>
                         € {{ portfolio.total_amount_invested|add:portfolio.total_profit }}
@@ -277,7 +288,7 @@
             </div>
         </div>
         <div class="col-sm-2">
-            <div class="card border-0 bg-light portfolioDetailsKpiCard">
+            <div class="card border bg-light portfolioDetailsKpiCard">
                 <div class="card-body">
                     <h3>
                         € 0
@@ -295,12 +306,12 @@
 <div class="container-fluid">
     <div class="row pe-4 stockTable">
         <div class="table-responsive">
-            <table class="table">
+            <table class="table" id="stockTableBo">
                 <thead>
                 <tr>
                     <th scope="col">Info</th>
                     <th scope="col">Stock ticker</th>
-                    <th scope="col" class="text-end">Price bought</th>
+                    <th data-field="name" data-filter-control="input" scope="col" class="text-end">Price bought</th>
                     <th scope="col" class="text-end">Quantity</th>
                     <th scope="col" class="text-end">Amount invested</th>
                     <th scope="col" class="text-end">Current market price</th>

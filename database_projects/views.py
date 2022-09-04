@@ -1,26 +1,27 @@
-import os
 import csv
+import os
 import random
 import uuid
+from datetime import date
+from datetime import datetime
 
 import requests
-from datetime import date
 import sentry_sdk
-from django.contrib import messages
 from decouple import config
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from django.http import FileResponse, HttpResponse
 from django.shortcuts import render, redirect
-from django.contrib.auth.decorators import login_required
-from .models import Portfolio, Positions
-from .forms import PortfolioForm, PositionForm
-from core.helpers_and_validators import calculator, input_validator
+
+from core.core_pdf_generator import core_pdf_generator
+from core.helpers_and_validators import input_validator
 from core.helpers_and_validators.extraction_helper import extract_postal_code
+from core.helpers_and_validators import stock_calculator
+from core.helpers_and_validators.iex_api import IexCloudAPI, check_active_connection
 from core.helpers_and_validators.valuation_service import get_properties_within_postal_code_range_and_nla_range, \
     get_mean_property_price
-from core.core_pdf_generator import core_pdf_generator
-from datetime import datetime
-from core.helpers_and_validators import stock_api
-from core.helpers_and_validators.iex_api import IexCloudAPI, check_active_connection
+from .forms import PortfolioForm, PositionForm
+from .models import Portfolio, Positions
 
 
 # Create your views here
@@ -150,7 +151,6 @@ def portfolio_detail(request, pk):
                             price_from_stock_api = 0
                     else:
                         price_from_stock_api = random.randrange(0, 200)
-                        messages.add_message(request, messages.INFO, 'Development mode on, prices are random!')
 
                     # Get current market price for profit calculation
                     if limit_exceeded is False and input_validator.no_value(price_from_stock_api):
@@ -164,7 +164,7 @@ def portfolio_detail(request, pk):
                         current_market_price_from_api_call = 0
 
                     # Total amount invested calculation
-                    calculated_total_invested = calculator.calculate_total_amount_invested(position.buy_price,
+                    calculated_total_invested = stock_calculator.calculate_total_amount_invested(position.buy_price,
                                                                                            position.quantity)
                     position.amount_invested = calculated_total_invested
                     calculated_total_amount_invested_in_portfolio += calculated_total_invested
@@ -173,16 +173,16 @@ def portfolio_detail(request, pk):
                     if position.current_market_price == 0:
                         calculated_profit = 0
                     else:
-                        calculated_profit = calculator.calculate_stock_profit(position.buy_price,
-                                                                              current_market_price_from_api_call,
-                                                                              position.quantity)
+                        calculated_profit = stock_calculator.calculate_stock_profit(position.buy_price,
+                                                                                    current_market_price_from_api_call,
+                                                                                    position.quantity)
                     position.position_profit = round(calculated_profit, 2)
                     calculated_total_profit_portfolio += calculated_profit
 
                     # Profit in percentage calculation
-                    calculated_profit_perc = calculator.calculate_profit_in_percentage(position.buy_price,
-                                                                                       position.quantity,
-                                                                                       calculated_profit)
+                    calculated_profit_perc = stock_calculator.calculate_profit_in_percentage(position.buy_price,
+                                                                                             position.quantity,
+                                                                                             calculated_profit)
                     calculated_total_profit_percentage += calculated_profit_perc
                     position.position_profit_in_percentage = calculated_profit_perc
 
@@ -206,13 +206,14 @@ def portfolio_detail(request, pk):
                 portfolio.total_positions = calculated_total_positions
                 portfolio.total_amount_invested = calculated_total_amount_invested_in_portfolio
                 portfolio.total_profit = round(calculated_total_profit_portfolio, 2)
-                portfolio.total_profit_percentage = calculator.calculate_portfolio_profit_in_percentage(
+                portfolio.total_profit_percentage = stock_calculator.calculate_portfolio_profit_in_percentage(
                     calculated_total_amount_invested_in_portfolio, calculated_total_profit_portfolio)
                 portfolio.labels_array = labels_for_portfolio_chart
                 portfolio.data_for_chart_array = data_for_portfolio_chart
                 portfolio.save()
                 context['positions'] = positions
             else:
+                messages.add_message(request, messages.INFO, 'Development mode on, prices are random!')
                 messages.add_message(request, messages.INFO,
                                      'API call limit exceeded. Profit calculation is up to date due to market price is\
                                      set to last retrieved market price in case of api call limit is exceeded.')
@@ -251,7 +252,8 @@ def portfolio_detail(request, pk):
                 messages.add_message(request, messages.INFO, "Could not find Stock, make sure you spelled it correct")
 
             # Adding new entry to Database
-            new_stock_entry = Positions(pk=uuid.uuid4(), portfolio=portfolio, ticker_name=user_input_add_form_stock_name,
+            new_stock_entry = Positions(pk=uuid.uuid4(), portfolio=portfolio,
+                                        ticker_name=user_input_add_form_stock_name,
                                         buy_price=user_input_add_form_buy_price,
                                         current_market_price=current_market_price_from_api_call_or_zero,
                                         quantity=user_input_add_form_quantity,
