@@ -1,5 +1,6 @@
 # Personal_portfolio  
 <b>!WIP!</b>  
+[![HitCount](https://hits.dwyl.com/RSPersonal/Personal_portfolio.svg?style=flat-square)](http://hits.dwyl.com/RSPersonal/Personal_portfolio)
 
 Technogoly stack used:
 <h6><b>BACKEND</b></h6>
