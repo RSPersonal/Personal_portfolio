@@ -7,7 +7,10 @@ fetch(`http://127.0.0.1:8000/api/v1/daily-return/${portfolioID}`)
 })
 .then(function (data) {
     fetchedLatestPrice = data.data[0].last_price;
-    document.getElementById("dailyReturnItem").innerHTML = `€ ${fetchedLatestPrice}`; 
+    if (fetchedLatestPrice) {
+        document.getElementById("dailyReturnItem").innerHTML = `€ ${fetchedLatestPrice}`);
+        }
+    }
 }).catch(function (error) {
     console.warn(error);
 });
