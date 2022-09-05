@@ -9,4 +9,3 @@ urlpatterns = [
     path('-stocktracker/portfolio/csv/<uuid:request_id>', views.download_portfolio_csv),
     path('-valuation-tool/', views.valuation_tool, name="valuation_tool")
 ]
-git
