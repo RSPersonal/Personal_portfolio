@@ -1,7 +1,6 @@
 import os
 import unittest
 import psycopg2
-from psycopg2 import Error
 from decouple import config
 
 
@@ -18,13 +17,15 @@ class TestInsertRows(unittest.TestCase):
             db_parameters = conn.get_dsn_parameters()
             self.assertEqual(db_parameters['user'], os.getenv("DB_USERNAME", config("DB_USERNAME")))
             conn.close()
-        except (Exception, Error) as error:
+            print("\nSuccessfully connected to Postgresql database!")
+        except Exception as error:
             print("Error while connecting to PostgresSql", error)
         finally:
             if conn:
+                print("\nPostgresql connection succes.")
                 cursor.close()
                 conn.close()
-                print("Postgresql connection is closed")
+                print("\nPostgresql connection is closed")
 
 
 if __name__ == '__main__':
