@@ -107,7 +107,7 @@ def portfolio_detail(request, pk):
     limit_exceeded = False  # stock_api.check_if_limit_exceeded()
     # iex_api = IexCloudAPI('aapl')
     active_connection = check_active_connection()
-    development_mode_active = os.getenv("DEBUG", config("DEBUG"))
+    demo_stock_prices = os.getenv("DEMO_MARKET_PRICES", config("DEMO_MARKET_PRICES"))
 
     portfolio = Portfolio.objects.get(id=pk)
     position_form = PositionForm()
@@ -136,8 +136,7 @@ def portfolio_detail(request, pk):
                     ticker_symbol = position.ticker_name
 
                     # Get stock data
-                    # TODO temp check for development mode, this due to to many api calls and eventually getting an Connection error
-                    if not development_mode_active:
+                    if demo_stock_prices == 'False':
                         stock_object = IexCloudAPI(ticker_symbol)
 
                         try:
@@ -165,7 +164,7 @@ def portfolio_detail(request, pk):
 
                     # Total amount invested calculation
                     calculated_total_invested = stock_calculator.calculate_total_amount_invested(position.buy_price,
-                                                                                           position.quantity)
+                                                                                                 position.quantity)
                     position.amount_invested = calculated_total_invested
                     calculated_total_amount_invested_in_portfolio += calculated_total_invested
 
