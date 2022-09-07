@@ -3,78 +3,87 @@
 {% if user.is_authenticated %}
 <body>
 <div class="container-fluid">
-    <div class="row p-2">
-        <div class="col-6">
-            <h2>Select your portfolio</h2>
-        </div>
-        <div class="col-4 text-start">
-            <!-- Button trigger modal -->
-            <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#addPortfolioModal">
-                Add new portfolio
-            </button>
+    <div class="row ms-1 mt-2">
+        <div class="card mb-2 border">
+            <div class="card-body">
+                <div class="row p-2">
+                    <div class="col-10 text-center">
+                        <h2><b>Select your portfolio</b></h2>
+                    </div>
+                    <div class="col-2 text-start mt-1">
+                        <!-- Button trigger modal -->
+                        <button type="button" class="btn btn-secondary" data-bs-toggle="modal"
+                                data-bs-target="#addPortfolioModal">
+                            + Add new portfolio
+                        </button>
 
-            <!-- Modal -->
+                        <!-- Modal -->
 
-            <div class="modal fade" id="addPortfolioModal" tabindex="-1" role="dialog"
-                 aria-labelledby="addPortfolioModalLabel"
-                 aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="addPortfolioLabel">Modal title</h5>
-                            <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true"></span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <form name="portfolio_form" method="post">
-                                {% csrf_token %}
-                                <p>
-                                    {{ portfolio_form }}
-                                </p>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close
-                                    </button>
-                                    <input type="submit" value="Submit"/>
+                        <div class="modal fade" id="addPortfolioModal" tabindex="-1" role="dialog"
+                             aria-labelledby="addPortfolioModalLabel"
+                             aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="addPortfolioLabel">Modal title</h5>
+                                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true"></span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form name="portfolio_form" method="post">
+                                            {% csrf_token %}
+                                            <p>
+                                                {{ portfolio_form }}
+                                            </p>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                                    Close
+                                                </button>
+                                                <input type="submit" value="Submit"/>
+                                            </div>
+                                        </form>
+                                    </div>
                                 </div>
-                            </form>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div>
-            {% for portfolio in portfolios %}
-            <div class="row p-2">
-                <div class="card mb-2">
-                    <div class="card-body">
-                        <div class="row pt-2">
-                            <div class="col-sm-4">
-                                <div class="btn-group">
-                                    <a class="btn btn-primary" href="{% url 'portfolio_detail' portfolio.pk%}">
-                                        Go to {{ portfolio }}</a>
-                                    <div class="btn-group" role="group">
-                                        <button class="btn btn-light dropdown-toggle" type="button"
-                                                id="optionsPortfolioDropdown"
-                                                data-bs-toggle="dropdown" aria-expanded="false">
-                                            Options
-                                        </button>
-                                        <ul class="dropdown-menu" aria-labelledby="optionsPortfolioDropdown">
-                                            <li><a class="dropdown-item"
-                                                   href="/database-projects-stocktracker/portfolio/csv/{{portfolio.id}}">Download
-                                                CSV</a></li>
-                                            <li><a class="dropdown-item" href="">Download PDF</a></li>
-                                        </ul>
-                                    </div>
-                                </div>
+    </div>
+</div>
+<div class="container-fluid">
+    {% for portfolio in portfolios %}
+    <div class="row ms-1">
+        <div class="card border">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="btn-group">
+                            <a class="btn btn-primary" href="{% url 'portfolio_detail' portfolio.pk%}">
+                                Go to {{ portfolio }}</a>
+                            <div class="btn-group" role="group">
+                                <button class="btn btn-light dropdown-toggle" type="button"
+                                        id="optionsPortfolioDropdown"
+                                        data-bs-toggle="dropdown" aria-expanded="false">
+                                    Options
+                                </button>
+                                <ul class="dropdown-menu" aria-labelledby="optionsPortfolioDropdown">
+                                    <li><a class="dropdown-item"
+                                           href="/database-projects-stocktracker/portfolio/csv/{{portfolio.id}}">Download
+                                        CSV</a></li>
+                                    <li><a class="dropdown-item" href="">Download PDF</a></li>
+                                </ul>
                             </div>
-                            {% if portfolio.total_positions > 0 %}
-                            <div class="row">
-                                <!--                            // TODO Fix charts, right now the chart data of the other portfolios are not assigned to the data, this due to line window.myPie = new Chart(ctx1, portfolioAttributes.data.configPieChart); -->
-                                <div class="col-4 text-start d-none d-sm-block" style="width: 50%;">
-                                    <span hidden id="portfolioID_{{id_for_chart}}"> {{ portfolio_id_for_chart|json_script:"portfolio_id_for_chart" }}</span>
-                                    <span hidden id="amountOfPositions_{{id_for_chart}}"> {{ portfolio.total_positions|json_script:"portfolio.total_positions" }}</span>
-                                    <script>
+                        </div>
+                    </div>
+                    {% if portfolio.total_positions > 0 %}
+                    <div class="row border mt-1">
+                        <div class="col-4 text-start d-none d-sm-block" style="width: 50%;">
+                            <span hidden id="portfolioID_{{id_for_chart}}"> {{ portfolio_id_for_chart|json_script:"portfolio_id_for_chart" }}</span>
+                            <span hidden id="amountOfPositions_{{id_for_chart}}"> {{ portfolio.total_positions|json_script:"portfolio.total_positions" }}</span>
+                            <script>
                                         var randomNum_{{ portfolio.id_for_chart }} = () => Math.floor(Math.random() * (235 - 52 + 1) + 52);
                                         function rgbToHex(r, g, b) {
                                             return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
@@ -127,29 +136,31 @@
                                             window.myBar = new Chart(ctx2, configBarChart_{{ portfolio.id_for_chart }});
                                         });
 
-                                    </script>
-                                    <canvas id="pie-chart_{{ portfolio.id_for_chart }}"></canvas>
-                                </div>
-                                <div class="col-4 text-end d-none d-sm-block" style="width: 50%;">
-                                    <canvas id="bar-Chart_{{ portfolio.id_for_chart }}"></canvas>
-                                </div>
-                            </div>
-                            {% endif %}
-                            <div class="row">
-                                <div class="col-sm-4 pt-2">
-                                    <b>Total amount invested:</b> {{ portfolio.total_amount_invested }}
-                                    <br/><b>Total Positions:</b> {{ portfolio.total_positions }}
-                                    <br/><b>Total Profit:</b> {{ portfolio.total_profit }}
-                                    <br/><b>Total Profit %:</b> {{ portfolio.total_profit_percentage }} %
-                                </div>
-                            </div>
+
+
+
+
+                            </script>
+                            <canvas id="pie-chart_{{ portfolio.id_for_chart }}"></canvas>
+                        </div>
+                        <div class="col-4 text-end d-none d-sm-block" style="width: 50%;">
+                            <canvas id="bar-Chart_{{ portfolio.id_for_chart }}"></canvas>
+                        </div>
+                    </div>
+                    {% endif %}
+                    <div class="row">
+                        <div class="col-sm-4 pt-2">
+                            <b>Total amount invested:</b> {{ portfolio.total_amount_invested }}
+                            <br/><b>Total Positions:</b> {{ portfolio.total_positions }}
+                            <br/><b>Total Profit:</b> {{ portfolio.total_profit }}
+                            <br/><b>Total Profit %:</b> {{ portfolio.total_profit_percentage }} %
                         </div>
                     </div>
                 </div>
             </div>
-            {% endfor %}
         </div>
     </div>
+    {% endfor %}
 </div>
 </body>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
