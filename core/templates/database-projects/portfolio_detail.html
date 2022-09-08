@@ -159,6 +159,7 @@
                             <span hidden id="amountOfPositions"> {{ portfolio.total_positions|json_script:"portfolio.total_positions" }}</span>
                             <span hidden id="portfolioDailyReturn">{{ portfolio.total_profit|json_script:"portfolio.total_profit" }}</span>
                             <span hidden id="portfolioOveralReturn"> {{ portfolio.total_profit|json_script:"portfolio.total_profit" }}</span>
+                            <span hidden id="apiHost"> {{ api_host|json_script:"api_host" }}</span>
                             <script>
                     var portfolioId = JSON.parse(document.getElementById("portfolioID").textContent);
                     var portfolioAttributes = {};
