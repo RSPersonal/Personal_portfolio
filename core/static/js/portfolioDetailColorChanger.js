@@ -1,6 +1,6 @@
 const valuesToCheck = {};
 
-// We first want to get the daily return data before we check on values to make the corresponding colors 
+// We first want to get the daily return data before we check on values to make the corresponding colors
 const portfolioID = JSON.parse(document.getElementById("portfolioID").textContent);
 let fetchedLatestPrice;
 
@@ -14,7 +14,7 @@ fetch(`http://127.0.0.1:8000/api/v1/daily-return/${portfolioID}`)
     })
     .catch((error) => {
         console.warn(error);
-    });    
+    });
 
 // Portfolio overal return
 valuesToCheck['mainElements'] = [];
