@@ -109,19 +109,19 @@ def portfolio_detail(request, pk):
     active_connection = check_active_connection()  # pragma: no cover
     demo_stock_prices = os.getenv("DEMO_MARKET_PRICES", config("DEMO_MARKET_PRICES"))  # pragma: no cover
     debug = os.getenv("DEBUG", config("DEBUG"))  # pragma: no cover
+
+    # Here we need the correct ip for the api call to get the daily return
     if debug == 'False':
         api_host_ip = os.getenv("API_HOST_PROD", config("API_HOST_PROD"))  # pragma: no cover
     else:
         api_host_ip = os.getenv("API_HOST_LOCAL", config("API_HOST_LOCAL"))  # pragma: no cover
-    print(api_host_ip)
+
     portfolio = Portfolio.objects.get(id=pk)
     position_form = PositionForm()
 
     context = {'position_form': position_form, 'portfolio': portfolio,
                'labels_monthly': ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug', 'Sept', 'Oct', 'Nov',
                                   'Dec'], 'api_host': api_host_ip}
-
-    # Here we need the correct ip for the api call to get the daily return
 
     # Lookup if there are any active positions
     if Positions.objects.filter(portfolio=pk).exists():
