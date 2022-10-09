@@ -3,8 +3,7 @@ const valuesToCheck = {};
 // We first want to get the daily return data before we check on values to make the corresponding colors
 const portfolioID = JSON.parse(document.getElementById("portfolioID").textContent);
 const apiHost = JSON.parse(document.getElementById("apiHost").textContent);
-console.log(apiHost);
-
+// console.log(apiHost);
 
 
 fetch(`${apiHost}api/v1/daily-return/${portfolioID}`)
@@ -13,7 +12,6 @@ fetch(`${apiHost}api/v1/daily-return/${portfolioID}`)
         let fetchedLatestPrice;
         if (data.data[0]) {
             fetchedLatestPrice = data.data[0].last_price;
-            console.log(fetchedLatestPrice);
         } else {
             fetchedLatestPrice = 0;
         }
@@ -36,10 +34,8 @@ fetch(`${apiHost}api/v1/daily-return/${portfolioID}`)
 
         valuesToCheck.mainElements.forEach(item => {
             let itemValue = parseFloat(item.value);
-            console.log(itemValue);
             if (itemValue < 0) {
                 const element = document.getElementById(item.divID);
-                console.log(element, itemValue, itemValue < 0);
                 element.style.backgroundColor = 'red';
                 element.style.borderRadius = "5px";
             }
