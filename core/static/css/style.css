@@ -30,6 +30,18 @@
     text-align: right;
 }
 
+.homePageBigBlock{
+    height: 80vh;
+}
+
+.homepageCardTitle {
+    font-size: 120px;
+}
+
+.homepageBigNameContainer {
+    margin-top: px;
+}
+
 @media only screen and (min-width: 992px) {
     * {
     outline-offset: -1px;

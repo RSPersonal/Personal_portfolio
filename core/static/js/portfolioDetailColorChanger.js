@@ -43,4 +43,6 @@ fetch(`${apiHost}api/v1/daily-return/${portfolioID}`)
     })
     .catch((error) => {
         console.warn(error);
+        document.getElementById("dailyReturnItem").innerHTML = `€ 0,-`;
+
     });
