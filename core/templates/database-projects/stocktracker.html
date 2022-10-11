@@ -79,7 +79,7 @@
                         </div>
                     </div>
                     {% if portfolio.total_positions > 0 %}
-                    <div class="row border mt-1">
+                    <div class="row mt-1">
                         <div class="col-4 text-start d-none d-sm-block" style="width: 50%;">
                             <span hidden id="portfolioID_{{id_for_chart}}"> {{ portfolio_id_for_chart|json_script:"portfolio_id_for_chart" }}</span>
                             <span hidden id="amountOfPositions_{{id_for_chart}}"> {{ portfolio.total_positions|json_script:"portfolio.total_positions" }}</span>

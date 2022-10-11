@@ -21,14 +21,14 @@
 <body>
 <header>
     <nav class="navbar navbar-expand-md navbar-light bg-light sticky-top">
-        <div class="container-fluid justify-content-between">
+        <div class="container justify-content-between">
             <a class="text-dark" href="{% url 'homepage_en' %}">Curriculum</a>
             <a class="text-dark" href="{% url 'api_overview' %}">API Projects/Scripts</a>
             <a class="text-dark" href="{% url 'database-projects' %}">Database Projects</a>
             <a class="text-dark" href="{% url 'website_projects_overview' %}">Website projects</a>
             <a class="text-dark" href="{% url 'contact_page' %}">Contact/Info</a>
             {% if user.is_authenticated %}
-            <div class="dropdown">
+            <div class="dropdown homepageDropdown">
                 <button class="btn btn-light dropdown-toggle"
                         type="button"
                         id="dropdownMenuButton1"
@@ -51,11 +51,12 @@
 <!-- Main content for every page -->
 {% block page_content %}
 {% endblock page_content %}
-<!-- footer -->
 <footer class="footer">
-    <div class="row text-center">
-        <div class="col-12 mt-2">
-            <h6 class="pt-10">© Copyright owned by Raphael Sparenberg 2022</h6>
+    <div class="container">
+        <div class="row text-center">
+            <div class="">
+                <h6 class="">© Copyright owned by Raphael Sparenberg 2022</h6>
+            </div>
         </div>
     </div>
 </footer>

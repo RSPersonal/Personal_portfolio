@@ -16,7 +16,7 @@ fetch(`${apiHost}api/v1/daily-return/${portfolioID}`)
             fetchedLatestPrice = 0;
         }
         document.getElementById("dailyReturnItem").innerHTML = `€ ${fetchedLatestPrice.toLocaleString()}`;
-        
+
         // Portfolio overal return
         valuesToCheck['mainElements'] = [];
         const portfolioOveralReturn = {};
@@ -43,4 +43,6 @@ fetch(`${apiHost}api/v1/daily-return/${portfolioID}`)
     })
     .catch((error) => {
         console.warn(error);
+        document.getElementById("dailyReturnItem").innerHTML = `€ 0,-`;
+
     });

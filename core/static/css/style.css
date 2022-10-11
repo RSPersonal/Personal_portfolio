@@ -30,6 +30,55 @@
     text-align: right;
 }
 
+.homePageBigBlock{
+    height: 100vh;
+}
+
+.homepageCardTitle {
+    font-size: 100px;
+}
+
+.lineHomepage {
+    margin-top: 20vh;
+    animation: fadeIn 5s;
+    animation-fill-mode: both;
+    animation-delay: 4s;
+}
+
+.homepageBigNameContainer {
+    margin-top: 200px;
+}
+
+.homepageLinkedin {
+    height: 40px;
+    width: auto;
+}
+
+.homepageGithub {
+    height: 40px;
+    width: auto;
+}
+
+.fade-in-image-linkedin {
+    margin-top: 20px;
+    animation: fadeIn 5s;
+    animation-fill-mode: both;
+    animation-delay: 3s;
+    }
+
+
+.fade-in-image-github {
+    margin-top: 20px;
+    animation: fadeIn 5s;
+    animation-fill-mode: both;
+    animation-delay: 4s;
+    }
+
+@keyframes fadeIn {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+}
+
 @media only screen and (min-width: 992px) {
     * {
     outline-offset: -1px;
