@@ -87,3 +87,8 @@ This is my main section to showcase projects like the stocktracker. I learned a 
 A user can have many portfolio's and a portfolio can have many positions.
 <br/>
 ![Stocktracker design drawio (1)](https://user-images.githubusercontent.com/74533741/187614553-892c3e1e-c320-4895-8495-76a6ea0c82d4.png)
+
+
+#### Notes
+
+`gunicorn --worker-tmp-dir /dev/shm core.wsgi1` for gunicorn
