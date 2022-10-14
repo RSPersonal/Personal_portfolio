@@ -22,7 +22,7 @@ from core.helpers_and_validators.valuation_service import get_properties_within_
     get_mean_property_price
 from .forms import PortfolioForm, PositionForm
 from .models import Portfolio, Positions
-from database_projects.services import get_portfolio
+from database_projects.services import check_if_active_positions, get_all_positions_in_portfolio
 
 
 # Create your views here
@@ -125,9 +125,9 @@ def portfolio_detail(request, pk):
                                   'Dec'], 'api_host': api_host_ip}
 
     # Lookup if there are any active positions
-    if get_portfolio(pk):
+    if check_if_active_positions(pk):
         # Get all positions
-        positions = Positions.objects.filter(portfolio=pk).order_by('added_on')
+        positions = get_all_positions_in_portfolio(pk)
 
         # Standard variables for total calculation of portfolio
         current_market_price_from_api_call = 0
