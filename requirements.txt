@@ -18,3 +18,4 @@ django-cleanup==6.0.0
 pre-commit==2.19.0
 scrapy==2.6.1
 coverage==6.4.4
+uvicorn==0.18.3
