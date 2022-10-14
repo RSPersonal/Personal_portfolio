@@ -3,6 +3,8 @@
 [![HitCount](https://hits.dwyl.com/RSPersonal/Personal_portfolio.svg?style=flat-square)](http://hits.dwyl.com/RSPersonal/Personal_portfolio)
 ![GitHub Workflow Status](https://img.shields.io/github/workflow/status/dwyl/auth_plug/Elixir%20CI?label=build&style=flat-square)
 
+https://r-sparenberg-portfolio.com/
+
 Technogoly stack used:
 <h6><b>BACKEND</b></h6>
 <p align="left">
@@ -54,6 +56,10 @@ Check requirements.txt for dependencies.
 7. Build a webscraper to get real estate data
 8. Build real estate valuation tool based on scraped data and user input
 
+#### Architecture
+![architecture drawio (6)](https://user-images.githubusercontent.com/74533741/195254311-2d265edb-057f-4b4f-aea4-628b4c4ff8a6.png)
+
+
 <b>Future goals</b>  
 1. Dockerize project and host in docker image    
 2. PDF Creation for stocktracker   
@@ -61,8 +67,9 @@ Check requirements.txt for dependencies.
 
 <b>Site structure:</b>
 1. Homepage  
-2. API Projects  
+2. API Projects & Scripts     
 3. Database projects  
+4. Website projects     
 4. Contact/Info  
 
 
@@ -75,8 +82,8 @@ Here I want to showcase that iam able to connect to an external API and retreive
 <b>Database Projects</b>  
 This is my main section to showcase projects like the stocktracker. I learned a lot from this section but mostly unittesting, catching exceptions, getting database instances, correct variable naming, connecting own REST api, connecting to external api etc. 
 
-Database design for stocktracker 
-<br/>
+#### Database design for stocktracker
+
 A user can have many portfolio's and a portfolio can have many positions.
 <br/>
 ![Stocktracker design drawio (1)](https://user-images.githubusercontent.com/74533741/187614553-892c3e1e-c320-4895-8495-76a6ea0c82d4.png)
