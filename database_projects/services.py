@@ -2,13 +2,14 @@ from database_projects.models import Portfolio, Positions
 from typing import Any
 
 
-def check_if_active_positions(portfolio_id: int) -> Any:
+def check_if_active_positions(portfolio_id: int) -> bool:
     """
     @param portfolio_id:
-    @param pk:
     @return: Object containing Portfolio or None
     """
-    return Positions.objects.filter(portfolio=portfolio_id).exists()
+    if Positions.objects.filter(portfolio=portfolio_id).exists():
+        return True
+    return False
 
 
 def get_all_positions_in_portfolio(portfolio_id: int) -> Any:
