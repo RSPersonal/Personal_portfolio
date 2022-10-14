@@ -22,7 +22,8 @@ from core.helpers_and_validators.valuation_service import get_properties_within_
     get_mean_property_price
 from .forms import PortfolioForm, PositionForm
 from .models import Portfolio, Positions
-from database_projects.services import check_if_active_positions, get_all_positions_in_portfolio
+from database_projects.services import check_if_active_positions, get_all_positions_in_portfolio, \
+    calculate_position_and_position_profit, save_portfolio_values_to_db, delete_portfolio
 
 
 # Create your views here
@@ -105,11 +106,11 @@ def stock_tracker_landing_page(request):
 @login_required
 def portfolio_detail(request, pk):
     # General checks for api calls
-    # TODO Build check for IEX CLoud limit exceeded check
     limit_exceeded = False  # stock_api.check_if_limit_exceeded()  # pragma: no cover
     active_connection = check_active_connection()  # pragma: no cover
-    demo_stock_prices = os.getenv("DEMO_MARKET_PRICES", config("DEMO_MARKET_PRICES"))  # pragma: no cover
     debug = os.getenv("DEBUG", config("DEBUG"))  # pragma: no cover
+    portfolio = Portfolio.objects.get(id=pk)
+    position_form = PositionForm()
 
     # Here we need the correct ip for the api call to get the daily return
     if debug == 'False':
@@ -117,106 +118,20 @@ def portfolio_detail(request, pk):
     else:
         api_host_ip = os.getenv("API_HOST_LOCAL", config("API_HOST_LOCAL"))  # pragma: no cover
 
-    portfolio = Portfolio.objects.get(id=pk)
-    position_form = PositionForm()
-
     context = {'position_form': position_form, 'portfolio': portfolio,
                'labels_monthly': ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug', 'Sept', 'Oct', 'Nov',
                                   'Dec'], 'api_host': api_host_ip}
 
-    # Lookup if there are any active positions
+    # First check if there are any active positions
     if check_if_active_positions(pk):
-        # Get all positions
         positions = get_all_positions_in_portfolio(pk)
-
-        # Standard variables for total calculation of portfolio
-        current_market_price_from_api_call = 0
-        calculated_total_amount_invested_in_portfolio = 0
-        calculated_total_profit_portfolio = 0
-        calculated_total_profit_percentage = 0.0
-        calculated_total_positions = 0
-        labels_for_portfolio_chart = []
-        data_for_portfolio_chart = []
 
         if active_connection:
             if not limit_exceeded:
-                for position in positions:
-                    ticker_symbol = position.ticker_name
-                    # Get stock data
-                    if demo_stock_prices == 'False':
-                        stock_object = IexCloudAPI(ticker_symbol)
-
-                        try:
-                            # price_from_stock_api = stock_api.get_stock_price(ticker_symbol)
-                            price_from_stock_api = stock_object.get_stock_price()
-                        except KeyError as error:
-                            sentry_sdk.capture_exception(error)
-                            price_from_stock_api = 0
-                        except ConnectionError as e:
-                            sentry_sdk.capture_exception(e)
-                            price_from_stock_api = 0
-                    else:
-                        price_from_stock_api = random.randrange(0, 200)
-
-                    # Get current market price for profit calculation
-                    if limit_exceeded is False and input_validator.no_value(price_from_stock_api):
-                        messages.add_message(request, messages.INFO, 'error')
-                        break
-                    elif input_validator.value(price_from_stock_api) and limit_exceeded is False:
-                        position.current_market_price = price_from_stock_api
-                        current_market_price_from_api_call = price_from_stock_api
-                    else:
-                        position.current_market_price = 0
-                        current_market_price_from_api_call = 0
-
-                    # Total amount invested calculation
-                    calculated_total_invested = stock_calculator.calculate_total_amount_invested(position.buy_price,
-                                                                                                 position.quantity)
-                    position.amount_invested = calculated_total_invested
-                    calculated_total_amount_invested_in_portfolio += calculated_total_invested
-
-                    # Profit calculation
-                    if position.current_market_price == 0:
-                        calculated_profit = 0
-                    else:
-                        calculated_profit = stock_calculator.calculate_stock_profit(position.buy_price,
-                                                                                    current_market_price_from_api_call,
-                                                                                    position.quantity)
-                    position.position_profit = round(calculated_profit, 2)
-                    calculated_total_profit_portfolio += calculated_profit
-
-                    # Profit in percentage calculation
-                    calculated_profit_perc = stock_calculator.calculate_profit_in_percentage(position.buy_price,
-                                                                                             position.quantity,
-                                                                                             calculated_profit)
-                    calculated_total_profit_percentage += calculated_profit_perc
-                    position.position_profit_in_percentage = calculated_profit_perc
-
-                    # Total positions
-                    calculated_total_positions += 1
-
-                    # Labels for Portfolio chart
-                    if limit_exceeded is False:
-                        labels_for_portfolio_chart.append(ticker_symbol)
-
-                    # Data for Portfolio chart
-                    data_for_portfolio_chart.append(position.quantity)
-
-                    # Save some to the position model
-                    position.amount_invested = round(calculated_total_invested, 2)
-                    position.position_profit = round(calculated_profit, 2)
-                    position.position_profit_in_percentage = round(calculated_profit_perc, 2)
-                    position.save()
+                calculated_positions_profit = calculate_position_and_position_profit(request, positions)
 
                 # Save it to the portfolio object to show later in portfolio overview
-                portfolio.total_positions = calculated_total_positions
-                portfolio.total_amount_invested = calculated_total_amount_invested_in_portfolio
-                portfolio.total_profit = round(calculated_total_profit_portfolio, 2)
-                portfolio.total_profit_percentage = stock_calculator.calculate_portfolio_profit_in_percentage(
-                    calculated_total_amount_invested_in_portfolio, calculated_total_profit_portfolio)
-                portfolio.labels_array = labels_for_portfolio_chart
-                portfolio.data_for_chart_array = data_for_portfolio_chart
-                portfolio.save()
+                save_portfolio_values_to_db(portfolio, calculated_positions_profit)
                 context['positions'] = positions
             else:
                 messages.add_message(request, messages.INFO, 'Development mode on, prices are random!')
@@ -271,9 +186,12 @@ def portfolio_detail(request, pk):
 
     # Delete position
     if request.method == 'POST' and 'delete_position_button' in request.POST:
-        Positions.objects.get(id=request.POST.get('id')).delete()
+        position = Positions.objects.get(id=request.POST.get('id'))
         # Check if remaining positions in portfolio
         portfolio.total_positions -= 1
+        portfolio.total_profit = portfolio.total_profit - (position.position_profit + position.amount_invested)
+        position.delete()
+
         portfolio.save()
         return redirect('portfolio_detail', pk)  # pragma: no cover
 
@@ -295,11 +213,9 @@ def portfolio_detail(request, pk):
             position_from_db.save()
         return redirect('portfolio_detail', pk)  # pragma: no cover
 
-    # Delete portfolio
+    # Delete Portfolio
     if request.method == 'POST' and 'delete_button' in request.POST:
-        if Positions.objects.filter(portfolio=pk).exists() or Portfolio.objects.get(id=pk):
-            Portfolio.objects.get(id=pk).delete()
-            return redirect('stocktracker')  # pragma: no cover
+        delete_portfolio(pk)
 
     return render(request, 'database-projects/portfolio_detail.html', context=context)  # pragma: no cover
 
