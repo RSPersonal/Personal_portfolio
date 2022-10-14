@@ -22,6 +22,7 @@ from core.helpers_and_validators.valuation_service import get_properties_within_
     get_mean_property_price
 from .forms import PortfolioForm, PositionForm
 from .models import Portfolio, Positions
+from database_projects.services import get_portfolio
 
 
 # Create your views here
@@ -124,7 +125,7 @@ def portfolio_detail(request, pk):
                                   'Dec'], 'api_host': api_host_ip}
 
     # Lookup if there are any active positions
-    if Positions.objects.filter(portfolio=pk).exists():
+    if get_portfolio(pk):
         # Get all positions
         positions = Positions.objects.filter(portfolio=pk).order_by('added_on')
 
@@ -139,6 +140,7 @@ def portfolio_detail(request, pk):
 
         if active_connection:
             if not limit_exceeded:
+
                 for position in positions:
                     ticker_symbol = position.ticker_name
 
