@@ -1,4 +1,3 @@
-import unittest
 from django.test import TestCase
 from .models import Portfolio, Positions
 from datetime import datetime
@@ -7,8 +6,8 @@ from django.contrib.auth.models import User
 from uuid import uuid4
 
 
-class TestPortfolio(TestCase):
-    def setUp(self):
+class TestPortfolio(TestCase):  # pragma: no cover
+    def setUp(self):  # pragma: no cover
         """
         @return: None
         """
@@ -25,7 +24,7 @@ class TestPortfolio(TestCase):
                                  monthly_profit=[]
                                  )
 
-    def test_get_portfolio(self):
+    def test_get_portfolio(self):  # pragma: no cover
         """
         @return: None
         """
@@ -40,8 +39,8 @@ class TestPortfolio(TestCase):
         self.assertEqual(fetched_portfolio.monthly_profit, [])
 
 
-class TestServices(TestCase):
-    def setUp(self):
+class TestServices(TestCase):  # pragma: no cover
+    def setUp(self):  # pragma: no cover
         test_user = User.objects.create(first_name='TestUser', last_name='TestUserSurname', email='testuser@gmail.com')
         test_portfolio = Portfolio.objects.create(portfolio_name='TestPortfolio',
                                                   user=test_user,
@@ -81,10 +80,14 @@ class TestServices(TestCase):
         self.test_user = test_user
         self.test_portfolio = test_portfolio
 
-    def test_check_active_positions(self):
+    def test_check_active_positions(self):  # pragma: no cover
         result = check_if_active_positions(self.test_portfolio.id)
         self.assertEqual(result, True)
 
-    def test_get_all_position_in_portfolio(self):
+    def test_check_active_positions_not_found(self):  # pragma: no cover
+        result = check_if_active_positions(uuid4())
+        self.assertEqual(result, False)
+
+    def test_get_all_position_in_portfolio(self):  # pragma: no cover
         result = get_all_positions_in_portfolio(self.test_portfolio.id)
         self.assertEqual(len(result), 2)

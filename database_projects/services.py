@@ -2,7 +2,7 @@ from database_projects.models import Portfolio, Positions
 from typing import Any
 
 
-def check_if_active_positions(portfolio_id: int) -> bool:
+def check_if_active_positions(portfolio_id: Any) -> bool:
     """
     @param portfolio_id:
     @return: Object containing Portfolio or None

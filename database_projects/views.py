@@ -140,10 +140,8 @@ def portfolio_detail(request, pk):
 
         if active_connection:
             if not limit_exceeded:
-
                 for position in positions:
                     ticker_symbol = position.ticker_name
-
                     # Get stock data
                     if demo_stock_prices == 'False':
                         stock_object = IexCloudAPI(ticker_symbol)
