@@ -65,7 +65,7 @@ class IexCloudAPI:
             return self.stock_json['symbol']
         return ''
 
-    def get_stock_price(self) -> float | None:
+    def get_stock_price(self) -> float or None:
         """
         @return: Latest stock price: float
         """
