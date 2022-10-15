@@ -2,7 +2,7 @@ name: test_django
 on: [pull_request, push]
 jobs:
   test_project:
-    runs_on: ubuntu-latest
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v2
