@@ -22,8 +22,7 @@ from core.helpers_and_validators.valuation_service import get_properties_within_
     get_mean_property_price
 from .forms import PortfolioForm, PositionForm
 from .models import Portfolio, Positions
-from database_projects.services import check_if_active_positions, get_all_positions_in_portfolio, \
-    calculate_position_and_position_profit, save_portfolio_values_to_db, delete_portfolio
+from database_projects import services
 
 
 # Create your views here
@@ -123,66 +122,13 @@ def portfolio_detail(request, pk):
                                   'Dec'], 'api_host': api_host_ip}
 
     # First check if there are any active positions
-    if check_if_active_positions(pk):
-        positions = get_all_positions_in_portfolio(pk)
-
-        if active_connection:
-            if not limit_exceeded:
-                calculated_positions_profit = calculate_position_and_position_profit(request, positions)
-
-                # Save it to the portfolio object to show later in portfolio overview
-                save_portfolio_values_to_db(portfolio, calculated_positions_profit)
-                context['positions'] = positions
-            else:
-                messages.add_message(request, messages.INFO, 'Development mode on, prices are random!')
-                messages.add_message(request, messages.INFO,
-                                     'API call limit exceeded. Profit calculation is up to date due to market price is\
-                                     set to last retrieved market price in case of api call limit is exceeded.')
-        else:
-            messages.add_message(request, messages.INFO, 'No active connection, check if API key is valid.')
+    positions = services.check_if_active_positions_and_calculate_current_profits(request, portfolio, pk,
+                                                                                 active_connection, limit_exceeded)
+    if positions:
         context['positions'] = positions
 
     # Adding new positions to database
-    if request.method == 'POST' and 'add_position_button' in request.POST:
-        add_position_form = PositionForm(request.POST)
-        if add_position_form.is_valid():
-
-            # Getting all the cleaned data for the database entry
-            user_input_add_form_stock_name = add_position_form.cleaned_data['ticker_name']
-            user_input_add_form_buy_price = add_position_form.cleaned_data['buy_price']
-            user_input_add_form_quantity = add_position_form.cleaned_data['quantity']
-            user_input_add_form_market = add_position_form.cleaned_data['market']
-            found_stock = False
-
-            stock_object = IexCloudAPI(user_input_add_form_stock_name)
-            active_connection = check_active_connection()
-            if active_connection and limit_exceeded is False:
-                response_stock_data_json = stock_object.stock_json
-                if input_validator.value(response_stock_data_json) \
-                        and stock_object.stock_symbol == user_input_add_form_stock_name:
-                    found_stock = True
-                    current_market_price_from_api_call_or_zero = stock_object.latest_stock_price
-                else:
-                    current_market_price_from_api_call_or_zero = 0
-            else:
-                current_market_price_from_api_call_or_zero = 0
-
-            if limit_exceeded:
-                messages.add_message(request, messages.INFO, 'API CALL LIMIT EXCEEDED.')
-            elif found_stock is False:
-                messages.add_message(request, messages.INFO, "Could not find Stock, make sure you spelled it correct")
-
-            # Adding new entry to Database
-            new_stock_entry = Positions(pk=uuid.uuid4(), portfolio=portfolio,
-                                        ticker_name=user_input_add_form_stock_name,
-                                        buy_price=user_input_add_form_buy_price,
-                                        current_market_price=current_market_price_from_api_call_or_zero,
-                                        quantity=user_input_add_form_quantity,
-                                        market=user_input_add_form_market)
-            # Saving the entry to database
-            new_stock_entry.save()
-
-            return redirect('portfolio_detail', pk)  # pragma: no cover
+    services.add_new_stock_entry(request, portfolio, pk, active_connection, limit_exceeded)
 
     # Delete position
     if request.method == 'POST' and 'delete_position_button' in request.POST:
@@ -197,25 +143,19 @@ def portfolio_detail(request, pk):
 
     # Edit position
     if request.method == 'POST' and 'edit_position_button' in request.POST:
-        form = PositionForm(request.POST)
-        if form.is_valid():
-            # Getting all the cleaned data for the database entry
-            user_input_stock_name = form.cleaned_data['ticker_name']
-            user_input_buy_price = form.cleaned_data['buy_price']
-            user_input_quantity = form.cleaned_data['quantity']
-            user_input_market = form.cleaned_data['market']
+        valid_form = services.validate_position_form(request)
+        user_input_form = PositionForm(request.POST)
 
-            position_from_db = Positions.objects.get(id=request.POST.get('id'))
-            position_from_db.ticker_name = user_input_stock_name
-            position_from_db.buy_price = user_input_buy_price
-            position_from_db.quantity = user_input_quantity
-            position_from_db.market = user_input_market
-            position_from_db.save()
+        if valid_form:
+            clean_position = services.get_clean_form_data(user_input_form,
+                                                          ['ticker_name', 'buy_price', 'quantity', 'market'])
+            services.update_stock_entry(request, clean_position)
+
         return redirect('portfolio_detail', pk)  # pragma: no cover
 
     # Delete Portfolio
     if request.method == 'POST' and 'delete_button' in request.POST:
-        delete_portfolio(pk)
+        services.delete_portfolio(pk)
 
     return render(request, 'database-projects/portfolio_detail.html', context=context)  # pragma: no cover
 
