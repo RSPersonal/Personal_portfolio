@@ -92,3 +92,4 @@ A user can have many portfolio's and a portfolio can have many positions.
 #### Notes
 
 `gunicorn --worker-tmp-dir /dev/shm core.wsgi1` for gunicorn
+`gunicorn core.asgi:application -k uvicorn.workers.UvicornWorker --bind 0.0.0.0:8080 --worker-tmp-dir /dev/shm` for uvicorn
