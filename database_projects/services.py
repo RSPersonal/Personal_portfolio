@@ -152,10 +152,16 @@ def save_portfolio_values_to_db(portfolio, calculated_profits) -> None:
     portfolio.save()
 
 
-def delete_portfolio(portfolio_id) -> HttpResponse:
+def delete_portfolio(request, portfolio_id) -> HttpResponse:
+    """
+    @param request:
+    @param portfolio_id:
+    @return:
+    """
     # Delete portfolio
-    if Positions.objects.filter(portfolio=portfolio_id).exists() or Portfolio.objects.get(id=portfolio_id):
-        Portfolio.objects.get(id=portfolio_id).delete()
+    if request.method == 'POST' and 'delete_button' in request.POST:
+        if Positions.objects.filter(portfolio=portfolio_id).exists() or Portfolio.objects.get(id=portfolio_id):
+            Portfolio.objects.get(id=portfolio_id).delete()
         return redirect('stocktracker')  # pragma: no cover
 
 
@@ -257,15 +263,24 @@ def add_new_stock_entry(request, portfolio_instance, portfolio_id, active_connec
             if current_stock_market_price:
                 add_stock_entry(portfolio_instance, clean_position)
                 found_stock = True
+                return redirect('portfolio_detail', portfolio_id)  # pragma: no cover
 
             if not found_stock:
                 messages.add_message(request, messages.INFO, "Could not find Stock, make sure you spelled it correct")
-            return redirect('portfolio_detail', pk)  # pragma: no cover
+            return redirect('portfolio_detail', portfolio_id)  # pragma: no cover
     return None
 
 
 def check_if_active_positions_and_calculate_current_profits(request, portfolio_instance, portfolio_id,
                                                             active_connection: bool, limit_exceeded: bool):
+    """
+    @param request:
+    @param portfolio_instance:
+    @param portfolio_id: UUID
+    @param active_connection: Bool
+    @param limit_exceeded: Bool
+    @return: None | Query set [Calculated Positions]
+    """
     calculated_positions = None
     if check_if_active_positions(portfolio_id):
         positions = get_all_positions_in_portfolio(portfolio_id)
@@ -283,3 +298,22 @@ def check_if_active_positions_and_calculate_current_profits(request, portfolio_i
         else:
             messages.add_message(request, messages.INFO, 'No active connection, check if API key is valid.')
     return calculated_positions
+
+
+def delete_position(request, portfolio_instance, portfolio_id):
+    """
+    @param request:
+    @param portfolio_instance:
+    @param portfolio_id: UUID
+    @return: None
+    """
+    if request.method == 'POST' and 'delete_position_button' in request.POST:
+        position = Positions.objects.get(id=request.POST.get('id'))
+        # Check if remaining positions in portfolio
+        portfolio_instance.total_positions -= 1
+        portfolio_instance.total_profit = portfolio_instance.total_profit - position.position_profit
+        position.delete()
+
+        portfolio_instance.save()
+        return redirect('portfolio_detail', portfolio_id)  # pragma: no cover
+    return None

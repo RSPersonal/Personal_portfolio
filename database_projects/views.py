@@ -128,18 +128,11 @@ def portfolio_detail(request, pk):
         context['positions'] = positions
 
     # Adding new positions to database
+    # TODO Redirect currently does not refresh the positions after adding a new position
     services.add_new_stock_entry(request, portfolio, pk, active_connection, limit_exceeded)
 
     # Delete position
-    if request.method == 'POST' and 'delete_position_button' in request.POST:
-        position = Positions.objects.get(id=request.POST.get('id'))
-        # Check if remaining positions in portfolio
-        portfolio.total_positions -= 1
-        portfolio.total_profit = portfolio.total_profit - (position.position_profit + position.amount_invested)
-        position.delete()
-
-        portfolio.save()
-        return redirect('portfolio_detail', pk)  # pragma: no cover
+    services.delete_position(request, portfolio, pk)
 
     # Edit position
     if request.method == 'POST' and 'edit_position_button' in request.POST:
@@ -154,8 +147,8 @@ def portfolio_detail(request, pk):
         return redirect('portfolio_detail', pk)  # pragma: no cover
 
     # Delete Portfolio
-    if request.method == 'POST' and 'delete_button' in request.POST:
-        services.delete_portfolio(pk)
+
+        services.delete_portfolio(request, pk)
 
     return render(request, 'database-projects/portfolio_detail.html', context=context)  # pragma: no cover
 
