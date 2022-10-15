@@ -30,7 +30,7 @@ def get_all_positions_in_portfolio(portfolio_id: int) -> Any:
     return Positions.objects.filter(portfolio=portfolio_id).order_by('added_on')
 
 
-def calculate_position_and_position_profit(request, positions):
+def calculate_position_and_position_profit(positions):
     """
     @param request:
     @param positions:
@@ -135,7 +135,7 @@ def calculate_position_and_position_profit(request, positions):
     }
 
 
-def save_portfolio_values_to_db(portfolio, calculated_profits) -> None:
+def save_portfolio_values_to_db(portfolio, calculated_profits: Dict) -> None:
     """
     @param portfolio:
     @param calculated_profits:
@@ -180,6 +180,11 @@ def update_stock_entry(request, clean_user_input_position: Dict) -> None:
 
 
 def get_clean_form_data(form_object, desired_fields: List[str]) -> Dict:
+    """
+    @param form_object:
+    @param desired_fields:
+    @return:
+    """
     clean_fields = {}
     if form_object.is_valid():
         for field in desired_fields:
@@ -198,7 +203,7 @@ def validate_position_form(request) -> bool:
     return False
 
 
-def add_stock_entry(portfolio_instance, clean_position) -> None:
+def add_stock_entry(portfolio_instance, clean_position: Dict) -> None:
     """
     @param portfolio_instance:
     @param clean_position:
@@ -217,6 +222,10 @@ def add_stock_entry(portfolio_instance, clean_position) -> None:
 
 
 def get_current_stock_market_price(stock_name: str) -> float:
+    """
+    @param stock_name: string
+    @return: float current market price from api call or 0
+    """
     try:
         stock_object = IexCloudAPI(stock_name)
         response_stock_data_json = stock_object.stock_json
@@ -233,7 +242,7 @@ def get_current_stock_market_price(stock_name: str) -> float:
     return current_market_price_from_api_call_or_zero
 
 
-def add_new_stock_entry(request, portfolio_instance, portfolio_id, active_connection: bool, limit_exceeded: bool):
+def add_new_stock_entry(request, portfolio_instance, portfolio_id: uuid.uuid4, active_connection: bool, limit_exceeded: bool):
     """
     @param request: request object
     @param portfolio_instance: Portfolio instance
@@ -286,7 +295,7 @@ def check_if_active_positions_and_calculate_current_profits(request, portfolio_i
         positions = get_all_positions_in_portfolio(portfolio_id)
         if active_connection:
             if not limit_exceeded:
-                calculated_positions_profit = calculate_position_and_position_profit(request, positions)
+                calculated_positions_profit = calculate_position_and_position_profit(positions)
                 # Save it to the portfolio object to show later in portfolio overview
                 if calculated_positions_profit:
                     save_portfolio_values_to_db(portfolio_instance, calculated_positions_profit)
@@ -315,5 +324,24 @@ def delete_position(request, portfolio_instance, portfolio_id):
         position.delete()
 
         portfolio_instance.save()
+        return redirect('portfolio_detail', portfolio_id)  # pragma: no cover
+    return None
+
+
+def edit_position(request, portfolio_id):
+    """
+    @param request:
+    @param portfolio_id:
+    @return:
+    """
+    if request.method == 'POST' and 'edit_position_button' in request.POST:
+        valid_form = validate_position_form(request)
+        user_input_form = PositionForm(request.POST)
+
+        if valid_form:
+            clean_position = get_clean_form_data(user_input_form,
+                                                 ['ticker_name', 'buy_price', 'quantity', 'market'])
+            update_stock_entry(request, clean_position)
+
         return redirect('portfolio_detail', portfolio_id)  # pragma: no cover
     return None

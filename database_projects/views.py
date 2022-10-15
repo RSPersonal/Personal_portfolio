@@ -135,16 +135,7 @@ def portfolio_detail(request, pk):
     services.delete_position(request, portfolio, pk)
 
     # Edit position
-    if request.method == 'POST' and 'edit_position_button' in request.POST:
-        valid_form = services.validate_position_form(request)
-        user_input_form = PositionForm(request.POST)
-
-        if valid_form:
-            clean_position = services.get_clean_form_data(user_input_form,
-                                                          ['ticker_name', 'buy_price', 'quantity', 'market'])
-            services.update_stock_entry(request, clean_position)
-
-        return redirect('portfolio_detail', pk)  # pragma: no cover
+    services.edit_position(request, portfolio)
 
     # Delete Portfolio
     services.delete_portfolio(request, pk)

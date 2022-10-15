@@ -1,7 +1,7 @@
 from django.test import TestCase
 from .models import Portfolio, Positions
 from datetime import datetime
-from .services import get_all_positions_in_portfolio, check_if_active_positions
+from database_projects import services
 from django.contrib.auth.models import User
 from uuid import uuid4
 
@@ -81,13 +81,37 @@ class TestServices(TestCase):  # pragma: no cover
         self.test_portfolio = test_portfolio
 
     def test_check_active_positions(self):  # pragma: no cover
-        result = check_if_active_positions(self.test_portfolio.id)
+        result = services.check_if_active_positions(self.test_portfolio.id)
         self.assertEqual(result, True)
 
     def test_check_active_positions_not_found(self):  # pragma: no cover
-        result = check_if_active_positions(uuid4())
+        result = services.check_if_active_positions(uuid4())
         self.assertEqual(result, False)
 
     def test_get_all_position_in_portfolio(self):  # pragma: no cover
-        result = get_all_positions_in_portfolio(self.test_portfolio.id)
+        result = services.get_all_positions_in_portfolio(self.test_portfolio.id)
         self.assertEqual(len(result), 2)
+
+    def test_check_if_active_positions_and_calculate_current_profits(self):
+        """
+        @return: None
+        """
+        calculated_positions = None
+        check_if_active_position = services.check_if_active_positions(self.test_portfolio.id)
+        self.assertEqual(check_if_active_position, True)
+        positions = services.get_all_positions_in_portfolio(self.test_portfolio.id)
+
+        if positions:
+            self.assertTrue(positions)
+
+            calculated_positions_profit = services.calculate_position_and_position_profit(positions)
+            self.assertTrue(calculated_positions_profit)
+            self.assertEqual(calculated_positions_profit['calculated_total_amount_invested_in_portfolio'], 1600)
+            self.assertEqual(calculated_positions_profit['calculated_total_positions'], 2)
+
+            for position in calculated_positions_profit['calculated_positions']:
+                self.assertTrue(position['symbol'])
+                self.assertTrue(position['calculated_profit'])
+                self.assertTrue(position['calculated_total_invested'])
+                self.assertTrue(position['current_market_price_from_api_call'])
+
