@@ -147,8 +147,7 @@ def portfolio_detail(request, pk):
         return redirect('portfolio_detail', pk)  # pragma: no cover
 
     # Delete Portfolio
-
-        services.delete_portfolio(request, pk)
+    services.delete_portfolio(request, pk)
 
     return render(request, 'database-projects/portfolio_detail.html', context=context)  # pragma: no cover
 

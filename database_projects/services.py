@@ -37,13 +37,13 @@ def calculate_position_and_position_profit(request, positions):
     @return:
     """
 
-    current_market_price_from_api_call: float | int = 0
-    calculated_total_amount_invested_in_portfolio: float | int = 0
-    calculated_total_profit_portfolio: float | int = 0
+    current_market_price_from_api_call: float = 0
+    calculated_total_amount_invested_in_portfolio: float = 0
+    calculated_total_profit_portfolio: float = 0
     calculated_total_profit_percentage: float = 0.0
     calculated_total_positions: int = 0
     labels_for_portfolio_chart: List[str] = []
-    data_for_portfolio_chart: List[int | float] = []
+    data_for_portfolio_chart: List[int or float] = []
     calculated_positions: List[Dict] = []
     position_object: Dict = {
         'symbol': None,
@@ -216,7 +216,7 @@ def add_stock_entry(portfolio_instance, clean_position) -> None:
     return None
 
 
-def get_current_stock_market_price(stock_name: str) -> float | int:
+def get_current_stock_market_price(stock_name: str) -> float:
     try:
         stock_object = IexCloudAPI(stock_name)
         response_stock_data_json = stock_object.stock_json
@@ -240,7 +240,7 @@ def add_new_stock_entry(request, portfolio_instance, portfolio_id, active_connec
     @param portfolio_id: UUID
     @param active_connection: Bool
     @param limit_exceeded:  Bool
-    @return: None | Redirect
+    @return: None or Redirect
     """
     if request.method == 'POST' and 'add_position_button' in request.POST:
         if not active_connection:
@@ -279,7 +279,7 @@ def check_if_active_positions_and_calculate_current_profits(request, portfolio_i
     @param portfolio_id: UUID
     @param active_connection: Bool
     @param limit_exceeded: Bool
-    @return: None | Query set [Calculated Positions]
+    @return: None or Query set [Calculated Positions]
     """
     calculated_positions = None
     if check_if_active_positions(portfolio_id):
