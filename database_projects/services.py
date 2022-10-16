@@ -242,7 +242,8 @@ def get_current_stock_market_price(stock_name: str) -> float:
     return current_market_price_from_api_call_or_zero
 
 
-def add_new_stock_entry(request, portfolio_instance, portfolio_id: uuid.uuid4, active_connection: bool, limit_exceeded: bool):
+def add_new_stock_entry(request, portfolio_instance, portfolio_id: uuid.uuid4, active_connection: bool,
+                        limit_exceeded: bool):
     """
     @param request: request object
     @param portfolio_instance: Portfolio instance
@@ -272,6 +273,7 @@ def add_new_stock_entry(request, portfolio_instance, portfolio_id: uuid.uuid4, a
             if current_stock_market_price:
                 add_stock_entry(portfolio_instance, clean_position)
                 found_stock = True
+                print('redirecting')
                 return redirect('portfolio_detail', portfolio_id)  # pragma: no cover
 
             if not found_stock:
@@ -345,3 +347,37 @@ def edit_position(request, portfolio_id):
 
         return redirect('portfolio_detail', portfolio_id)  # pragma: no cover
     return None
+
+
+def parse_csv_and_return_data_dictionary(csv_file) -> Dict:
+    pass
+
+
+def remove_hyphen_from_portfolio_id(portfolio_id):
+    """
+    @param portfolio_id:
+    @return: str Portfolio id without '-' symbol
+    """
+    return str(portfolio_id).replace('-', '')
+
+
+def get_portfolio_id_without_hyphen(portfolio_id_with_hyphen):
+    """
+    @param portfolio_id_with_hyphen:
+    @return:
+    """
+    if portfolio_id_with_hyphen:
+        return portfolio_id_with_hyphen
+    return remove_hyphen_from_portfolio_id(portfolio_id_with_hyphen)
+
+
+def check_if_database_value_exists(database_table_instance, database_table_entry_id, search_values: List[str]) -> bool:
+    fetched_database_entry = database_table_instance.objects.filter(id=database_table_entry_id)
+    if not fetched_database_entry:
+        return False
+    print(fetched_database_entry)
+    for value_to_search_for in search_values:
+        print(value_to_search_for)
+        fetched_value = fetched_database_entry.value_to_search_for
+        if fetched_value:
+            return True

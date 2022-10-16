@@ -51,7 +51,8 @@ class TestServices(TestCase):  # pragma: no cover
                                                   total_profit=0,
                                                   total_profit_percentage=0.0,
                                                   total_positions=0,
-                                                  monthly_profit=[]
+                                                  monthly_profit=[],
+                                                  id_for_chart=''
                                                   )
         Positions.objects.create(pk=uuid4(),
                                  ticker_name='AAPL',
@@ -115,3 +116,11 @@ class TestServices(TestCase):  # pragma: no cover
                 self.assertTrue(position['calculated_total_invested'])
                 self.assertTrue(position['current_market_price_from_api_call'])
 
+    def test_get_portfolio_id_without_hypen(self):
+        pass
+
+    def test_check_if_database_value_exists(self):
+        check_if_database_column_value_exists = services.check_if_database_value_exists(Portfolio,
+                                                                                        self.test_portfolio.id,
+                                                                                        ['id_for_chart'])
+        self.assertEqual(check_if_database_column_value_exists, True)
