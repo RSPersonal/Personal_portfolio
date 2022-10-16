@@ -1,3 +1,5 @@
+v1.6--2022-10-16--Intgration of Flake8, github actions, unittesting, refactor of whole view.py from database project
+----------------
 v1.5.2--2022-08-11--Issue with get stock ticker name, added test for new stock api
 ----------------
 v1.5.1--2022-07-31--Changed yahoo connection to marketstack api
