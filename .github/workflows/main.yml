@@ -2,10 +2,9 @@ name: test_django
 on: [pull_request, push]
 jobs:
   test_project:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v2
       - run: pip install flake8
-      - run: pip install -r requirements.txt
-      - run: flake8 .
+      - run: flake8 --extend-ignore=E501 .

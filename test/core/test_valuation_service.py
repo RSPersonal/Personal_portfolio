@@ -11,5 +11,5 @@ class TestValuationService(unittest.TestCase):
 
     def test_get_postal_code_range(self):
         postal_code_range = requests.get(
-            f"http://postcode.vanvulpen.nl/afstand/8021/3000/").json()
+            'http://postcode.vanvulpen.nl/afstand/8021/3000/').json()
         self.assertEqual(postal_code_range, ['8011', '8012', '8019', '8021', '8022', '8023', '8031', '8032', '8033'])

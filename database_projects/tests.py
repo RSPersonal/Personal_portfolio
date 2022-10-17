@@ -51,7 +51,8 @@ class TestServices(TestCase):  # pragma: no cover
                                                   total_profit=0,
                                                   total_profit_percentage=0.0,
                                                   total_positions=0,
-                                                  monthly_profit=[]
+                                                  monthly_profit=[],
+                                                  id_for_chart=''
                                                   )
         Positions.objects.create(pk=uuid4(),
                                  ticker_name='AAPL',
@@ -115,3 +116,7 @@ class TestServices(TestCase):  # pragma: no cover
                 self.assertTrue(position['calculated_total_invested'])
                 self.assertTrue(position['current_market_price_from_api_call'])
 
+    def test_get_portfolio_id_without_hypen(self):
+        dirty_id = self.test_portfolio.id_for_chart
+        clean_id = services.get_portfolio_id_without_hyphen(self.test_portfolio)
+        self.assertEqual(clean_id, services.remove_hyphen_from_portfolio_id(self.test_portfolio.id))

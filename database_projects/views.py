@@ -1,23 +1,18 @@
 import csv
 import os
-import random
-import uuid
 from datetime import date
 from datetime import datetime
 
 import requests
 import sentry_sdk
 from decouple import config
-from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.http import FileResponse, HttpResponse
-from django.shortcuts import render, redirect
+from django.shortcuts import render
 
 from core.core_pdf_generator import core_pdf_generator
-from core.helpers_and_validators import input_validator
 from core.helpers_and_validators.extraction_helper import extract_postal_code
-from core.helpers_and_validators import stock_calculator
-from core.helpers_and_validators.iex_api import IexCloudAPI, check_active_connection
+from core.helpers_and_validators.iex_api import check_active_connection
 from core.helpers_and_validators.valuation_service import get_properties_within_postal_code_range_and_nla_range, \
     get_mean_property_price
 from .forms import PortfolioForm, PositionForm
@@ -51,7 +46,7 @@ def stock_tracker_landing_page(request):
     for portfolio in portfolio_or_portfolios:
         # Don't execute the save if the id is already stored
         if portfolio.id_for_chart == '':
-            portfolio.id_for_chart = str(portfolio.id).replace('-', '')
+            services.get_portfolio_id_without_hyphen(portfolio)
 
         try:
             portfolio.monthly_profit[current_month_for_data_array] = portfolio.total_profit
@@ -84,6 +79,7 @@ def stock_tracker_landing_page(request):
         # context[f"monthly_profit_{portfolio.id}"] = portfolio_monthly_profits
 
     # Adding new portfolio
+    services.add_new_portfolio(request, current_month)
     if request.method == 'POST':
         form = PortfolioForm(request.POST)
         if form.is_valid():
