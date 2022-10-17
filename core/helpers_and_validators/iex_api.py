@@ -1,6 +1,5 @@
 import requests
 import os
-import json
 import sentry_sdk
 from decouple import config
 
@@ -12,7 +11,8 @@ def check_active_connection() -> bool:
     try:
         response = requests.get(
             f'https://cloud.iexapis.com/stable/stock/aapl/quote?token={API_KEY}').json()
-        return True
+        if response:
+            return True
     except ConnectionError as e:
         sentry_sdk.capture_exception(e)
         return False

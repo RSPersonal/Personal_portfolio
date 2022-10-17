@@ -25,4 +25,3 @@ class TestClient(TestCase):
         """
         homepage = self.client.get('/contact')
         self.assertEqual(homepage.status_code, 200)
-
