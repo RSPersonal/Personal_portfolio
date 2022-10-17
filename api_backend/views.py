@@ -4,7 +4,6 @@ from json.decoder import JSONDecodeError
 from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render
 from django.contrib import messages
-from requests import Response
 from decouple import config
 from .forms import CurrencyForm
 from core.helpers_and_validators import input_validator
