@@ -119,8 +119,3 @@ class TestServices(TestCase):  # pragma: no cover
     def test_get_portfolio_id_without_hypen(self):
         pass
 
-    def test_check_if_database_value_exists(self):
-        check_if_database_column_value_exists = services.check_if_database_value_exists(Portfolio,
-                                                                                        self.test_portfolio.id,
-                                                                                        ['id_for_chart'])
-        self.assertEqual(check_if_database_column_value_exists, True)

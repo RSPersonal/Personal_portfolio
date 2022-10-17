@@ -12,7 +12,7 @@ from django.shortcuts import redirect
 from .forms import PortfolioForm, PositionForm
 
 
-def check_if_active_positions(portfolio_id: Any) -> bool:
+def check_if_active_positions(portfolio_id: uuid.UUID) -> bool:
     """
     @param portfolio_id:
     @return: Object containing Portfolio or None
@@ -22,7 +22,7 @@ def check_if_active_positions(portfolio_id: Any) -> bool:
     return False
 
 
-def get_all_positions_in_portfolio(portfolio_id: int) -> Any:
+def get_all_positions_in_portfolio(portfolio_id: uuid.UUID) -> Any:
     """
     @param portfolio_id:
     @return: Query object with all positions
@@ -152,7 +152,7 @@ def save_portfolio_values_to_db(portfolio, calculated_profits: Dict) -> None:
     portfolio.save()
 
 
-def delete_portfolio(request, portfolio_id) -> HttpResponse:
+def delete_portfolio(request, portfolio_id: uuid.UUID) -> HttpResponse:
     """
     @param request:
     @param portfolio_id:
@@ -203,7 +203,7 @@ def validate_position_form(request) -> bool:
     return False
 
 
-def add_stock_entry(portfolio_instance, clean_position: Dict) -> None:
+def add_stock_entry_to_db(portfolio_instance, clean_position: Dict) -> None:
     """
     @param portfolio_instance:
     @param clean_position:
@@ -242,7 +242,7 @@ def get_current_stock_market_price(stock_name: str) -> float:
     return current_market_price_from_api_call_or_zero
 
 
-def add_new_stock_entry(request, portfolio_instance, portfolio_id: uuid.uuid4, active_connection: bool,
+def add_new_stock_entry(request, portfolio_instance, portfolio_id: uuid.UUID, active_connection: bool,
                         limit_exceeded: bool):
     """
     @param request: request object
@@ -271,9 +271,8 @@ def add_new_stock_entry(request, portfolio_instance, portfolio_id: uuid.uuid4, a
             clean_position['current_stock_market_price'] = current_stock_market_price
 
             if current_stock_market_price:
-                add_stock_entry(portfolio_instance, clean_position)
+                add_stock_entry_to_db(portfolio_instance, clean_position)
                 found_stock = True
-                print('redirecting')
                 return redirect('portfolio_detail', portfolio_id)  # pragma: no cover
 
             if not found_stock:
@@ -282,7 +281,7 @@ def add_new_stock_entry(request, portfolio_instance, portfolio_id: uuid.uuid4, a
     return None
 
 
-def check_if_active_positions_and_calculate_current_profits(request, portfolio_instance, portfolio_id,
+def check_if_active_positions_and_calculate_current_profits(request, portfolio_instance, portfolio_id: uuid.UUID,
                                                             active_connection: bool, limit_exceeded: bool):
     """
     @param request:
@@ -311,7 +310,7 @@ def check_if_active_positions_and_calculate_current_profits(request, portfolio_i
     return calculated_positions
 
 
-def delete_position(request, portfolio_instance, portfolio_id):
+def delete_position(request, portfolio_instance, portfolio_id: uuid.UUID) -> HttpResponse or None:
     """
     @param request:
     @param portfolio_instance:
@@ -330,7 +329,7 @@ def delete_position(request, portfolio_instance, portfolio_id):
     return None
 
 
-def edit_position(request, portfolio_id):
+def edit_position(request, portfolio_id: uuid.UUID) -> HttpResponse or None:
     """
     @param request:
     @param portfolio_id:
@@ -353,7 +352,7 @@ def parse_csv_and_return_data_dictionary(csv_file) -> Dict:
     pass
 
 
-def remove_hyphen_from_portfolio_id(portfolio_id):
+def remove_hyphen_from_portfolio_id(portfolio_id: uuid.UUID) -> str:
     """
     @param portfolio_id:
     @return: str Portfolio id without '-' symbol
@@ -371,13 +370,27 @@ def get_portfolio_id_without_hyphen(portfolio_id_with_hyphen):
     return remove_hyphen_from_portfolio_id(portfolio_id_with_hyphen)
 
 
-def check_if_database_value_exists(database_table_instance, database_table_entry_id, search_values: List[str]) -> bool:
-    fetched_database_entry = database_table_instance.objects.filter(id=database_table_entry_id)
-    if not fetched_database_entry:
-        return False
-    print(fetched_database_entry)
-    for value_to_search_for in search_values:
-        print(value_to_search_for)
-        fetched_value = fetched_database_entry.value_to_search_for
-        if fetched_value:
-            return True
+def save_new_portfolio_to_db(cleaned_user_portfolio_name: str, user_id: uuid.UUID, data_for_chart_array: List[str],
+                             labels_array: List[str], monthly_profit: List[float]):
+    new_portfolio_entry = Portfolio(portfolio_name=cleaned_user_portfolio_name,
+                                    user_id=user_id,
+                                    data_for_chart_array=data_for_chart_array,
+                                    labels_array=labels_array,
+                                    monthly_profit=monthly_profit
+                                    )
+    new_portfolio_entry.save()
+
+
+def add_new_portfolio(request, current_month) -> HttpResponse:
+    if request.method == 'POST':
+        form = PortfolioForm(request.POST)
+        if form.is_valid():
+            monthly_profit_array_until_current_month = []
+            for i in range(0, current_month.month):
+                monthly_profit_array_until_current_month.append(0)
+
+            cleaned_user_portfolio_name = form.cleaned_data['portfolio_name']
+            save_new_portfolio_to_db(cleaned_user_portfolio_name, request.user.id, [], [],
+                                     monthly_profit_array_until_current_month)
+
+            return redirect('stocktracker')  # pragma: no cover

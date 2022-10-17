@@ -79,6 +79,7 @@ def stock_tracker_landing_page(request):
         # context[f"monthly_profit_{portfolio.id}"] = portfolio_monthly_profits
 
     # Adding new portfolio
+    services.add_new_portfolio(request, current_month)
     if request.method == 'POST':
         form = PortfolioForm(request.POST)
         if form.is_valid():
