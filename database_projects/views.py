@@ -46,7 +46,7 @@ def stock_tracker_landing_page(request):
     for portfolio in portfolio_or_portfolios:
         # Don't execute the save if the id is already stored
         if portfolio.id_for_chart == '':
-            services.get_portfolio_id_without_hyphen(portfolio.id)
+            services.get_portfolio_id_without_hyphen(portfolio)
 
         try:
             portfolio.monthly_profit[current_month_for_data_array] = portfolio.total_profit

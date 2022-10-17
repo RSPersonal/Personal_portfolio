@@ -352,22 +352,22 @@ def parse_csv_and_return_data_dictionary(csv_file) -> Dict:
     pass
 
 
-def remove_hyphen_from_portfolio_id(portfolio_id: uuid.UUID) -> str:
+def remove_hyphen_from_portfolio_id(dirty_portfolio_id: uuid.UUID) -> str:
     """
-    @param portfolio_id:
+    @param dirty_portfolio_id:
     @return: str Portfolio id without '-' symbol
     """
-    return str(portfolio_id).replace('-', '')
+    return str(dirty_portfolio_id).replace('-', '')
 
 
-def get_portfolio_id_without_hyphen(portfolio_id_with_hyphen):
+def get_portfolio_id_without_hyphen(portfolio_instance):
     """
-    @param portfolio_id_with_hyphen:
+    @param portfolio_instance:
     @return:
     """
-    if portfolio_id_with_hyphen:
-        return portfolio_id_with_hyphen
-    return remove_hyphen_from_portfolio_id(portfolio_id_with_hyphen)
+    if portfolio_instance.id_for_chart:
+        return portfolio_instance.id_for_chart
+    return remove_hyphen_from_portfolio_id(portfolio_instance.id)
 
 
 def save_new_portfolio_to_db(cleaned_user_portfolio_name: str, user_id: uuid.UUID, data_for_chart_array: List[str],
