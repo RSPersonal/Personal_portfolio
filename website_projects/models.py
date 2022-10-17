@@ -11,6 +11,7 @@ STATUS_CHOICES = [
     ('Onbekend', 'Onbekend')
 ]
 
+
 # Create your models here.
 class PropertyModel(models.Model):
     TYPE_OF_PROPERTY_CHOICES = [
