@@ -4,7 +4,7 @@ from django.contrib import messages
 from typing import Any
 from django.http import HttpResponse
 
-from core.helpers_and_validators.iex_api import IexCloudAPI, check_active_connection
+from core.helpers_and_validators.iex_api import IexCloudAPI
 from .models import Portfolio, Positions
 from core.helpers_and_validators import stock_calculator
 from typing import List, Dict

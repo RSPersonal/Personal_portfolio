@@ -97,7 +97,6 @@ class TestServices(TestCase):  # pragma: no cover
         """
         @return: None
         """
-        calculated_positions = None
         check_if_active_position = services.check_if_active_positions(self.test_portfolio.id)
         self.assertEqual(check_if_active_position, True)
         positions = services.get_all_positions_in_portfolio(self.test_portfolio.id)
@@ -117,6 +116,5 @@ class TestServices(TestCase):  # pragma: no cover
                 self.assertTrue(position['current_market_price_from_api_call'])
 
     def test_get_portfolio_id_without_hypen(self):
-        dirty_id = self.test_portfolio.id_for_chart
         clean_id = services.get_portfolio_id_without_hyphen(self.test_portfolio)
         self.assertEqual(clean_id, services.remove_hyphen_from_portfolio_id(self.test_portfolio.id))
