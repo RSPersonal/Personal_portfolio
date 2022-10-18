@@ -38,63 +38,24 @@ def stock_tracker_landing_page(request):
     context['portfolio_form'] = portfolio_form
     context['labels_monthly'] = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec']
 
-    #  Adding the total profit to correct month.
     current_month = datetime.now()
     current_month_for_data_array = (current_month.month - 1)
 
-    # TODO Write test for adding portfolio and adding the profit to the correct month
     for portfolio in portfolio_or_portfolios:
         # Don't execute the save if the id is already stored
         if portfolio.id_for_chart == '':
             services.get_portfolio_id_without_hyphen(portfolio)
+            portfolio.save()
 
-        try:
-            portfolio.monthly_profit[current_month_for_data_array] = portfolio.total_profit
-            portfolio.save()
-        except KeyError as error:
-            sentry_sdk.capture_exception(error)
-        except IndexError as error:
-            sentry_sdk.capture_exception(error)
-            portfolio.monthly_profit.append(0)
-            portfolio.save()
+        services.add_monthly_profit_to_data_array_and_save_to_db(portfolio, current_month_for_data_array)
 
         # Reset the portfolio figures if no active positions
-        if portfolio.total_positions == 0:
-            portfolio.total_amount_invested = 0
-            portfolio.total_profit = 0
-            portfolio.total_profit_percentage = 0.0
-            portfolio.data_for_chart_array = []
-            portfolio.labels_array = []
-            portfolio.total_positions = 0
-            portfolio.save()
-        # Get the monthly profits for visualisation
-        # try:
-        #     response = requests.request('GET', f"http://127.0.0.1:8000/api/v1/chart-data/{portfolio.id}",
-        #                                 timeout=5).json()
-        #     portfolio_monthly_profits = response['data']['monthly_profit']
-        # except ConnectionError as error:
-        #     sentry_sdk.capture_exception(error)
-        #     portfolio_monthly_profits = []
-        #
-        # context[f"monthly_profit_{portfolio.id}"] = portfolio_monthly_profits
+        if services.check_if_portfolio_is_empty(portfolio):
+            services.reset_portfolio_when_no_positions(portfolio)
 
     # Adding new portfolio
     services.add_new_portfolio(request, current_month)
-    if request.method == 'POST':
-        form = PortfolioForm(request.POST)
-        if form.is_valid():
-            monthly_profit_array_until_current_month = []
-            for i in range(0, current_month.month):
-                monthly_profit_array_until_current_month.append(0)
 
-            cleaned_user_portfolio_name = form.cleaned_data['portfolio_name']
-            new_portfolio_entry = Portfolio(portfolio_name=cleaned_user_portfolio_name,
-                                            user_id=request.user.id,
-                                            data_for_chart_array=[],
-                                            labels_array=[],
-                                            monthly_profit=monthly_profit_array_until_current_month
-                                            )
-            new_portfolio_entry.save()
     return render(request, 'database-projects/stocktracker.html', context=context)  # pragma: no cover
 
 
@@ -117,7 +78,7 @@ def portfolio_detail(request, pk):
                'labels_monthly': ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug', 'Sept', 'Oct', 'Nov',
                                   'Dec'], 'api_host': api_host_ip}
 
-    # First check if there are any active positions
+    # We want to check if there active positions and if so, we calculate the profit
     positions = services.check_if_active_positions_and_calculate_current_profits(request, portfolio, pk,
                                                                                  active_connection, limit_exceeded)
     if positions:
@@ -188,12 +149,7 @@ def valuation_tool(request):
         user_input_type_of_object = request.POST.get('typeOfObject')
         clean_postal_code = extract_postal_code(request.POST.get('postcode'))
         user_input_radius = int(request.POST.get('radius'))
-        try:
-            postal_code_range = requests.get(
-                f"http://postcode.vanvulpen.nl/afstand/{clean_postal_code}/{user_input_radius}/").json()
-        except ConnectionError as e:
-            sentry_sdk.capture_exception(e)
-            postal_code_range = None
+        postal_code_range = services.get_postal_code_range(clean_postal_code)
 
         # Makes no sense to search for properties if we have no postal code range
         if postal_code_range:

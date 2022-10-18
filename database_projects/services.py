@@ -1,13 +1,16 @@
+import datetime
+
 import sentry_sdk
 import uuid
 from django.contrib import messages
 from typing import Any
 from django.http import HttpResponse
+import requests
 
 from core.helpers_and_validators.iex_api import IexCloudAPI
 from .models import Portfolio, Positions
 from core.helpers_and_validators import stock_calculator
-from typing import List, Dict
+from typing import List, Dict, Union
 from django.shortcuts import redirect
 from .forms import PortfolioForm, PositionForm
 
@@ -30,7 +33,7 @@ def get_all_positions_in_portfolio(portfolio_id: uuid.UUID) -> Any:
     return Positions.objects.filter(portfolio=portfolio_id).order_by('added_on')
 
 
-def calculate_position_and_position_profit(positions):
+def calculate_position_and_position_profit(positions: Positions) -> Dict:
     """
     @param request:
     @param positions:
@@ -203,13 +206,12 @@ def validate_position_form(request) -> bool:
     return False
 
 
-def add_stock_entry_to_db(portfolio_instance, clean_position: Dict) -> None:
+def add_stock_entry_to_db(portfolio_instance: Portfolio, clean_position: Dict) -> None:
     """
     @param portfolio_instance:
     @param clean_position:
     @return:
     """
-    # TODO Maybe implement the validation for the clean_position dictionary.
     new_stock_entry = Positions(pk=uuid.uuid4(), portfolio=portfolio_instance,
                                 ticker_name=clean_position['ticker_name'],
                                 buy_price=clean_position['buy_price'],
@@ -242,8 +244,8 @@ def get_current_stock_market_price(stock_name: str) -> float:
     return current_market_price_from_api_call_or_zero
 
 
-def add_new_stock_entry(request, portfolio_instance, portfolio_id: uuid.UUID, active_connection: bool,
-                        limit_exceeded: bool):
+def add_new_stock_entry(request, portfolio_instance: Portfolio, portfolio_id: uuid.UUID, active_connection: bool,
+                        limit_exceeded: bool) -> None:
     """
     @param request: request object
     @param portfolio_instance: Portfolio instance
@@ -281,7 +283,7 @@ def add_new_stock_entry(request, portfolio_instance, portfolio_id: uuid.UUID, ac
     return None
 
 
-def check_if_active_positions_and_calculate_current_profits(request, portfolio_instance, portfolio_id: uuid.UUID,
+def check_if_active_positions_and_calculate_current_profits(request, portfolio_instance: Portfolio, portfolio_id: uuid.UUID,
                                                             active_connection: bool, limit_exceeded: bool):
     """
     @param request:
@@ -310,7 +312,7 @@ def check_if_active_positions_and_calculate_current_profits(request, portfolio_i
     return calculated_positions
 
 
-def delete_position(request, portfolio_instance, portfolio_id: uuid.UUID) -> HttpResponse or None:
+def delete_position(request, portfolio_instance: Portfolio, portfolio_id: uuid.UUID) -> Union[HttpResponse, None]:
     """
     @param request:
     @param portfolio_instance:
@@ -329,7 +331,7 @@ def delete_position(request, portfolio_instance, portfolio_id: uuid.UUID) -> Htt
     return None
 
 
-def edit_position(request, portfolio_id: uuid.UUID) -> HttpResponse or None:
+def edit_position(request, portfolio_id: uuid.UUID) -> Union[HttpResponse, None]:
     """
     @param request:
     @param portfolio_id:
@@ -360,7 +362,7 @@ def remove_hyphen_from_portfolio_id(dirty_portfolio_id: uuid.UUID) -> str:
     return str(dirty_portfolio_id).replace('-', '')
 
 
-def get_portfolio_id_without_hyphen(portfolio_instance):
+def get_portfolio_id_without_hyphen(portfolio_instance: Portfolio):
     """
     @param portfolio_instance:
     @return:
@@ -372,7 +374,16 @@ def get_portfolio_id_without_hyphen(portfolio_instance):
 
 def save_new_portfolio_to_db(cleaned_user_portfolio_name: str, user_id: uuid.UUID, data_for_chart_array: List[str],
                              labels_array: List[str], monthly_profit: List[float]):
-    new_portfolio_entry = Portfolio(portfolio_name=cleaned_user_portfolio_name,
+    """
+    @param cleaned_user_portfolio_name:
+    @param user_id:
+    @param data_for_chart_array:
+    @param labels_array:
+    @param monthly_profit:
+    @return: None
+    """
+    new_portfolio_entry = Portfolio(pk=uuid.uuid4(),
+                                    portfolio_name=cleaned_user_portfolio_name,
                                     user_id=user_id,
                                     data_for_chart_array=data_for_chart_array,
                                     labels_array=labels_array,
@@ -381,16 +392,89 @@ def save_new_portfolio_to_db(cleaned_user_portfolio_name: str, user_id: uuid.UUI
     new_portfolio_entry.save()
 
 
-def add_new_portfolio(request, current_month) -> HttpResponse:
+def add_new_portfolio(request, current_month: datetime.date) -> HttpResponse:
+    """
+    @param request:
+    @param current_month:
+    @return:
+    """
     if request.method == 'POST':
         form = PortfolioForm(request.POST)
         if form.is_valid():
-            monthly_profit_array_until_current_month = []
-            for i in range(0, current_month.month):
-                monthly_profit_array_until_current_month.append(0)
+            monthly_profit_array = get_monthly_profit_array_until_current_month(current_month)
 
             cleaned_user_portfolio_name = form.cleaned_data['portfolio_name']
-            save_new_portfolio_to_db(cleaned_user_portfolio_name, request.user.id, [], [],
-                                     monthly_profit_array_until_current_month)
+            save_new_portfolio_to_db(cleaned_user_portfolio_name,
+                                     request.user.id,
+                                     [],
+                                     [],
+                                     monthly_profit_array
+                                     )
 
             return redirect('stocktracker')  # pragma: no cover
+
+
+def get_monthly_profit_array_until_current_month(current_month: datetime.date) -> List[int]:
+    """
+    @param current_month:
+    @return: List with added zero's example: [0,0,0,0]
+    """
+    monthly_profit_array_until_current_month = []
+    for i in range(0, current_month.month):
+        monthly_profit_array_until_current_month.append(0)
+    return monthly_profit_array_until_current_month
+
+
+def check_if_portfolio_is_empty(portfolio: Portfolio) -> bool:
+    """
+    @param portfolio: Portfolio instance
+    @return: true or false
+    """
+    if portfolio.total_positions == 0:
+        return True
+    return False
+
+
+def reset_portfolio_when_no_positions(portfolio: Portfolio) -> None:
+    """
+    @param portfolio:
+    @return: None
+    """
+    portfolio.total_amount_invested = 0
+    portfolio.total_profit = 0
+    portfolio.total_profit_percentage = 0.0
+    portfolio.data_for_chart_array = []
+    portfolio.labels_array = []
+    portfolio.total_positions = 0
+    portfolio.save()
+
+
+def get_postal_code_range(clean_postal_code: str, radius: int) -> List[str]:
+    """
+    @param clean_postal_code: str
+    @param radius: int
+    @return: List containing Postal code range/s
+    """
+    postal_code_range = []
+    try:
+        response = requests.get(
+            f"http://postcode.vanvulpen.nl/afstand/{clean_postal_code}/{radius}/").json()
+        postal_code_range = response
+        return postal_code_range
+    except ConnectionError as e:
+        sentry_sdk.capture_exception(e)
+        postal_code_range = []
+    return postal_code_range
+
+
+def add_monthly_profit_to_data_array_and_save_to_db(portfolio: Portfolio, current_month_for_data_array: int):
+    try:
+        portfolio.monthly_profit[current_month_for_data_array] = portfolio.total_profit
+        portfolio.save()
+    except KeyError as error:
+        sentry_sdk.capture_exception(error)
+    except IndexError as error:
+        sentry_sdk.capture_exception(error)
+        portfolio.monthly_profit.append(0)
+        portfolio.save()
+    return None

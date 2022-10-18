@@ -1,3 +1,5 @@
+import uuid
+
 from django.test import TestCase
 from .models import Portfolio, Positions
 from datetime import datetime
@@ -42,7 +44,8 @@ class TestPortfolio(TestCase):  # pragma: no cover
 class TestServices(TestCase):  # pragma: no cover
     def setUp(self):  # pragma: no cover
         test_user = User.objects.create(first_name='TestUser', last_name='TestUserSurname', email='testuser@gmail.com')
-        test_portfolio = Portfolio.objects.create(portfolio_name='TestPortfolio',
+        test_portfolio = Portfolio.objects.create(pk=uuid.uuid4(),
+                                                  portfolio_name='TestPortfolio',
                                                   user=test_user,
                                                   data_for_chart_array=[],
                                                   labels_array=[],
@@ -54,6 +57,19 @@ class TestServices(TestCase):  # pragma: no cover
                                                   monthly_profit=[],
                                                   id_for_chart=''
                                                   )
+        empty_test_portfolio = Portfolio.objects.create(pk=uuid.uuid4(),
+                                                        portfolio_name='TestPortfolioEmpty',
+                                                        user=test_user,
+                                                        data_for_chart_array=[],
+                                                        labels_array=[],
+                                                        created_on=datetime.now(),
+                                                        total_amount_invested=0,
+                                                        total_profit=0,
+                                                        total_profit_percentage=0.0,
+                                                        total_positions=0,
+                                                        monthly_profit=[],
+                                                        id_for_chart=''
+                                                        )
         Positions.objects.create(pk=uuid4(),
                                  ticker_name='AAPL',
                                  buy_price=80,
@@ -80,6 +96,8 @@ class TestServices(TestCase):  # pragma: no cover
                                  )
         self.test_user = test_user
         self.test_portfolio = test_portfolio
+        self.empty_test_portfolio = empty_test_portfolio
+        self.current_month = current_month = datetime.now()
 
     def test_check_active_positions(self):  # pragma: no cover
         result = services.check_if_active_positions(self.test_portfolio.id)
@@ -118,3 +136,20 @@ class TestServices(TestCase):  # pragma: no cover
     def test_get_portfolio_id_without_hypen(self):
         clean_id = services.get_portfolio_id_without_hyphen(self.test_portfolio)
         self.assertEqual(clean_id, services.remove_hyphen_from_portfolio_id(self.test_portfolio.id))
+
+    def test_save_new_portfolio_to_db(self):
+        test_monthly_profit_array = services.get_monthly_profit_array_until_current_month(self.current_month)
+        services.save_new_portfolio_to_db('test_portfolio_1',
+                                          self.test_user.id,
+                                          [],
+                                          [],
+                                          test_monthly_profit_array)
+        self.assertEqual(Portfolio.objects.filter(portfolio_name='test_portfolio_1').exists(), True)
+
+    def test_get_postal_code_range(self):
+        postal_code_range = services.get_postal_code_range('8021', 1000)
+        self.assertEqual(postal_code_range, ['8021', '8022'])
+
+    def test_check_if_portfolio_is_empty(self):
+        check_if_empty_portfolio = services.check_if_portfolio_is_empty(self.empty_test_portfolio)
+        self.assertEqual(check_if_empty_portfolio, True)
