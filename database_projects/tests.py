@@ -97,7 +97,7 @@ class TestServices(TestCase):  # pragma: no cover
         self.test_user = test_user
         self.test_portfolio = test_portfolio
         self.empty_test_portfolio = empty_test_portfolio
-        self.current_month = current_month = datetime.now()
+        self.current_month = datetime.now()
 
     def test_check_active_positions(self):  # pragma: no cover
         result = services.check_if_active_positions(self.test_portfolio.id)

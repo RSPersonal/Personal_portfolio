@@ -3,8 +3,6 @@ import os
 from datetime import date
 from datetime import datetime
 
-import requests
-import sentry_sdk
 from decouple import config
 from django.contrib.auth.decorators import login_required
 from django.http import FileResponse, HttpResponse
@@ -149,7 +147,7 @@ def valuation_tool(request):
         user_input_type_of_object = request.POST.get('typeOfObject')
         clean_postal_code = extract_postal_code(request.POST.get('postcode'))
         user_input_radius = int(request.POST.get('radius'))
-        postal_code_range = services.get_postal_code_range(clean_postal_code)
+        postal_code_range = services.get_postal_code_range(clean_postal_code, user_input_radius)
 
         # Makes no sense to search for properties if we have no postal code range
         if postal_code_range:
