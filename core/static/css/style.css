@@ -1,5 +1,129 @@
 * {
     outline-offset: -1px;
-    font-family: monospace;
+    font-family: roboto;
+    font-size: 13px;
 }*
-#outline: 1px solid blue;
+
+.technicalHeader {
+    font-size: 8px;
+}
+
+.loginDiv {
+    margin-top: 20vh;
+    width: 500px;
+}
+
+.stockTable {
+    margin-top: 40px;
+}
+
+.leftCardPortfolioDetail{
+    height: 200px;
+}
+
+.portfolioDetailsKpiCard{
+    height: 100px;
+    margin-top: 10px;
+}
+
+.dailyReturnPercentage {
+    text-align: right;
+}
+
+.homePageBigBlock{
+    height: 100vh;
+}
+
+.homepageCardTitle {
+    font-size: 100px;
+}
+
+.lineHomepage {
+    margin-top: 20vh;
+    animation: fadeIn 5s;
+    animation-fill-mode: both;
+    animation-delay: 4s;
+}
+
+.homepageBigNameContainer {
+    margin-top: 200px;
+}
+
+.homepageLinkedin {
+    height: 40px;
+    width: auto;
+}
+
+.homepageGithub {
+    height: 40px;
+    width: auto;
+}
+
+.fade-in-image-linkedin {
+    margin-top: 20px;
+    animation: fadeIn 5s;
+    animation-fill-mode: both;
+    animation-delay: 3s;
+    }
+
+
+.fade-in-image-github {
+    margin-top: 20px;
+    animation: fadeIn 5s;
+    animation-fill-mode: both;
+    animation-delay: 4s;
+    }
+
+@keyframes fadeIn {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+}
+
+@media only screen and (max-width: 992px) {
+    * {
+    outline-offset: -1px;
+    font-family: roboto;
+    font-size: 13px;
+    }*
+
+    .homepageCardTitle {
+        font-size: 50px;
+    }
+
+    .homepageGithub {
+        height: 40px;
+        margin-left: 30px;
+        width: auto;
+    }
+    .technicalHeader {
+        font-size: 8px;
+    }
+
+    .loginDiv {
+        margin-top: 20vh;
+        width: 500px;
+    }
+
+    .portfolioDetailsKpiCard {
+        margin-top: 20px;
+        height: 100px;
+        align-items: left;
+    }
+
+    .stockTable {
+        margin-top: 40px;
+    }
+
+    .leftCardPortfolioDetail, .rightCardPortfolioDetailCharts{
+    }
+
+    .portfolioMainCards {
+        margin-top: 20px;
+    }
+
+    .dailyReturnPercentage {
+        text-align: center;
+        align-items: center;
+        margin: auto;
+    }
+}

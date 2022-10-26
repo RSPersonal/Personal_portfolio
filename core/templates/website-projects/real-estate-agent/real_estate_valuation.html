@@ -44,22 +44,22 @@
                 </div>
                 <div class="row mt-3">
                     <div class="col-sm-3">
-                        <label for="street" class="form-label">Straat</label>
+                        <label for="street" class="form-label">Street</label>
                         <br>
                         <input type="text" class="from-control" id="street" name="street" size="30"/>
                     </div>
                     <div class="col-sm-1">
-                        <label for="houseNumber" class="form-label">Huisnummer</label>
+                        <label for="houseNumber" class="form-label">Housenumber</label>
                         <br>
                         <input type="text" class="from-control" id="houseNumber" name="houseNumber" size="9" required/>
                     </div>
                     <div class="col-sm-2">
-                        <label for="postcode" class="form-label">Postcode</label>
+                        <label for="postcode" class="form-label">Postalcode</label>
                         <br>
                         <input class="from-control" type="text" id="postcode" name="postcode" required/>
                     </div>
                     <div class="col-sm-3">
-                        <label for="locality" class="form-label">Stad</label>
+                        <label for="locality" class="form-label">City</label>
                         <br>
                         <input type="text" id="locality" name="locality" />
                     </div>
@@ -78,10 +78,12 @@
                     <div class="col-sm-3 mt-3">
                         <label for="radius" class="form-label">Radius</label>
                         <br>
-                        <input type="range" class="form-range" id="radius" name="radius" min="0" max="15000" required/>
+                        <input type="range" class="form-range" id="radius" name="radius" min="0" max="10000" step="500"
+                               onChange="document.getElementById('postalCodeRangeDiv').innerText = document.getElementById('radius').value + ' m'" required/>
+                        <span id="postalCodeRangeDiv">5000 m</span>
                     </div>
                     <div class="col-sm-2 mt-3">
-                        <label for="nla" class="form-label">Woonoppervlakte m²</label>
+                        <label for="nla" class="form-label">Living area m²</label>
                         <br>
                         <input type="text" id="nla" name="nla" size="10" required/>
                     </div>
@@ -92,7 +94,7 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-sm-2 mt-3">
+                    <div class="col-sm-2 mt-3 mb-3">
                         <label for="filterSubmitButton" class="form-label"></label>
                         <button type="submit" class="btn btn-primary" id="filterSubmitButton"
                                 name="searchAddressSubmitButton">
@@ -101,6 +103,14 @@
                     </div>
                 </div>
             </form>
+            {% if no_objects_found == True %}
+            <div class="col-sm-12 text-center">
+                <h5>
+                    No properties with given parameters found in {{ user_input_city }}
+                </h5>
+                <p></p>
+            </div>
+            {% endif %}
             {% if final_calculated_mean_price > 0 %}
             <div class="col-sm-12 text-center">
                 <h5 id="meanPrice">

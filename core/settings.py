@@ -82,16 +82,35 @@ WSGI_APPLICATION = 'core.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': os.getenv("DB_DATABASE", config("DB_DATABASE")),
-        'USER': os.getenv("DB_USERNAME", config("DB_USERNAME")),
-        'PASSWORD': os.getenv("DB_PASSWORD", config("DB_PASSWORD")),
-        'HOST': os.getenv("DB_DOCKER_HOST", config("DB_DOCKER_HOST")),
-        'PORT': os.getenv("DB_PORT", config("DB_PORT")),
+
+DEVELOPMENT_MODE = os.getenv("DEVELOPMENT_MODE", config("DEVELOPMENT_MODE")) == "True"
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+
+if DEVELOPMENT_MODE is True:
+    EMAIL_HOST = 'localhost'
+    EMAIL_PORT = 1025
+    EMAIL_HOST_USER = ''
+    EMAIL_HOST_PASSWORD = ''
+    EMAIL_USE_TLS = False
+    DEFAULT_FROM_MAIL = 'testing@localhost.com'
+
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': os.getenv("DB_DATABASE", config("DB_DATABASE")),
+            'USER': os.getenv("DB_USERNAME", config("DB_USERNAME")),
+            'PASSWORD': os.getenv("DB_PASSWORD", config("DB_PASSWORD")),
+            'HOST': os.getenv("DB_HOST", config("DB_HOST")),
+            'PORT': os.getenv("DB_PORT", config("DB_PORT")),
+        }
     }
-}
+elif len(sys.argv) > 0 and sys.argv[1] != 'collectstatic':
+    if os.getenv("DATABASE_URL", None) is None:
+        raise Exception("DATABASE_URL environment variable not defined")
+    DATABASES = {
+        "default": dj_database_url.parse(os.environ.get("DATABASE_URL")),
+    }
+
 
 
 # Password validation
@@ -186,7 +205,6 @@ sentry_sdk.init(
 
 CSRF_COOKIE_SECURE = True
 SESSION_COOKIE_SECURE = True
-LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 USE_THOUSAND_SEPARATOR = True
 2222

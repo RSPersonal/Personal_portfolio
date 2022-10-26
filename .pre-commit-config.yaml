@@ -7,7 +7,6 @@ repos:
       - id: check-executables-have-shebangs
       - id: check-merge-conflict
       - id: debug-statements
-      - id: end-of-file-fixer
       - id: name-tests-test
         args: [ "--django" ]
       - id: trailing-whitespace

@@ -1,130 +1,320 @@
 {% extends 'base.html' %}
 {% block page_content %}
+{% load static %}
 <div class="container-fluid">
-    <div class="row ps-4 pe-4">
-        <div class="col-sm-6">
-            <h3>{{ portfolio.portfolio_name }}</h3>
-        </div>
-        <div class="col-sm-6 text-end">
-            <!-- Button trigger modal -->
-            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#portfolio_label">
-                Delete portfolio
-            </button>
-
-            <!-- Modal for deleting the portfolio -->
-            <div class="modal fade" id="portfolio_label" tabindex="-1" role="dialog"
-                 aria-labelledby="exampleModalLabel"
-                 aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="portfolio_label_modal_label">{{ portfolio_name }}</h5>
-                            <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true"></span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <form name="portfolio_form" method="post">
-                                {% csrf_token %}
-                                <p>
-                                    Are you sure you want to delete the portfolio?
-                                </p>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No
-                                    </button>
-                                    <input class="btn btn-primary" name="delete_button" type="submit" value="Yes"/>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-sm-4 text-start">
-            <div class="btn-group">
-                <!-- Button trigger modal -->
-                <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                        data-bs-target="#add_position_modal">
-                    Add position
-                </button>
-                <!-- Modal for adding position -->
-                <div class="modal fade" id="add_position_modal" tabindex="-1" role="dialog"
-                     aria-labelledby="exampleModalLabel"
-                     aria-hidden="true">
-                    <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="add_position_modal_'label">{{ portfolio_name }}</h5>
-                                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true"></span>
+    <div class="row">
+        <div class="col-sm-6 portfolioMainCards">
+            <div class="card border bg-light leftCardPortfolioDetail">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-sm-8">
+                            <div class="btn-group">
+                                <!-- Button trigger modal -->
+                                <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                        data-bs-target="#add_position_modal">
+                                    + Add position
                                 </button>
-                            </div>
-                            <div class="modal-body">
-                                <div class="row">
-                                    <div class="col-sm-4">
-                                        <p>
-                                            Stock ticker:
-                                        </p>
-                                        <p class="pt-2">
-                                            Buy price:
-                                        </p>
-                                        <p class="pt-2">
-                                            Quantity:
-                                        </p>
-                                        <p class="pt-2">
-                                            Market:
-                                        </p>
-                                    </div>
-                                    <div class="col-sm-4">
-                                        <form name="position_form" method="post">
-                                            {% csrf_token %}
-                                            <p>
-                                                {{ position_form.ticker_name }}
-                                            </p>
-                                            <p>
-                                                {{ position_form.buy_price }}
-                                            </p>
-                                            <p>
-                                                {{ position_form.quantity }}
-                                            </p>
-                                            <p>
-                                                {{ position_form.market }}
-                                            </p>
-                                            <div class="modal-footer">
-                                                {% csrf_token %}
-                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                                                    No
+                                <!-- Modal for adding position -->
+                                <div class="modal fade" id="add_position_modal" tabindex="" role="dialog"
+                                     aria-labelledby="exampleModalLabel"
+                                     aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="add_position_modal_'label">
+                                                    {{ portfolio_name }}</h5>
+                                                <button type="button" class="close" data-bs-dismiss="modal"
+                                                        aria-label="Close">
+                                                    <span aria-hidden="true"></span>
                                                 </button>
-                                                <input class="btn btn-primary" name="add_position_button" type="submit" value="Yes"/>
                                             </div>
-                                        </form>
+                                            <div class="modal-body">
+                                                <div class="row">
+                                                    <div class="col-sm-4">
+                                                        <p>
+                                                            Stock ticker:
+                                                        </p>
+                                                        <p class="pt-2">
+                                                            Buy price:
+                                                        </p>
+                                                        <p class="pt-2">
+                                                            Quantity:
+                                                        </p>
+                                                        <p class="pt-2">
+                                                            Market:
+                                                        </p>
+                                                    </div>
+                                                    <div class="col-sm-4">
+                                                        <form name="position_form" method="post">
+                                                            {% csrf_token %}
+                                                            <p>
+                                                                {{ position_form.ticker_name }}
+                                                            </p>
+                                                            <p>
+                                                                {{ position_form.buy_price }}
+                                                            </p>
+                                                            <p>
+                                                                {{ position_form.quantity }}
+                                                            </p>
+                                                            <p>
+                                                                {{ position_form.market }}
+                                                            </p>
+                                                            <div class="modal-footer">
+                                                                {% csrf_token %}
+                                                                <button type="button" class="btn btn-secondary"
+                                                                        data-bs-dismiss="modal">
+                                                                    No
+                                                                </button>
+                                                                <input class="btn btn-primary"
+                                                                       name="add_position_button"
+                                                                       type="submit"
+                                                                       value="Yes"/>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <a class="btn btn-info" href="/database-projects-stocktracker">
+                                    Back to Portfolio overview</a>
+                            </div>
+                        </div>
+                        <div class="col-sm-4 text-end">
+                            <!-- Button trigger modal -->
+                            <button type="button" class="btn btn-danger" data-bs-toggle="modal"
+                                    data-bs-target="#portfolio_label">
+                                Delete portfolio
+                            </button>
+                            <!-- Modal for deleting the portfolio -->
+                            <div class="modal fade" id="portfolio_label" tabindex="-1" role="dialog"
+                                 aria-labelledby="exampleModalLabel"
+                                 aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="portfolio_label_modal_label">
+                                                {{ portfolio_name }}</h5>
+                                            <button type="button" class="close" data-bs-dismiss="modal"
+                                                    aria-label="Close">
+                                                <span aria-hidden="true"></span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form name="portfolio_form" method="post">
+                                                {% csrf_token %}
+                                                <p>
+                                                    Are you sure you want to delete the portfolio?
+                                                </p>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary"
+                                                            data-bs-dismiss="modal">
+                                                        No
+                                                    </button>
+                                                    <input class="btn btn-primary" name="delete_button" type="submit"
+                                                           value="Yes"/>
+                                                </div>
+                                            </form>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+                    <div class="col-sm-6">
+                        <table class="table" data-filter-control="true">
+                            <tbody>
+                            <tr>
+                                <th>Name:</th>
+                                <td>{{portfolio.portfolio_name}}</td>
+                            </tr>
+                            <tr>
+                                <th>Total positions</th>
+                                <td>{{portfolio.total_positions}}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="pt-2">
+                        {% if messages %}
+                        <ul class="messages">
+                            {% for message in messages %}
+                            <li {% if message.tags %} class="{{ message.tags }}" {% endif %}>
+                                {{ message }}
+                            </li>
+                            {% endfor %}
+                        </ul>
+                        {% endif %}
+                    </div>
                 </div>
-                <a class="btn btn-secondary" href="/database-projects-stocktracker">Portfolio overview</a>
             </div>
         </div>
-        <div class="pt-2">
-            {% if messages %}
-            <ul class="messages">
-                {% for message in messages %}
-                <li {% if message.tags %} class="{{ message.tags }}" {% endif %}>
-                    {{ message }}
-                </li>
-                {% endfor %}
-            </ul>
-            {% endif %}
+        <div class="col-sm-6 portfolioMainCards d-none d-sm-block">
+            <div class="card border bg-light rightCardPortfolioDetailCharts">
+                <div class="card-body text-center">
+                    <div class="row">
+                        <div class="col-4 text-start" style="width: 50%;">
+                            <span hidden id="portfolioID"> {{ portfolio.id|json_script:"portfolio.id" }}</span>
+                            <span hidden id="amountOfPositions"> {{ portfolio.total_positions|json_script:"portfolio.total_positions" }}</span>
+                            <span hidden id="portfolioDailyReturn">{{ portfolio.total_profit|json_script:"portfolio.total_profit" }}</span>
+                            <span hidden id="portfolioOveralReturn"> {{ portfolio.total_profit|json_script:"portfolio.total_profit" }}</span>
+                            <span hidden id="apiHost"> {{ api_host|json_script:"api_host" }}</span>
+                            <script>
+                    var portfolioId = JSON.parse(document.getElementById("portfolioID").textContent);
+                    var portfolioAttributes = {};
+                    portfolioAttributes['id'] = portfolioId
+                    portfolioAttributes['data'] = {};
+                    portfolioAttributes['randomNumber'] = () => Math.floor(Math.random() * (235 - 52 + 1) + 52);
+
+                    function rgbToHex(r, g, b) {
+                        return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
+                    }
+                    countPositions = JSON.parse(document.getElementById("amountOfPositions").textContent);
+
+                    portfolioAttributes.data['barColors'] = [];
+                    // var barColors_{{ portfolio.pk }} = [];
+                    for (var i = 0; i < countPositions; i++) {
+                        randomGeneratedColor = rgbToHex(portfolioAttributes.randomNumber(),portfolioAttributes.randomNumber(), portfolioAttributes.randomNumber());
+                        while (portfolioAttributes.data.barColors.includes(randomGeneratedColor)) {
+                            randomGeneratedColor = rgbToHex(randomNum(), randomNum(), randomNum());
+                        }
+                        portfolioAttributes.data.barColors.push(randomGeneratedColor);
+                    }
+                    portfolioAttributes.data['configPieChart'] = {
+                        type: 'pie',
+                        data: {
+                            datasets: [{
+                                data: {{ portfolio.data_for_chart_array|safe }},
+                                backgroundColor: portfolioAttributes.data.barColors,
+                                label: 'Stock ticker'
+                            }],
+                            labels: {{ portfolio.labels_array|safe }}
+                        },
+                        options: {
+                            responsive: true
+                        }
+                    };
+
+
+                    portfolioAttributes.data['configLineChart'] = {
+                        type: 'line',
+                        data: {
+                            datasets: [{
+                                data: {{ portfolio.monthly_profit|safe }},
+                                backgroundColor: portfolioAttributes.data.barColors,
+                                fill: false,
+                                label: 'Profit p.m.'
+                            }],
+                            labels: {{ labels_monthly|safe }}
+                        },
+                        options: {
+                            responsive: true
+                        }
+                    };
+
+                    window.addEventListener('load',  function() {
+                        var ctx1 = document.getElementById('pie-chart{{ portfolio.id }}').getContext('2d');
+                        window.myPie = new Chart(ctx1, portfolioAttributes.data.configPieChart);
+                         var ctx2 = document.getElementById('barChart{{ portfolio.id }}').getContext('2d');
+                        window.myBar = new Chart(ctx2, portfolioAttributes.data.configLineChart);
+                    });
+
+                            </script>
+                            <canvas id="pie-chart{{ portfolio.id }}"></canvas>
+                        </div>
+                        <div class="col-4 text-end d-none d-sm-block" style="width: 50%;">
+                            <canvas id="barChart{{ portfolio.pk }}"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
+    </div>
+</div>
+
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-3">
+            <div class="card border bg-success border text-white portfolioDetailsKpiCard">
+                <div class="card-body" id="dailyReturnDiv">
+                    <div class="row">
+                        <div class="col-6">
+                            <h3 id="dailyReturnItem">€</h3>
+                            <h6>Performance today</h6>
+                        </div>
+                        <div class="col-6 dailyReturnPercentage">
+                            <h2>  %</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <div class="card border bg-success text-white portfolioDetailsKpiCard"  >
+                <div class="card-body" id="overalReturnDiv">
+                    <div class="row">
+                        <div class="col-6">
+                            <h3>€ {{ portfolio.total_profit }}</h3>
+                            <h6>Overal return</h6>
+                        </div>
+                        <div class="col-6 dailyReturnPercentage">
+                            <h2> {{ portfolio.total_profit_percentage }} %</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-2">
+            <div class="card border bg-light portfolioDetailsKpiCard">
+                <div class="card-body">
+                    <h3>
+                        € {{ portfolio.total_amount_invested }}
+                    </h3>
+                    <h6>
+                        Total amount invested
+                    </h6>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-2">
+            <div class="card border bg-light portfolioDetailsKpiCard">
+                <div class="card-body">
+                    <h3>
+                        € {{ portfolio.total_amount_invested|add:portfolio.total_profit }}
+                    </h3>
+                    <h6>
+                        Portfolio value
+                    </h6>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-2">
+            <div class="card border bg-light portfolioDetailsKpiCard">
+                <div class="card-body">
+                    <h3>
+                        € 0
+                    </h3>
+                    <h6>
+                        Dividends
+                    </h6>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="container-fluid">
+    <div class="row pe-4 stockTable">
         <div class="table-responsive">
-            <table class="table">
+            <table class="table" id="stockTableBo">
                 <thead>
                 <tr>
                     <th scope="col">Info</th>
                     <th scope="col">Stock ticker</th>
-                    <th scope="col" class="text-end">Price bought</th>
+                    <th data-field="name" data-filter-control="input" scope="col" class="text-end">Price bought</th>
                     <th scope="col" class="text-end">Quantity</th>
                     <th scope="col" class="text-end">Amount invested</th>
                     <th scope="col" class="text-end">Current market price</th>
@@ -162,7 +352,8 @@
                                 <div class="modal-dialog" role="document">
                                     <div class="modal-content">
                                         <div class="modal-header">
-                                            <h5 class="modal-title" id="position_label_modal_label">{{ position.ticker_name }}</h5>
+                                            <h5 class="modal-title" id="position_label_modal_label">
+                                                {{ position.ticker_name }}</h5>
                                             <button type="button" class="close" data-bs-dismiss="modal"
                                                     aria-label="Close">
                                                 <span aria-hidden="true"></span>
@@ -203,7 +394,8 @@
                                 <div class="modal-dialog" role="document">
                                     <div class="modal-content">
                                         <div class="modal-header">
-                                            <h5 class="modal-title" id="edit_position_modal_label_{{ position.pk }}">{{ position.ticker_name }}</h5>
+                                            <h5 class="modal-title" id="edit_position_modal_label_{{ position.pk }}">
+                                                {{ position.ticker_name }}</h5>
                                             <button type="button" class="close" data-bs-dismiss="modal"
                                                     aria-label="Close">
                                                 <span aria-hidden="true"></span>
@@ -246,7 +438,8 @@
                                                                     data-bs-dismiss="modal">
                                                                 No
                                                             </button>
-                                                            <input class="btn btn-primary" name="edit_position_button" type="submit" value="Yes"/>
+                                                            <input class="btn btn-primary" name="edit_position_button"
+                                                                   type="submit" value="Yes"/>
                                                             <input type='hidden' value='{{ position.id }}' name='id'/>
                                                         </div>
                                                     </form>
@@ -279,4 +472,6 @@
         </div>
     </div>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+<script src="{% static 'js/portfolioDetailColorChanger.js' %}"></script>
 {% endblock %}

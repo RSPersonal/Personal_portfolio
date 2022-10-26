@@ -4,7 +4,6 @@ from json.decoder import JSONDecodeError
 from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render
 from django.contrib import messages
-from requests import Response
 from decouple import config
 from .forms import CurrencyForm
 from core.helpers_and_validators import input_validator
@@ -28,7 +27,7 @@ def geo_api_get_ip(request):
         user_ip_input = request.POST.get('ip-address')
         if input_validator.value(user_ip_input):
             try:
-                response: Response = requests.get(
+                response = requests.get(
                     f'http://api.ipstack.com/{user_ip_input}?access_key=9e190f3484c23275bc0cb044948ac119')
                 geo_data = response.json()
             except JSONDecodeError as e:
@@ -64,12 +63,13 @@ def currency_converter_call(request):
         if input_validator.value(from_currency_input) and form.is_valid():
             amount = form.cleaned_data['amount']
             api_key = os.getenv('CURRENCY_FREAKS_API_KEY', config('CURRENCY_FREAKS_API_KEY'))
+            requested_currency_data = {}
             try:
-                response: Response = requests.get(
+                response = requests.get(
                     f'https://api.currencyfreaks.com/latest?apikey={api_key}&symbols={from_currency_input}')
+                requested_currency_data = response.json()
             except JSONDecodeError as e:
                 print(e)
-            requested_currency_data = response.json()
             if 'success' in requested_currency_data:
                 messages.add_message(request, messages.INFO, requested_currency_data['error']['message'])
             else:

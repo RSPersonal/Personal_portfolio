@@ -1,0 +1,157 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block page_content %}
+<div class="container-fluid">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12 text-start mt-2">
+                <h5>
+                    Valuation tool
+                </h5>
+            </div>
+        </div>
+        <div class="col-sm-12">
+            <p>
+                This idea came from the fact that most real estate agents offer a so-called "free" valuation for
+                your house. In the end it always came down to that you still needed to send a request for a valuation to
+                them, and then they would come by and valuate your house.
+            </p>
+            <p>
+                To me this felt like a chance for them to sale
+                additionally services like a proposal to sale your house. I just want to know roughly what my house is
+                worth,
+                so that was the start of this whole idea.
+            </p>
+            <p>
+                Current features are:
+            <ol>
+                <li>Scrape data from funda.nl for sold houses</li>
+                <li>Save scraped data to database via pipeline</li>
+                <li>Get postal code range from external API tool called http://postcode.vanvulpen.nl/</li>
+                <li>Search for properties in postal code range based on radius (wip)</li>
+                <li>Calculate mean price of found properties</li>
+                <li>Ability to change the price based on user input bid percentage.</li>
+            </ol>
+            </p>
+        </div>
+        <div class="row">
+            <form method="post" id="searchAddressForm">
+                {% csrf_token %}
+                <div class="" id="searchBarValuation">
+                    <div class="col-sm-6">
+                        <input type="text" class="form-control" id="addressSearchBar" name="searchAddressInput"/>
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-sm-3">
+                        <label for="street" class="form-label">Street</label>
+                        <br>
+                        <input type="text" class="from-control" id="street" name="street" size="30"/>
+                    </div>
+                    <div class="col-sm-1">
+                        <label for="houseNumber" class="form-label">Housenumber</label>
+                        <br>
+                        <input type="text" class="from-control" id="houseNumber" name="houseNumber" size="9" required/>
+                    </div>
+                    <div class="col-sm-2">
+                        <label for="postcode" class="form-label">Postalcode</label>
+                        <br>
+                        <input class="from-control" type="text" id="postcode" name="postcode" required/>
+                    </div>
+                    <div class="col-sm-3">
+                        <label for="locality" class="form-label">City</label>
+                        <br>
+                        <input type="text" id="locality" name="locality" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-3 mt-3">
+                        <label for="typeOfObject" class="form-label">Type object</label>
+                        <br>
+                        <select class="form-select" aria-label="typeOfObject"  id="typeOfObject" name="typeOfObject" required>
+                            <option selected>Type object</option>
+                            <option>apartment</option>
+                            <option>house</option>
+                        </select>
+                    </div>
+
+                    <div class="col-sm-3 mt-3">
+                        <label for="radius" class="form-label">Radius</label>
+                        <br>
+                        <input type="range" class="form-range" id="radius" name="radius" min="0" max="10000" step="500"
+                               onChange="document.getElementById('postalCodeRangeDiv').innerText = document.getElementById('radius').value + ' m'" required/>
+                        <span id="postalCodeRangeDiv">5000 m</span>
+                    </div>
+                    <div class="col-sm-2 mt-3">
+                        <label for="nla" class="form-label">Living area m²</label>
+                        <br>
+                        <input type="text" id="nla" name="nla" size="10" required/>
+                    </div>
+                    <div class="col-sm-3 mt-3">
+                        <label for="biddingPercentage" class="form-label">Bid percentage %</label>
+                        <br>
+                        <input type="number" id="biddingPercentage" name="biddingPercentage" size="5" onclick=""/>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-2 mt-3 mb-3">
+                        <label for="filterSubmitButton" class="form-label"></label>
+                        <button type="submit" class="btn btn-primary" id="filterSubmitButton"
+                                name="searchAddressSubmitButton">
+                            Submit
+                        </button>
+                    </div>
+                </div>
+            </form>
+            {% if no_objects_found == True %}
+            <div class="col-sm-12 text-center">
+                <h5>
+                    No properties with given parameters found in {{ user_input_city }}
+                </h5>
+                <p></p>
+            </div>
+            {% endif %}
+            {% if final_calculated_mean_price > 0 %}
+            <div class="col-sm-12 text-center">
+                <h5 id="meanPrice">
+                    € {{ final_calculated_mean_price }}
+                </h5>
+                <p>Geschatte marktwaarde op basis van {{ found_objects }} gevonden objecten in de straal van 2000m van
+                    postcode {{ user_input_postal_code }}</p>
+            </div>
+            <div class="col-sm-2">
+                <a class="btn btn-light mb-2" data-bs-toggle="collapse" href="#showFoundObjects" role="button"
+                   aria-expanded="false" aria-controls="showFoundObjects">Show found objects</a>
+            </div>
+            <div class="col-sm-3">
+                <label for="bidPercentageButton" class="form-label"></label>
+                <button class="btn" id="bidPercentageButton" name="bidPercentageButton">Show price with bid
+                    percentage
+                </button>
+            </div>
+            <div class="row">
+                <div class="col-sm-6 collapse mt-1" id="showFoundObjects">
+                    {% for found_property in found_properties %}
+                    <div class="card card-body mt-2">
+                        <p><i class="bi bi-house-door"></i> Adres: {{ found_property.street }} {{ found_property.housenumber }} {{ found_property.city }} </p>
+                        <p>
+                            <i class="bi bi-clipboard-data"></i> Prijs aangeboden: € {{ found_property.ask_price }}
+                        </p>
+                        <p>
+                            {{ found_property.type_of_property }}
+                        </p>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+<span hidden id="meanPriceJson"> {{ final_calculated_mean_price|json_script:"final_calculated_mean_price" }}</span>
+<script type="text/javascript" src="{% static 'js/website_projects/searchAddress.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/website_projects/priceChanger.js' %}"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key={{google_places_key}}&libraries=places&callback=initAutocomplete"
+        async defer>
+</script>
+{% endblock %}

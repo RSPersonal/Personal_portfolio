@@ -1,5 +1,6 @@
 import unittest
-from .calculator import *
+from core.helpers_and_validators.stock_calculator import calculate_mean_price, calculate_stock_profit, calculate_portfolio_profit_in_percentage, \
+    calculate_profit_in_percentage, calculate_total_amount_invested
 
 
 class CalculateTest(unittest.TestCase):
@@ -21,6 +22,9 @@ class CalculateTest(unittest.TestCase):
             calculate_mean_price([339000, 385000, 325000, 259000, 397500, 325000, 285000, 545000, 359500, 775000]),
             399500.0)
 
+    def test_calculate_profit_in_percentage(self):
+        self.assertEqual(calculate_profit_in_percentage(200, 10, 200), 10.0)
+
 
 if __name__ == '__main__':
-    unittest.main(argv=['', '-v'])
+    unittest.main()

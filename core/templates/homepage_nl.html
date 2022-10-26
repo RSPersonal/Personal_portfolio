@@ -3,18 +3,40 @@
 
 {% block page_content %}
 <body>
+<div class="container homePageBigBlock">
+    <div class="homepageBigNameContainer">
+        <h2 class="homepageCardTitle">Raphael <br> Sparenberg </h2>
+        <h2 class="ml1">
+            <span class="text-wrapper">
+            <span class="line line1"></span>
+            <span class="letters">&#60;Aspiring programmer from the Netherlands></span>
+            <span class="line line2"></span>
+            </span>
+        </h2>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-1 fade-in-image-linkedin">
+                <a href="https://nl.linkedin.com/in/raphael-sparenberg-637885173" target="_blank"><img
+                        class="card-img-top homepageLinkedin" src="{% static 'img/linkedin-logo.png' %}"
+                        alt="Card image cap"></a>
+            </div>
+            <div class="col-1 fade-in-image-github">
+                <a href="https://github.com/RSPersonal" target="_blank"><img class="card-img-top homepageGithub"
+                                                                             src="{% static 'img/github-logo.png' %}"
+                                                                             alt="Card image cap"></a>
+            </div>
+        </div>
+    </div>
+</div>
 <div class="container mt-2">
     <div class="row">
-        <div class="col-1 text-left">
-            <p>Visitor count</p>
-            {{ num_visits.visitor_count }}
-        </div>
         <div class="col-sm text-center">
             <h3 class="mt-4">
-                <p>Raphael Sparenberg</p>
+                Raphael Sparenberg
             </h3>
             <p>
-                <br/>REAL ESTATE ADVISOR | INTERNATIONAL BUSINESS IT-CONSULTANT ZWOLLE, NEDERLAND +31 (0)6 41237152
+                <br/>SENIOR INTERNATIONAL BUSINESS IT-CONSULTANT ZWOLLE, NEDERLAND +31 (0)6 41237152
             </p>
         </div>
         <div class="col-sm-1 text-right">
@@ -25,7 +47,7 @@
 <div class="container">
     <!-- Left column -->
     <div class="row">
-        <div class="col-sm-4 text-center">
+        <div class="col-sm-3 text-center">
             <h5><b>PERSONALIA</b></h5>
             <p>Zwolle
                 <br/>Nederland
@@ -77,13 +99,13 @@
         <!-- Middle column -->
         <!-- Right column -->
         <div class="col-sm text-left">
-            <h5><b>PROFIEL</b></h5>
+            <h5><b><i class="bi bi-file-person pe-1"></i>PROFIEL</b></h5>
             {% for profile_post in profile_posts %}
             <p>{{ profile_post.post }}</p>
             {% endfor %}
-            <h5><b>WERKERVARING</b></h5>
+            <h5><b><i class="bi bi-pencil-square pe-1"></i>WERKERVARING</b></h5>
             <p>
-                <b>International Business IT-Consultant | Real Estate Advisor, KATE Innovations B.V., Utrecht</b>
+                <b>Senior International Business IT-Consultant, KATE Innovations B.V., Utrecht</b>
                 <br/>november 2020- tot Heden
             <ul>
                 <li>Projectmanagement internationaal</li>
@@ -113,7 +135,7 @@
             </p>
             <div class="row">
                 <div class="col-sm-8 text-left">
-                    <h5><b>OPLEIDING & TECHNISCH</b></h5>
+                    <h5><b><i class="bi bi-book-half pe-1"></i>OPLEIDING & TECHNISCH</b></h5>
                     <p>
                         <b>Crash course PHP programmeren, KATE Innovations, Utrecht</b>
                         <br/>december 2020 — maart 2021
@@ -204,4 +226,6 @@
     </div>
 </div>
 </body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/2.0.2/anime.min.js"></script>
+<script type="text/javascript" src="{% static 'js/homepageLetters.js' %}"></script>
 {% endblock %}

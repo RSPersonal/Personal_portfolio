@@ -2,15 +2,38 @@
 {% load static %}
 
 {% block page_content %}
+
+<div class="container homePageBigBlock">
+    <div class="homepageBigNameContainer">
+        <h2 class="homepageCardTitle">Raphael <br> Sparenberg </h2>
+        <h2 class="ml1">
+            <span class="text-wrapper">
+            <span class="line line1"></span>
+            <span class="letters">&#60;Aspiring programmer from the Netherlands></span>
+            <span class="line line2"></span>
+            </span>
+        </h2>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-1 fade-in-image-linkedin">
+                <a href="https://nl.linkedin.com/in/raphael-sparenberg-637885173" target="_blank"><img
+                        class="card-img-top homepageLinkedin" src="{% static 'img/linkedin-logo.png' %}"
+                        alt="Card image cap"></a>
+            </div>
+            <div class="col-1 fade-in-image-github">
+                <a href="https://github.com/RSPersonal" target="_blank"><img class="card-img-top homepageGithub"
+                                                                             src="{% static 'img/github-logo.png' %}"
+                                                                             alt="Card image cap"></a>
+            </div>
+        </div>
+    </div>
+</div>
 <div class="container mt-2">
     <div class="row">
-        <div class="col-1 text-left" id="visitorCount">
-            <p>Visitor count</p>
-            {{ num_visits.visitor_count }}
-        </div>
-        <div class="col-sm-10 text-center">
+        <div class="col-sm text-center">
             <h3 class="mt-4">
-                <p>Raphael Sparenberg</p>
+                Raphael Sparenberg
             </h3>
             <p>
                 <br/>SENIOR INTERNATIONAL BUSINESS IT-CONSULTANT ZWOLLE, NEDERLAND +31 (0)6 *
@@ -25,7 +48,7 @@
 <div class="container">
     <!-- Left column -->
     <div class="row">
-        <div class="col-sm-4 text-center">
+        <div class="col-sm-3 text-center">
             <h5><b>PERSONALIA</b></h5>
             <p>Zwolle
                 <br/>Nederland
@@ -208,5 +231,6 @@
         </div>
     </div>
 </div>
-<script type="text/javascript" src="{% static 'js/homepage/hideForResume.js' %}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/2.0.2/anime.min.js"></script>
+<script type="text/javascript" src="{% static 'js/homepageLetters.js' %}"></script>
 {% endblock %}

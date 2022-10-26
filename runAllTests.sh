@@ -1,2 +1,2 @@
-python -m manage test core
-python -m manage test
+python -Wa -m manage test core
+python -Wa -m manage test
