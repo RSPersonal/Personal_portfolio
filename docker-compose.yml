@@ -21,5 +21,30 @@ services:
       dockerfile: ./Dockerfile
     links:
       - db:db
-    ports:
-      - "8000:8000"
+    labels:
+      # Enable Traefik for this specific "backend" service
+      - traefik.enable=true
+      # Define the port inside of the Docker service to use
+      - traefik.http.services.app.loadbalancer.server.port=80
+      # Make Traefik use this domain in HTTP
+      - traefik.http.routers.app-http.entrypoints=http
+      - traefik.http.routers.app-http.rule=Host(`rs-portfolio-services.com`)
+      # Make Traefik use this domain in HTTPS
+      - traefik.http.routers.app-https.entrypoints=https
+      - traefik.http.routers.app-https.rule=Host(`rs-portfolio-services.com`)
+      - traefik.http.routers.app-https.tls=true
+      # Use tls lets encrypt resolver
+      - traefik.http.routers.app-https.tls.certresolver=le
+      # https-redirect middleware to redirect HTTP to HTTPS
+      - traefik.http.middlewares.https-redirect.redirectscheme.scheme=https
+      - traefik.http.middlewares.https-redirect.redirectscheme.permanent=true
+      # Middleware to redirect HTTP to HTTPS
+      - traefik.http.routers.app-http.middlewares=https-redirect
+      # Use the traefik-public network (declared below)
+      - traefik.docker.network=traefik-public
+    networks:
+      - traefik-public
+
+networks:
+  traefik-public:
+    external: true
