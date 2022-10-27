@@ -7,12 +7,18 @@ def home_page_en(request):
     """
     Function for homepage render
     """
-    active_visitor_count = VisitorCount.objects.get(pk=1)
-    if active_visitor_count:
+    check_active_visitor_count = VisitorCount.objects.filter(pk=1).exists()
+
+    if check_active_visitor_count:
+        active_visitor_count = VisitorCount.objects.get(pk=1)
         active_visitor_count.visitor_count += 1
         active_visitor_count.save()
+        num_current_visits = active_visitor_count
+    else:
+        first_visitor_count = VisitorCount(visitor_count=1)
+        first_visitor_count.save()
+        num_current_visits = 1
 
-    num_current_visits = active_visitor_count
     profile_posts = ProfilePosts.objects.order_by('order').filter(language='EN')
 
     # TODO Possible this can be done more elegant. Probably to many database calls
@@ -42,12 +48,17 @@ def home_page_nl(request):
     """
     Function for homepage render
     """
-    active_visitor_count = VisitorCount.objects.get(pk=1)
-    if active_visitor_count:
+    check_active_visitor_count = VisitorCount.objects.filter(pk=1).exists()
+
+    if check_active_visitor_count:
+        active_visitor_count = VisitorCount.objects.get(pk=1)
         active_visitor_count.visitor_count += 1
         active_visitor_count.save()
-
-    num_current_visits = active_visitor_count
+        num_current_visits = active_visitor_count
+    else:
+        first_visitor_count = VisitorCount(visitor_count=1)
+        first_visitor_count.save()
+        num_current_visits = 1
 
     profile_posts = ProfilePosts.objects.order_by('order').filter(language='NL')
 
