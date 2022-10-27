@@ -48,4 +48,4 @@ networks:
   traefik-public:
     external: true
   django-network:
-    driver: brigde
+    driver: default
