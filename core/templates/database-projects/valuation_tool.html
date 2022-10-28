@@ -35,8 +35,8 @@
             </p>
         </div>
         <div class="row">
+            {% csrf_token %}
             <form method="post" id="searchAddressForm">
-                {% csrf_token %}
                 <div class="" id="searchBarValuation">
                     <div class="col-sm-6">
                         <input type="text" class="form-control" id="addressSearchBar" name="searchAddressInput"/>

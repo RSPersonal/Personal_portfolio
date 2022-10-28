@@ -111,8 +111,6 @@ elif len(sys.argv) > 0 and sys.argv[1] != 'collectstatic':
         "default": dj_database_url.parse(os.environ.get("DATABASE_URL")),
     }
 
-
-
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
 
@@ -207,4 +205,3 @@ CSRF_COOKIE_SECURE = True
 SESSION_COOKIE_SECURE = True
 LOGOUT_REDIRECT_URL = '/'
 USE_THOUSAND_SEPARATOR = True
-2222

@@ -64,23 +64,28 @@
                             <a class="btn btn-primary" href="{% url 'portfolio_detail' portfolio.pk%}">
                                 Go to {{ portfolio }}</a>
                             <div class="btn-group" role="group">
-                                <button class="btn btn-light dropdown-toggle" type="button"
-                                        id="optionsPortfolioDropdown"
-                                        data-bs-toggle="dropdown" aria-expanded="false">
-                                    Options
-                                </button>
-                                <ul class="dropdown-menu" aria-labelledby="optionsPortfolioDropdown">
-                                    <li><a class="dropdown-item"
-                                           href="/database-projects-stocktracker/portfolio/csv/{{portfolio.id}}">Download
-                                        CSV</a></li>
-                                    <li><a class="dropdown-item" href="">Download PDF</a></li>
-                                    <li><label for="fileSelect">Import CSV file</label>
-                                        <a>
-                                            <input id="fileSelect" type="file"
-                                                   accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"/>
-                                        </a>
-                                    </li>
-                                </ul>
+                                                                        {% csrf_token %}
+
+                                <form>
+                                    <button class="btn btn-light dropdown-toggle" type="button"
+                                            id="optionsPortfolioDropdown"
+                                            data-bs-toggle="dropdown" aria-expanded="false">
+                                        Options
+                                    </button>
+                                    <ul class="dropdown-menu" aria-labelledby="optionsPortfolioDropdown">
+                                        <li><a class="dropdown-item"
+                                               href="/database-projects-stocktracker/portfolio/csv/{{portfolio.id}}">Download
+                                            CSV</a></li>
+                                        <li><a class="dropdown-item" href="">Download PDF</a></li>
+
+                                        <li><label for="fileSelect">Import CSV file</label>
+                                            <a>
+                                                <input id="fileSelect" type="file"
+                                                       accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"/>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </form>
                             </div>
                         </div>
                     </div>
@@ -141,6 +146,8 @@
                                             var ctx2 = document.getElementById('bar-Chart_{{ portfolio.id_for_chart }}').getContext('2d');
                                             window.myBar = new Chart(ctx2, configBarChart_{{ portfolio.id_for_chart }});
                                         });
+
+
 
 
 

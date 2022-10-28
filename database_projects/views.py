@@ -1,5 +1,6 @@
 import csv
 import os
+import io
 from datetime import date
 from datetime import datetime
 
@@ -135,6 +136,23 @@ def download_portfolio_csv(request, request_id: int):
              position.current_market_price, position.position_profit, position.position_profit_in_percentage])
 
     return response  # pragma: no cover
+
+
+@login_required
+def import_csv_stock_entries(request):
+    portfolio_id = ''
+    # Read the uploaded file row for row
+    csv_file = request.FILES['file']
+    data_set = csv_file.read().decode('UTF-8')
+
+    io_string = io.StringIO(data_set)
+
+    for column in csv.reader(io_string, delimiter=','):
+        print(column)
+
+
+    headers = []
+    # Read the first row as the headers
 
 
 def valuation_tool(request):

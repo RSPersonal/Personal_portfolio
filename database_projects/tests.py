@@ -10,9 +10,6 @@ from uuid import uuid4
 
 class TestPortfolio(TestCase):  # pragma: no cover
     def setUp(self):  # pragma: no cover
-        """
-        @return: None
-        """
         test_user = User.objects.create(first_name='TestUser', last_name='TestUserSurname', email='testuser@gmail.com')
         Portfolio.objects.create(portfolio_name='TestPortfolio',
                                  user=test_user,
@@ -25,6 +22,7 @@ class TestPortfolio(TestCase):  # pragma: no cover
                                  total_positions=0,
                                  monthly_profit=[]
                                  )
+        self.user = test_user
 
     def test_get_portfolio(self):  # pragma: no cover
         """
@@ -112,9 +110,6 @@ class TestServices(TestCase):  # pragma: no cover
         self.assertEqual(len(result), 2)
 
     def test_check_if_active_positions_and_calculate_current_profits(self):
-        """
-        @return: None
-        """
         check_if_active_position = services.check_if_active_positions(self.test_portfolio.id)
         self.assertEqual(check_if_active_position, True)
         positions = services.get_all_positions_in_portfolio(self.test_portfolio.id)
