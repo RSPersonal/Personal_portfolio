@@ -6,8 +6,6 @@
 https://r-sparenberg-portfolio.com/
 
 #### Architecture
-![image](https://user-images.githubusercontent.com/74533741/198544295-ea5b4361-a12c-463e-9e7a-b7196d2e75bf.png)
-
 Technogoly stack used:
 <h6><b>BACKEND</b></h6>
 <p align="left">
