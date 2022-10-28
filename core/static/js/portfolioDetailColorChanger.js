@@ -3,7 +3,6 @@ const valuesToCheck = {};
 // We first want to get the daily return data before we check on values to make the corresponding colors
 const portfolioID = JSON.parse(document.getElementById("portfolioID").textContent);
 const apiHost = JSON.parse(document.getElementById("apiHost").textContent);
-// console.log(apiHost);
 
 
 fetch(`${apiHost}api/v1/daily-return/${portfolioID}`)

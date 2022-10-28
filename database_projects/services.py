@@ -331,8 +331,9 @@ def delete_position(request, portfolio_instance: Portfolio, portfolio_id: uuid.U
     return None
 
 
-def edit_position(request, portfolio_id: uuid.UUID) -> Union[HttpResponse, None]:
+def edit_position(request, portfolio_id: uuid.UUID, pk) -> Union[HttpResponse, None]:
     """
+    @param pk:
     @param request:
     @param portfolio_id:
     @return:
@@ -346,7 +347,7 @@ def edit_position(request, portfolio_id: uuid.UUID) -> Union[HttpResponse, None]
                                                  ['ticker_name', 'buy_price', 'quantity', 'market'])
             update_stock_entry(request, clean_position)
 
-        return redirect('portfolio_detail', portfolio_id)  # pragma: no cover
+        return redirect('portfolio_detail', pk)  # pragma: no cover
     return None
 
 

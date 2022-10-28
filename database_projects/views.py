@@ -90,7 +90,7 @@ def portfolio_detail(request, pk):
     services.delete_position(request, portfolio, pk)
 
     # Edit position
-    services.edit_position(request, portfolio)
+    services.edit_position(request, portfolio, pk)
 
     # Delete Portfolio
     services.delete_portfolio(request, pk)
