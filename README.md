@@ -83,6 +83,10 @@ Here I want to showcase that iam able to connect to an external API and retreive
 <b>Database Projects</b>  
 This is my main section to showcase projects like the stocktracker. I learned a lot from this section but mostly unittesting, catching exceptions, getting database instances, correct variable naming, connecting own REST api, connecting to external api etc. 
 
+<b>Stocktracker<b> 
+![image](https://user-images.githubusercontent.com/74533741/198841183-564d890e-f5e0-4a53-a399-91da9bcdcd75.png)
+
+
 #### Database design for stocktracker
 
 A user can have many portfolio's and a portfolio can have many positions.
