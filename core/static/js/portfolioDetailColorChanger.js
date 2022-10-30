@@ -4,14 +4,13 @@ const valuesToCheck = {};
 const portfolioID = JSON.parse(document.getElementById("portfolioID").textContent);
 const apiHost = JSON.parse(document.getElementById("apiHost").textContent);
 
-
 fetch(`${apiHost}api/v1/daily-return/${portfolioID}`)
     .then((response) => response.json())
     .then((data) => {
         let fetchedLatestPrice;
-        if (data.data[0]) {
-            fetchedLatestPrice = data.data[0].last_price;
-        } else {
+        if (data.data) {
+            fetchedLatestPrice = data.data.last_price;
+        }else {
             fetchedLatestPrice = 0;
         }
         document.getElementById("dailyReturnItem").innerHTML = `€ ${fetchedLatestPrice.toLocaleString()}`;
@@ -43,5 +42,4 @@ fetch(`${apiHost}api/v1/daily-return/${portfolioID}`)
     .catch((error) => {
         console.warn(error);
         document.getElementById("dailyReturnItem").innerHTML = `€ 0,-`;
-
     });

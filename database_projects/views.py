@@ -67,16 +67,14 @@ def portfolio_detail(request, pk):
     position_form = PositionForm()
 
     # Here we need the correct ip for the api call to get the daily return
+    api_host_ip = os.getenv("API_HOST_LOCAL", config("API_HOST_LOCAL"))  # pragma: no cover
     if debug == 'False':
         api_host_ip = os.getenv("API_HOST_PROD", config("API_HOST_PROD"))  # pragma: no cover
-    else:
-        api_host_ip = os.getenv("API_HOST_LOCAL", config("API_HOST_LOCAL"))  # pragma: no cover
 
     context = {'position_form': position_form, 'portfolio': portfolio,
                'labels_monthly': ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug', 'Sept', 'Oct', 'Nov',
                                   'Dec'], 'api_host': api_host_ip}
-
-    # We want to check if there active positions and if so, we calculate the profit
+    # We want to check if there are active positions and if so, we calculate the profit
     positions = services.check_if_active_positions_and_calculate_current_profits(request, portfolio, pk,
                                                                                  active_connection, limit_exceeded)
     if positions:
