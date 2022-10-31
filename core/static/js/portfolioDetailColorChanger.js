@@ -8,6 +8,7 @@ fetch(`${apiHost}api/v1/daily-return/${portfolioID}`)
     .then((response) => response.json())
     .then((data) => {
         let fetchedLatestPrice;
+
         if (data.data) {
             fetchedLatestPrice = data.data.last_price;
         }else {
