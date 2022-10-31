@@ -1,7 +1,7 @@
 import random
 
 
-def generate_random_number(range_start_for_numbers: int, range_end_for_numbers: int):
+def generate_random_number(range_start_for_numbers: int, range_end_for_numbers: int) -> int:
     """
     @param range_start_for_numbers:
     @param range_end_for_numbers:

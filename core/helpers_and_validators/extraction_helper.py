@@ -1,7 +1,7 @@
 import re
 
 
-def extract_postal_code(dirty_postal_input: str):
+def extract_postal_code(dirty_postal_input: str) -> str:
     """
     @param dirty_postal_input:
     @return:

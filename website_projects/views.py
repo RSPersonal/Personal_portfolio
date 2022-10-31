@@ -10,6 +10,7 @@ from decouple import config
 from core.helpers_and_validators.extraction_helper import extract_postal_code
 from core.helpers_and_validators.valuation_service import get_properties_within_postal_code_range_and_nla_range, \
     get_mean_property_price
+from website_projects import services
 
 
 def projects_overview(request):
@@ -32,7 +33,8 @@ def property_detail(request, property_id):
 
 def sale_properties(request):
     context = {}
-    active_cities = PropertyModel.objects.all().values_list('city', flat=True).distinct()
+    active_cities = services.get_all_active_cities(PropertyModel)
+
     active_property_types = PropertyModel.objects.all().values_list('building_type', flat=True).distinct()
     active_sale_properties = PropertyModel.objects.filter(type_of_property='Koop').order_by('added_on')
 
@@ -67,7 +69,7 @@ def sale_properties(request):
 def rental_properties(request):
     context = {}
     # Here comes the form
-    active_cities = PropertyModel.objects.all().values_list('city', flat=True).distinct()
+    active_cities = active_cities = services.get_all_active_cities(PropertyModel)
     active_rental_properties = PropertyModel.objects.filter(type_of_property='Huur').order_by('added_on')
 
     # response = requests.request("GET", "http://127.0.0.1:8000/api/v1/properties/sale/Zwolle").json()
