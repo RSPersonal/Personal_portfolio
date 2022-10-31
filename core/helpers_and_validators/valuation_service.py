@@ -1,7 +1,6 @@
 from website_projects.models import ScrapyPropertyModel
 from core.helpers_and_validators.stock_calculator import calculate_mean_price
 from typing import List
-from numpy import ndarray
 
 
 def get_properties_within_postal_code_range_and_nla_range(postal_code_range: List[str], user_input_type_object: str,
