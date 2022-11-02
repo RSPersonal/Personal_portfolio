@@ -94,6 +94,11 @@ A user can have many portfolio's and a portfolio can have many positions.
 ![Stocktracker design drawio (1)](https://user-images.githubusercontent.com/74533741/187614553-892c3e1e-c320-4895-8495-76a6ea0c82d4.png)
 
 
+<b>Valuation tool <b>
+![image](https://user-images.githubusercontent.com/74533741/199420535-da97f5b7-d8b9-40d0-b1dd-5f5cecf4270d.png)
+
+
+
 #### Notes
 
 `gunicorn --worker-tmp-dir /dev/shm core.wsgi1` for gunicorn
