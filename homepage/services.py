@@ -1,6 +1,4 @@
-from typing import Union, Type
-from django.db.models import QuerySet
-
+from typing import Type
 from .models import VisitorCount
 
 
