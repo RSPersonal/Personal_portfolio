@@ -23,7 +23,7 @@ def home_page_en(request):
         'num_visits': num_current_visits,
         'profile_posts': profile_posts
     }
-    return render(request, 'homepage_en.html', context)
+    return render(request, 'homepage_en.html', context)  # pragma no cover
 
 
 def home_page_nl(request):
@@ -43,14 +43,14 @@ def home_page_nl(request):
         'num_visits': num_current_visits,
         'profile_posts': profile_posts
     }
-    return render(request, 'homepage_nl.html', context)
+    return render(request, 'homepage_nl.html', context)  # pragma no cover
 
 
 def about_me(request):
     """
     Function for about me render
     """
-    return render(request, 'about_me.html')
+    return render(request, 'about_me.html')  # pragma no cover
 
 
 def contact(request):
@@ -67,4 +67,4 @@ def contact(request):
             new_version_entry.save()
             current_version_number = current_version_from_txt
     context = {'version_history': current_version_number}
-    return render(request, 'contact.html', context=context)
+    return render(request, 'contact.html', context=context)  # pragma no cover

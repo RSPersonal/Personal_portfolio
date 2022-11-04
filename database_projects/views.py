@@ -132,7 +132,7 @@ def download_portfolio_csv(request, request_id: int):
             [position.id, position.ticker_name, position.buy_price, position.quantity, position.amount_invested,
              position.current_market_price, position.position_profit, position.position_profit_in_percentage])
 
-    return response  # pragma: no cover
+    return response  # pragma no cover
 
 
 def valuation_tool(request):
@@ -166,4 +166,4 @@ def valuation_tool(request):
 
         context['user_input_postal_code'] = clean_postal_code
         context['user_input_city'] = user_input_city
-    return render(request, 'database-projects/valuation_tool.html', context=context)  # pragma:: no cover
+    return render(request, 'database-projects/valuation_tool.html', context=context)  # pragma no cover

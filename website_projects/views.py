@@ -14,21 +14,23 @@ from website_projects import services
 
 
 def projects_overview(request):
-    return render(request, 'website-projects/website_overview.html')
+    return render(request, 'website-projects/website_overview.html')  # pragma no cover
 
 
 def real_estate_homepage(request):
     context = {}
     properties = PropertyModel.objects.order_by('added_on')[:3]
     context['properties'] = properties
-    return render(request, 'website-projects/real-estate-agent/real_estate_agent_homepage.html', context=context)
+    return render(request, 'website-projects/real-estate-agent/real_estate_agent_homepage.html',
+                  context=context)  # pragma no cover
 
 
 def property_detail(request, property_id):
     context = {}
     property_data = get_object_or_404(PropertyModel, pk=property_id)
     context['property'] = property_data
-    return render(request, 'website-projects/real-estate-agent/property_detail.html', context=context)
+    return render(request, 'website-projects/real-estate-agent/property_detail.html',
+                  context=context)  # pragma no cover
 
 
 def sale_properties(request):
