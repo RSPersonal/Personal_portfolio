@@ -24,7 +24,7 @@ def get_properties_within_postal_code_range_and_nla_range(postal_code_range: Lis
     return properties
 
 
-def get_mean_property_price(properties: list):
+def get_mean_property_price(properties: Type[QuerySet]) -> float:
     """
     @param properties: List of queried properties
     @return: Mean price of queried objects
@@ -33,9 +33,7 @@ def get_mean_property_price(properties: list):
         return 0
 
     price_list = []
-    count_properties = 0
     for scraped_property in properties:
-        count_properties += 1
         price_list.append(scraped_property.ask_price)
-    mean_price = calculate_mean_price(price_list)
+    mean_price = float(calculate_mean_price(price_list))
     return round(mean_price, 0)
