@@ -1,10 +1,11 @@
 from website_projects.models import ScrapyPropertyModel
 from core.helpers_and_validators.stock_calculator import calculate_mean_price
-from typing import List
+from typing import List, Type
+from django.db.models import QuerySet
 
 
 def get_properties_within_postal_code_range_and_nla_range(postal_code_range: List[str], user_input_type_object: str,
-                                                          nla_range: int, user_input_city: str):
+                                                          nla_range: int, user_input_city: str) -> Type[QuerySet]:
     """
     @param user_input_type_object:
     @param user_input_city:  str

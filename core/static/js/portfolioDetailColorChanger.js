@@ -8,17 +8,10 @@ fetch(`${apiHost}api/v1/daily-return/${portfolioID}`)
     .then((response) => response.json())
     .then((data) => {
         let fetchedLatestPrice;
-<<<<<<< HEAD
         if (data.data) {
         console.log(data.data.last_price);
             fetchedLatestPrice = data.data.last_price;
         } else {
-=======
-
-        if (data.data) {
-            fetchedLatestPrice = data.data.last_price;
-        }else {
->>>>>>> 89dc76c43b6686bf8f5abfcbd597698fd555fd8f
             fetchedLatestPrice = 0;
         }
         document.getElementById("dailyReturnItem").innerHTML = `€ ${fetchedLatestPrice.toLocaleString()}`;
