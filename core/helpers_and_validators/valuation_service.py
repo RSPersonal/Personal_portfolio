@@ -23,7 +23,7 @@ def get_properties_within_postal_code_range_and_nla_range(postal_code_range: Lis
     return properties
 
 
-def get_mean_property_price(properties: list) -> int:
+def get_mean_property_price(properties: list):
     """
     @param properties: List of queried properties
     @return: Mean price of queried objects

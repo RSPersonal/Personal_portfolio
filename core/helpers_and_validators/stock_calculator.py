@@ -1,7 +1,8 @@
 import numpy as np
+from numpy import ndarray
 
 
-def calculate_stock_profit(price_bought: float, current_market_price: float, quantity: float):
+def calculate_stock_profit(price_bought: float, current_market_price: float, quantity: float) -> float:
     """
     @param price_bought: float
     @param current_market_price: float
@@ -11,7 +12,7 @@ def calculate_stock_profit(price_bought: float, current_market_price: float, qua
     return np.subtract((current_market_price * quantity), (price_bought * quantity))
 
 
-def calculate_total_amount_invested(buy_price: float, amount_of_stocks: float):
+def calculate_total_amount_invested(buy_price: float, amount_of_stocks: float) -> float:
     """
     @param buy_price:
     @param amount_of_stocks:
@@ -20,7 +21,7 @@ def calculate_total_amount_invested(buy_price: float, amount_of_stocks: float):
     return np.multiply(buy_price, amount_of_stocks)
 
 
-def calculate_profit_in_percentage(buy_price: float, quantity: float, profit: float):
+def calculate_profit_in_percentage(buy_price: float, quantity: float, profit: float) -> float:
     """
     @param buy_price:
     @param quantity:
@@ -31,7 +32,7 @@ def calculate_profit_in_percentage(buy_price: float, quantity: float, profit: fl
     return round(np.divide(profit, calculated_total_amount_invested) * 100, 2)
 
 
-def calculate_portfolio_profit_in_percentage(amount_invested: float, profit: float):
+def calculate_portfolio_profit_in_percentage(amount_invested: float, profit: float) -> float:
     """
     @param amount_invested:
     @param profit:
@@ -41,7 +42,7 @@ def calculate_portfolio_profit_in_percentage(amount_invested: float, profit: flo
     return round(np.divide(profit, amount_invested) * 100, 2)
 
 
-def calculate_mean_price(prices: list):
+def calculate_mean_price(prices: list) -> ndarray:
     """
     @param prices: list
     @return: mean price from list

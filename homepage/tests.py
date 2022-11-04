@@ -10,7 +10,6 @@ class TestClient(TestCase):
         @return:
         """
         self.client = Client()
-        VisitorCount.objects.create(visitor_count=1)
 
     def test_main_homepage_en(self):
         """
@@ -24,4 +23,11 @@ class TestClient(TestCase):
         @return:
         """
         homepage = self.client.get('/contact')
+        self.assertEqual(homepage.status_code, 200)
+
+    def test_api_example_page(self):
+        """
+        @return:
+        """
+        homepage = self.client.get('/api/v1/')
         self.assertEqual(homepage.status_code, 200)
