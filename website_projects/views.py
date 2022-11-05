@@ -59,8 +59,6 @@ def sale_properties(request):
         else:
             query_result = []
 
-        # if from_price_range_input != 0 or to_price_range_input != 0:
-        #     filtered_properties = PropertyModel.objects.generated_query
         active_sale_properties = query_result
     context['city_filters'] = active_cities
     context['active_properties'] = active_sale_properties

@@ -35,7 +35,7 @@ def home_page_nl(request):
         active_visitor_count.visitor_count += 1
         active_visitor_count.save()
 
-    num_current_visits = active_visitor_count
+    num_current_visits: int = active_visitor_count
 
     profile_posts = ProfilePosts.objects.order_by('order').filter(language='NL')
 
